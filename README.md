@@ -1,1 +1,2 @@
-# gravedigger-dapp
+# Spot NFT Dapp!
+
