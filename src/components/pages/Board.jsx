@@ -18,11 +18,11 @@ export const Board = () => {
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
 
     const [filter, setFilter] = useState('');
-    const [textinput, setTextinput] = useState('');
-    const [xInput, setXInput] = useState('125');
-    const [yInput, setYInput] = useState('135');
+    const [textinput, setTextinput] = useState('Name');
+    const [xInput, setXInput] = useState('127');
+    const [yInput, setYInput] = useState('185');
     const [fontSize, setFontSize] = useState('30');
-    const [font, setFont] = useState('Arial');
+    const [font, setFont] = useState('Fantasy');
     const [fontStyle, setFontStyle] = useState('normal');
 
     const textinputUser = (event) => {
@@ -68,10 +68,10 @@ export const Board = () => {
     };
 
 
-    const [textinputText, setTextinputText] = useState('');
-    const [xInputText, setXInputText] = useState('110');
-    const [yInputText, setYInputText] = useState('160');
-    const [fontSizeText, setFontSizeText] = useState('20');
+    const [textinputText, setTextinputText] = useState('wtf');
+    const [xInputText, setXInputText] = useState('152');
+    const [yInputText, setYInputText] = useState('215');
+    const [fontSizeText, setFontSizeText] = useState('15');
     const [fontText, setFontText] = useState('Arial');
     const [fontStyleText, setFontStyleText] = useState('normal');
 
@@ -125,7 +125,7 @@ export const Board = () => {
     });
     {/* For Traits retrieval */ }
     const [chosenTrait, setChosenTrait] = useState({
-        TombStone: '',
+        TombStone: '1',
         TombStoneID: '1',
         Eyes: '',
         Mouth: '',
