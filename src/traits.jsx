@@ -1,9 +1,15 @@
-import image1 from './unnamedImages/1.png'
-import image2 from './unnamedImages/2.png'
-import image3 from './unnamedImages/3.png'
-import image4 from './unnamedImages/4.png'
-import image5 from './unnamedImages/5.png'
-import image6 from './unnamedImages/6.png'
+import image1 from './tombstoneimages/1.jpg'
+import image2 from './tombstoneimages/2.jpg'
+import image3 from './tombstoneimages/3.jpg'
+import image4 from './tombstoneimages/4.jpg'
+import image5 from './tombstoneimages/5.jpg'
+import image6 from './tombstoneimages/6.jpg'
+import image7 from './tombstoneimages/7.jpg'
+import image8 from './tombstoneimages/8.jpg'
+import image9 from './tombstoneimages/9.jpg'
+import image10 from './tombstoneimages/10.jpg'
+import image11 from './tombstoneimages/11.jpg'
+
 
 
 const traits = [
@@ -48,6 +54,42 @@ const traits = [
     traitType: 'TombStone',
     rarity: 'Common'
   },
+  {
+    id: 7,
+    image: image7,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 8,
+    image: image8,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 9,
+    image: image9,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 10,
+    image: image10,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 11,
+    image: image11,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+
 
 
 
