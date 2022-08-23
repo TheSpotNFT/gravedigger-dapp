@@ -280,7 +280,7 @@ export const Board = () => {
 
 
     // Add feature: Filter owned trait cards
-    const [ownedCards, setOwnedCards] = useState(true)
+    const [ownedCards, setOwnedCards] = useState(false)
     //---------------------------------//
 
     //filtering
