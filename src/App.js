@@ -33,12 +33,12 @@ function App() {
         (chainId !== '0xa86a')&&switchNetwork("0xa86a")
   }, [isAuthenticated, isWeb3Enabled, chain]);
 
-    if (!isAuthenticated || account===null) {
+   /* if (!isAuthenticated || account===null) {
       
       return (
         <Authenticate />
       );
-    }
+    }*/
   
     return (
       <div className='App bg-slate-900'>
