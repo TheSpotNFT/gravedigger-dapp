@@ -7,8 +7,13 @@ import image6 from './tombstoneimages/6.jpg'
 import image7 from './tombstoneimages/7.jpg'
 import image8 from './tombstoneimages/8.jpg'
 import image9 from './tombstoneimages/9.jpg'
-import image10 from './tombstoneimages/IMG_1877.jpg'
-import image11 from './tombstoneimages/11.jpg'
+import image10 from './tombstoneimages/11.jpg'
+import image11 from './tombstoneimages/12.jpg'
+import image12 from './tombstoneimages/13.jpg'
+import image13 from './tombstoneimages/14.png'
+import image14 from './tombstoneimages/15.jpg'
+import image15 from './tombstoneimages/16.jpg'
+
 
 
 
@@ -85,6 +90,34 @@ const traits = [
   {
     id: 11,
     image: image11,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 12,
+    image: image12,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 13,
+    image: image13,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 14,
+    image: image14,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 15,
+    image: image15,
     nftName: 'TombStone',
     traitType: 'TombStone',
     rarity: 'Common'
