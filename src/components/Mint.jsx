@@ -19,6 +19,10 @@ function Mint(props) {
 
   const { data: mintData, error: mintError, fetch: mintFetch, isFetching: mintFetching, isLoading: mintLoading } = useWeb3ExecuteFunction();
 
+  function comingsoon() {
+    alert("Claim your plot soon...");
+  }
+
   function getImage() {
     return props.saveImage()
   }
@@ -106,7 +110,7 @@ function Mint(props) {
     return (
       <div>
         <button className="m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={mintMyNFT} disabled={props.traitsAvailability === '1'}>Mint (0.1)</button>
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={comingsoon} disabled={props.traitsAvailability === '1'}>Mint (0.1)</button>
       </div>
     )
 }
