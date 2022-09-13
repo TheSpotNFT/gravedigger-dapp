@@ -16,8 +16,8 @@ export const Board = () => {
     const userAddress = account
     const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
-
     const [filter, setFilter] = useState('');
+    //for text on canvas
     const [textinput, setTextinput] = useState('Name');
     const [xInput, setXInput] = useState('127');
     const [yInput, setYInput] = useState('185');
@@ -118,6 +118,17 @@ export const Board = () => {
         setFontStyleText(selectedOption.value);
     };
 
+    //For Metadata
+    const [tomebstoneBackground, setTombstoneBackground] = useState();
+    const [tombstoneBase, setTombstoneBase] = useState();
+    const [tombstoneBehind, setTomstoneBehind] = useState();
+    const [tombstoneFlair, setTombstoneFlair] = useState();
+    const [tombstoneGround, setTombstoneGround] = useState();
+    const [tombstoneTop, setTombstoneTop] = useState();
+    const [name, setName] = useState();
+    const [epitaph, setEpitaph] = useState();
+
+
     {/* For Image retrieval */ }
     const [canvasImage, setCanvasImage] = useState({
         TombStone: '',
@@ -127,23 +138,22 @@ export const Board = () => {
     const [chosenTrait, setChosenTrait] = useState({
         TombStone: '1',
         TombStoneID: '1',
-        Eyes: '',
-        Mouth: '',
-        Hat: '',
-        Skin: '',
-        Nose: '',
-        Special: '',
-        Lines: '',
-        Branding: 'None',
-        BrandingID: '9999'
+        BackGround: '',
+        Base: '',
+        Behind: '',
+        Flair: '',
+        Ground: '',
+        Top: '',
+        Name: '',
+        Epitaph: '',
     })
 
 
-    //Set an array of save UnnamedNFT traits which are unburnable and available to all.
-    const start = 3001;
-    const end = 3004;
+    /*Set an array of save UnnamedNFT traits which are unburnable and available to all.
+    const start = 3000;
+    const end = 3009;
     const branding = [...Array(end - start + 1).keys()].map(x => x + start);
-
+*/
     {/* For retrieval of traits */ }
     const [walletTraits, setWalletTraits] = useState([])
     const [apiLoaded, setApiLoaded] = useState(false)
@@ -202,7 +212,7 @@ export const Board = () => {
     });
     let ownedFilter = traits.filter(item => {
 
-        if (walletTraits.includes(item.id.toString()) || branding.includes(item.id)) {
+        if (walletTraits.includes(item.id.toString())) {
 
             return item
         }
@@ -251,10 +261,12 @@ export const Board = () => {
             ctxHidden.font = `${fontStyleText} ${fontSizeText}px ${fontText}`;
             ctxHidden.fillText(textinputText, xInputText, yInputText, 100);
         }
-
+        setName(textinput);
+        setEpitaph(textinputText);
     }
 
-
+    console.log(name);
+    console.log(epitaph);
 
 
     useEffect(() => {
@@ -338,7 +350,7 @@ export const Board = () => {
                                 userAddress={userAddress}
                                 canvas={chosenTrait}
                                 savedImage={savedImage}
-                                branding={branding}
+
                             // traitsAvailability={traitsAvailability}
                             />
 
