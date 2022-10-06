@@ -323,7 +323,7 @@ export const Board = () => {
             <div className='container flex-auto mx-auto w-full'>
 
                 {/* Canvas Row*/}
-                <div className="lg:sticky top-20 grid 2xl:grid-cols-4 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+                <div className="lg:sticky top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                     {/* canvas div */}
 
                     <div className="p-1 mb-10 sm:mb-10" ref={div} style={{ height: "20rem", width: "20rem" }}>
@@ -410,8 +410,7 @@ export const Board = () => {
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
-                            /></div></div>
-                        <div className='flex justify-center pt-3 pb-2'>
+                            /></div>
                             <div className='col-span-1 w-38'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
                             <div className='col-span-1 w-38'><Select options={textFontStyleOptions} onChange={handleChangeStyle} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
@@ -440,8 +439,7 @@ export const Board = () => {
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
-                            /></div></div>
-                        <div className='flex justify-center pt-3 pb-2'>
+                            /></div>
                             <div className='col-span-1 w-38'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
                             <div className='col-span-1 w-38'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
