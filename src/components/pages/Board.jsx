@@ -10,6 +10,8 @@ import spotNFTAbi from '../../contracts/spotNFTAbi.json';
 import spotTraitsAbi from '../../contracts/spotTraitsAbi.json';
 import SetApproval from '../SetApproval';
 import Mint from '../Mint';
+import '../../Board.css'
+
 
 export const Board = () => {
     const { account, isAuthenticated } = useMoralis();
@@ -37,7 +39,20 @@ export const Board = () => {
     const userFontSize = (event) => {
         setFontSize(event.target.value);
     }
+    //Sliders
 
+    const getBackgroundSize = () => {
+        return { backgroundSize: `${(xInput * 100) / 300}% 100%` }
+    }
+    const getBackgroundSize1 = () => {
+        return { backgroundSize: `${(yInput * 100) / 350}% 100%` }
+    }
+    const getBackgroundSize2 = () => {
+        return { backgroundSize: `${(xInputText * 100) / 300}% 100%` }
+    }
+    const getBackgroundSize3 = () => {
+        return { backgroundSize: `${(yInputText * 100) / 350}% 100%` }
+    }
     const textFontOptions = [
         { value: "Arial", label: "Arial" },
         { value: "Comic Sans MS", label: "Comic Sans MS" },
@@ -274,7 +289,7 @@ export const Board = () => {
         drawImage(canvasImage.Text);
 
     }
-        , [canvasImage, canvas, windowWidth, windowHeight])
+        , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText])
     const [savedImage, setSavedImage] = useState('empty image') //Saving image for sending to IPFS. This part isn't active yet!
     function saveImage() {
         const result = (new Promise((resolve, reject) => {
@@ -318,7 +333,7 @@ export const Board = () => {
                             height={height}
                             className='mt-1 border-1 border-4 border-slate-500 text-center content-center p-5'
                         />
-                        <div className="text-center md: pl-10"><h1 className='font-mono text-lg text-yellow-400 pt-1'>Gravedigger</h1></div>
+                        <div className="text-center pb-2 md: pl-10"><h1 className='font-mono text-lg text-yellow-400 pt-1'>Gravedigger</h1></div>
                         <canvas
                             ref={hiddenCanvas}
                             width='900px'
@@ -341,7 +356,7 @@ export const Board = () => {
                         </div>
                         {/* End of Indiv Stats */}
                         {/* Buttons */}
-                        <div className="pt-1 pb-1 flex">
+                        {/*} <div className="pt-1 pb-1 flex">
 
                             <Mint
                                 chosenTrait={chosenTrait}
@@ -355,7 +370,7 @@ export const Board = () => {
                             />
 
 
-                        </div>
+        </div>*/}
                         {/* End of Buttons */}
                         {/* Two bottom text lines */}
 
@@ -379,28 +394,20 @@ export const Board = () => {
                         </div>*/} {/* End of btm text lines */}
                     </div>{/* Stats div Ends*/}
                     {/* SearchBox */}
-                    <div className="gap-4 pt-4 pl-2">
-                        <div className="">
-                            <div className='col-span-2 text-white'>Tomb Name: </div><div><input type="text"
+                    <div className="gap-4 pt-8 pl-2 grid grid-col-4">
+                        <div className="flex">
+                            <div className='col-span-2 text-white pr-4'>Name: </div><div><input type="text"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="Engrave"
                                 value={textinput}
                                 onChange={textinputUser.bind(this)}
                             /></div>
 
-                            <div className='col-span-2 text-white pt-2'>X coords: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="x plot"
-                                value={xInput}
-                                onChange={userXInput.bind(this)}
-                            /></div>
+                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={300} id="slider" class="slider" value={xInput} onChange={(e) => setXInput(e.target.valueAsNumber)} style={getBackgroundSize()} /></div></div>
 
-                            <div className='col-span-1 text-white pt-2'>Y coords: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="y plot"
-                                value={yInput}
-                                onChange={userYInput.bind(this)}
-                            /></div>
+                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInput} onChange={(e) => setYInput(e.target.valueAsNumber)} style={getBackgroundSize1()} /></div></div>
 
-                            <div className='col-span-1 text-white pt-2'>Font Size: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="Font size"
+                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
                             /></div></div>
@@ -417,35 +424,20 @@ export const Board = () => {
                         /></div>
                     */}
 
-                        <div className='self-end'>
-                            <button className="w-1/2 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={updateCanvasTraits}>Refresh Text</button>
 
-                        </div>
-                    </div>{/* SearchBox Ends */}
-
-                    <div className="gap-4 pt-4 pl-2">
-                        <div className="">
-                            <div className='col-span-2 text-white'>Epitaph: </div><div><input type="text"
+                        <div className="flex">
+                            <div className='col-span-2 text-white pr-1'>Epitaph: </div><div><input type="text"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="Engrave"
                                 value={textinputText}
                                 onChange={textinputUserText.bind(this)}
                             /></div>
 
-                            <div className='col-span-2 text-white pt-2'>X coords: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="x plot"
-                                value={xInputText}
-                                onChange={userXInputText.bind(this)}
-                            /></div>
+                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={300} id="slider" class="slider" value={xInputText} onChange={(e) => setXInputText(e.target.valueAsNumber)} style={getBackgroundSize2()} /></div></div>
 
-                            <div className='col-span-1 text-white pt-2'>Y coords: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="y plot"
-                                value={yInputText}
-                                onChange={userYInputText.bind(this)}
-                            /></div>
+                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInputText} onChange={(e) => setYInputText(e.target.valueAsNumber)} style={getBackgroundSize3()} /></div></div>
 
-                            <div className='col-span-1 text-white pt-2'>Font Size: </div><div><input type="text"
-                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="Font size"
+                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
                             /></div></div>
@@ -462,17 +454,13 @@ export const Board = () => {
                         /></div>
                     */}
 
-                        <div className='self-end'>
-                            <button className="w-1/2 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={updateCanvasTraits}>Refresh Text</button>
 
-                        </div>
                     </div>
 
 
                 </div>{/* Canvas Row Div Ends*/}
                 <div className='overflow-y-auto'>
-                    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+                    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                         {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
                     </div></div>
                 {/*} <div className="text-white">BackGround: {unnamedData[`${(chosenTrait.UnnamedNFTID - 1)}`].attributes[0].value}</div>
