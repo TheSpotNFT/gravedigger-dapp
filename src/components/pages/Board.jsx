@@ -411,8 +411,8 @@ export const Board = () => {
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
                             /></div>
-                            <div className='col-span-1 w-38'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
-                            <div className='col-span-1 w-38'><Select options={textFontStyleOptions} onChange={handleChangeStyle} defaultValue={{ label: "Normal", value: "normal" }} /></div>
+                            <div className='w-36'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontStyleOptions} onChange={handleChangeStyle} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
 
 
@@ -440,8 +440,8 @@ export const Board = () => {
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
                             /></div>
-                            <div className='col-span-1 w-38'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
-                            <div className='col-span-1 w-38'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
+                            <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
 
 
