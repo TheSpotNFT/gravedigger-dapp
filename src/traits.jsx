@@ -13,6 +13,9 @@ import image12 from './tombstoneimages/13.jpg'
 import image13 from './tombstoneimages/14.png'
 import image14 from './tombstoneimages/15.jpg'
 import image15 from './tombstoneimages/16.jpg'
+import image16 from './tombstoneimages/17.png'
+import image17 from './tombstoneimages/18.png'
+import image18 from './tombstoneimages/19.png'
 
 
 
@@ -118,6 +121,27 @@ const traits = [
   {
     id: 15,
     image: image15,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 16,
+    image: image16,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 17,
+    image: image17,
+    nftName: 'TombStone',
+    traitType: 'TombStone',
+    rarity: 'Common'
+  },
+  {
+    id: 18,
+    image: image18,
     nftName: 'TombStone',
     traitType: 'TombStone',
     rarity: 'Common'
