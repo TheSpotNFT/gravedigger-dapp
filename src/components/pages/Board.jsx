@@ -24,7 +24,7 @@ export const Board = () => {
     const [xInput, setXInput] = useState('127');
     const [yInput, setYInput] = useState('185');
     const [fontSize, setFontSize] = useState('30');
-    const [font, setFont] = useState('Fantasy');
+    const [font, setFont] = useState('Arial');
     const [fontStyle, setFontStyle] = useState('normal');
 
     const textinputUser = (event) => {
@@ -52,6 +52,12 @@ export const Board = () => {
     }
     const getBackgroundSize3 = () => {
         return { backgroundSize: `${(yInputText * 100) / 350}% 100%` }
+    }
+    const getBackgroundSize4 = () => {
+        return { backgroundSize: `${(xInputText1 * 100) / 300}% 100%` }
+    }
+    const getBackgroundSize5 = () => {
+        return { backgroundSize: `${(yInputText1 * 100) / 350}% 100%` }
     }
     const textFontOptions = [
         { value: "Arial", label: "Arial" },
@@ -83,9 +89,9 @@ export const Board = () => {
     };
 
 
-    const [textinputText, setTextinputText] = useState('wtf');
-    const [xInputText, setXInputText] = useState('152');
-    const [yInputText, setYInputText] = useState('215');
+    const [textinputText, setTextinputText] = useState('Line 1');
+    const [xInputText, setXInputText] = useState('142');
+    const [yInputText, setYInputText] = useState('210');
     const [fontSizeText, setFontSizeText] = useState('15');
     const [fontText, setFontText] = useState('Arial');
     const [fontStyleText, setFontStyleText] = useState('normal');
@@ -132,6 +138,57 @@ export const Board = () => {
         console.log('handleChange', selectedOption.value);
         setFontStyleText(selectedOption.value);
     };
+
+    const [textinputText1, setTextinputText1] = useState('Line 2');
+    const [xInputText1, setXInputText1] = useState('142');
+    const [yInputText1, setYInputText1] = useState('230');
+    const [fontSizeText1, setFontSizeText1] = useState('15');
+    const [fontText1, setFontText1] = useState('Arial');
+    const [fontStyleText1, setFontStyleText1] = useState('normal');
+
+
+    const textinputUserText1 = (event) => {
+        setTextinputText1(event.target.value);
+    }
+    const userXInputText1 = (event) => {
+        setXInputText(event.target.value);
+    }
+    const userYInputText1 = (event) => {
+        setYInputText1(event.target.value);
+    }
+    const userFontSizeText1 = (event) => {
+        setFontSizeText1(event.target.value);
+    }
+
+    const textFontOptionsText1 = [
+        { value: "Arial", label: "Arial" },
+        { value: "Comic Sans MS", label: "Comic Sans MS" },
+        { value: "Courier New", label: "Courier New" },
+        { value: "Times New Roman", label: "Times New Roman" },
+        { value: "Fantasy", label: "Fantasy" },
+        { value: "Sans-serif", label: "Sans-serif" },
+        { value: "Serif", label: "Serif" },
+        { value: "Cambria", label: "Cambria" },
+
+    ];
+
+    const textFontStyleOptionsText1 = [
+        { value: "normal", label: "Normal" },
+        { value: "bold", label: "Bold" },
+
+
+    ];
+
+    const handleChangeText1 = selectedOption => {
+        console.log('handleChange', selectedOption.value);
+        setFontText(selectedOption.value);
+    };
+
+    const handleChangeStyleText1 = selectedOption => {
+        console.log('handleChange', selectedOption.value);
+        setFontStyleText(selectedOption.value);
+    };
+
 
     //For Metadata
     const [tomebstoneBackground, setTombstoneBackground] = useState();
@@ -263,6 +320,8 @@ export const Board = () => {
             ctx.fillText(textinput, xInput, yInput);
             ctx.font = `${fontStyleText} ${fontSizeText}px ${fontText}`;
             ctx.fillText(textinputText, xInputText, yInputText, 100);
+            ctx.font = `${fontStyleText1} ${fontSizeText1}px ${fontText1}`;
+            ctx.fillText(textinputText1, xInputText1, yInputText1, 100);
         }
 
         const imgHidden = new Image();
@@ -275,6 +334,8 @@ export const Board = () => {
             ctxHidden.fillText(textinput, xInput, yInput);
             ctxHidden.font = `${fontStyleText} ${fontSizeText}px ${fontText}`;
             ctxHidden.fillText(textinputText, xInputText, yInputText, 100);
+            ctxHidden.font = `${fontStyleText1} ${fontSizeText1}px ${fontText1}`;
+            ctxHidden.fillText(textinputText1, xInputText1, yInputText1, 100);
         }
         setName(textinput);
         setEpitaph(textinputText);
@@ -442,6 +503,27 @@ export const Board = () => {
                             /></div>
                             <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
+                        </div>
+
+
+                        <div className="flex">
+                            <div className='col-span-2 text-white pr-1'>Epitaph: </div><div><input type="text"
+                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-24" placeholder="Engrave"
+                                value={textinputText1}
+                                onChange={textinputUserText1.bind(this)}
+                            /></div>
+
+                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={300} id="slider" class="slider" value={xInputText1} onChange={(e) => setXInputText1(e.target.valueAsNumber)} style={getBackgroundSize4()} /></div></div>
+
+                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInputText1} onChange={(e) => setYInputText1(e.target.valueAsNumber)} style={getBackgroundSize5()} /></div></div>
+
+                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
+                                value={fontSizeText1}
+                                onChange={userFontSizeText1.bind(this)}
+                            /></div>
+                            <div className='w-36'><Select options={textFontOptionsText1} onChange={handleChangeText1} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontStyleOptionsText1} onChange={handleChangeStyleText1} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
 
 
