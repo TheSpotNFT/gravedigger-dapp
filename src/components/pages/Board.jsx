@@ -21,8 +21,8 @@ export const Board = () => {
     const [filter, setFilter] = useState('');
     //for text on canvas
     const [textinput, setTextinput] = useState('Name');
-    const [xInput, setXInput] = useState('127');
-    const [yInput, setYInput] = useState('185');
+    const [xInput, setXInput] = useState('198');
+    const [yInput, setYInput] = useState('260');
     const [fontSize, setFontSize] = useState('30');
     const [font, setFont] = useState('Arial');
     const [fontStyle, setFontStyle] = useState('normal');
@@ -90,8 +90,8 @@ export const Board = () => {
 
 
     const [textinputText, setTextinputText] = useState('Line 1');
-    const [xInputText, setXInputText] = useState('142');
-    const [yInputText, setYInputText] = useState('210');
+    const [xInputText, setXInputText] = useState('217');
+    const [yInputText, setYInputText] = useState('287');
     const [fontSizeText, setFontSizeText] = useState('15');
     const [fontText, setFontText] = useState('Arial');
     const [fontStyleText, setFontStyleText] = useState('normal');
@@ -140,8 +140,8 @@ export const Board = () => {
     };
 
     const [textinputText1, setTextinputText1] = useState('Line 2');
-    const [xInputText1, setXInputText1] = useState('142');
-    const [yInputText1, setYInputText1] = useState('230');
+    const [xInputText1, setXInputText1] = useState('217');
+    const [yInputText1, setYInputText1] = useState('307');
     const [fontSizeText1, setFontSizeText1] = useState('15');
     const [fontText1, setFontText1] = useState('Arial');
     const [fontStyleText1, setFontStyleText1] = useState('normal');
@@ -343,7 +343,12 @@ export const Board = () => {
 
     console.log(name);
     console.log(epitaph);
-
+    console.log(xInput);
+    console.log(yInput);
+    console.log(xInputText);
+    console.log(yInputText);
+    console.log(xInputText1);
+    console.log(yInputText1);
 
     useEffect(() => {
         drawImage(canvasImage.TombStone);
@@ -387,7 +392,7 @@ export const Board = () => {
                 <div className="lg:sticky top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                     {/* canvas div */}
 
-                    <div className="p-1 mb-10 sm:mb-10" ref={div} style={{ height: "20rem", width: "20rem" }}>
+                    <div className="p-1 mb-10 sm:mb-10" ref={div} style={{ height: "30rem", width: "30rem" }}>
                         <canvas
                             ref={canvas}
                             width={width}
