@@ -181,12 +181,12 @@ export const Board = () => {
 
     const handleChangeText1 = selectedOption => {
         console.log('handleChange', selectedOption.value);
-        setFontText(selectedOption.value);
+        setFontText1(selectedOption.value);
     };
 
     const handleChangeStyleText1 = selectedOption => {
         console.log('handleChange', selectedOption.value);
-        setFontStyleText(selectedOption.value);
+        setFontStyleText1(selectedOption.value);
     };
 
 
@@ -317,11 +317,11 @@ export const Board = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, width, height);
             ctx.font = `${fontStyle} ${fontSize}px ${font}`;
-            ctx.fillText(textinput, xInput, yInput);
+            ctx.fillText(textinput, xInput, yInput, 150);
             ctx.font = `${fontStyleText} ${fontSizeText}px ${fontText}`;
-            ctx.fillText(textinputText, xInputText, yInputText, 100);
+            ctx.fillText(textinputText, xInputText, yInputText, 150);
             ctx.font = `${fontStyleText1} ${fontSizeText1}px ${fontText1}`;
-            ctx.fillText(textinputText1, xInputText1, yInputText1, 100);
+            ctx.fillText(textinputText1, xInputText1, yInputText1, 150);
         }
 
         const imgHidden = new Image();
