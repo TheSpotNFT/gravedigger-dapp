@@ -36,11 +36,11 @@ function Mint(props) {
   }
 
   async function mintMyNFT() {
-    if (!checkTraits()) {
+   /* if (!checkTraits()) {
       alert("Some of the selected traits are not in your wallet. Ensure all trait-titles are yellow. Click 'My Owned Traits' again to refresh wallet traits.")
     }
 
-    else {
+    else {*/
       setIsLoading(true)
       const base64 = await getImage()
       const imageData = new Moralis.File("img.png", { base64: base64 });
@@ -62,7 +62,10 @@ function Mint(props) {
           }
         ],
       }
-      const tokenMetadataUrlResult = await Moralis.Cloud.run("handlemint", {
+
+      console.log(metadata);
+      
+      /*const tokenMetadataUrlResult = await Moralis.Cloud.run("handlemint", {
         metadata
       });
       const mintResult = await mintFetch({
@@ -93,7 +96,7 @@ function Mint(props) {
         }
       });
 
-    }
+    //}*/
   }
   if (isLoading) {
     return (
@@ -110,7 +113,7 @@ function Mint(props) {
     return (
       <div>
         <button className="m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={comingsoon} disabled={props.traitsAvailability === '1'}>Engrave</button>
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={mintMyNFT} disabled={props.traitsAvailability === '1'}>Engrave</button>
       </div>
     )
 }
