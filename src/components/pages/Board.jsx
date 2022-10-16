@@ -11,7 +11,8 @@ import spotTraitsAbi from '../../contracts/spotTraitsAbi.json';
 import SetApproval from '../SetApproval';
 import Mint from '../Mint';
 import '../../Board.css'
-
+import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
+import axios from 'axios';
 
 export const Board = () => {
     const { account, isAuthenticated } = useMoralis();
@@ -20,10 +21,11 @@ export const Board = () => {
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
     const [filter, setFilter] = useState('');
     const [savedImage, setSavedImage] = useState('empty image') //Saving image for sending to IPFS. This part isn't active yet!
+    const contractProcessor = useWeb3ExecuteFunction();
 
     //for text on canvas
     const [textinput, setTextinput] = useState('Name');
-    const [xInput, setXInput] = useState('198');
+    const [xInput, setXInput] = useState('185');
     const [yInput, setYInput] = useState('260');
     const [fontSize, setFontSize] = useState('30');
     const [xInputX2, setXInputX2] = useState('198');
@@ -33,7 +35,7 @@ export const Board = () => {
     const [fontStyle, setFontStyle] = useState('normal');
 
     const [textinputText, setTextinputText] = useState('Line 1');
-    const [xInputText, setXInputText] = useState('217');
+    const [xInputText, setXInputText] = useState('207');
     const [yInputText, setYInputText] = useState('287');
     const [fontSizeText, setFontSizeText] = useState('15');
     const [xInputTextX2, setXInputTextX2] = useState('217');
@@ -43,7 +45,7 @@ export const Board = () => {
     const [fontStyleText, setFontStyleText] = useState('normal');
 
     const [textinputText1, setTextinputText1] = useState('Line 2');
-    const [xInputText1, setXInputText1] = useState('217');
+    const [xInputText1, setXInputText1] = useState('207');
     const [yInputText1, setYInputText1] = useState('307');
     const [fontSizeText1, setFontSizeText1] = useState('15');
     const [xInputText1X2, setXInputText1X2] = useState('217');
@@ -73,7 +75,7 @@ export const Board = () => {
     const getBackgroundSize5 = () => {
         return { backgroundSize: `${(yInputText1 * 100) / 350}% 100%` }
     }
-    
+
     //user input text vars
 
     const textinputUser = (event) => {
@@ -95,7 +97,7 @@ export const Board = () => {
         setFontSizeText1(event.target.value);
     }
 
-//name font info
+    //name font info
     const textFontOptions = [
         { value: "Arial", label: "Arial" },
         { value: "Comic Sans MS", label: "Comic Sans MS" },
@@ -112,7 +114,7 @@ export const Board = () => {
         { value: "bold", label: "Bold" },
     ];
 
-//epitaph line 1 
+    //epitaph line 1 
     const textFontOptionsText = [
         { value: "Arial", label: "Arial" },
         { value: "Comic Sans MS", label: "Comic Sans MS" },
@@ -164,7 +166,7 @@ export const Board = () => {
         console.log('handleChange', selectedOption.value);
         setFontStyleText(selectedOption.value);
     };
- 
+
     const handleChangeText1 = selectedOption => {
         console.log('handleChange', selectedOption.value);
         setFontText1(selectedOption.value);
@@ -206,6 +208,25 @@ export const Board = () => {
         Epitaph: '',
     })
 
+    //To fetch users nfts
+
+    function fetchUsersNfts() {
+        const options = {
+            method: 'GET',
+            url: `https://deep-index.moralis.io/api/v2/${userAddress}/nft`,
+            params: { chain: 'avalanche', format: 'decimal' },
+            headers: { accept: 'application/json', 'X-API-Key': 'test' }
+        };
+
+        axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
 
     /*Set an array of save UnnamedNFT traits which are unburnable and available to all.
     const start = 3000;
@@ -231,16 +252,16 @@ export const Board = () => {
         getTraits();
     }, [account])
 
-    function valueX2(){
-        setFontSizeTextX2(fontSizeText*2);
-        setFontSizeText1X2(fontSizeText1*2);
-        setFontSizeX2(fontSize*2);
-        setXInputX2(xInput*2);
-        setYInputX2(yInput*2);
-        setXInputTextX2(xInputText*2);
-        setYInputTextX2(yInputText*2);
-        setXInputText1X2(xInputText1*2);
-        setYInputText1X2(yInputText1*2);
+    function valueX2() {
+        setFontSizeTextX2(fontSizeText * 2);
+        setFontSizeText1X2(fontSizeText1 * 2);
+        setFontSizeX2(fontSize * 2);
+        setXInputX2(xInput * 2);
+        setYInputX2(yInput * 2);
+        setXInputTextX2(xInputText * 2);
+        setYInputTextX2(yInputText * 2);
+        setXInputText1X2(xInputText1 * 2);
+        setYInputText1X2(yInputText1 * 2);
     }
 
 
@@ -303,7 +324,7 @@ export const Board = () => {
             setWidth(node.getBoundingClientRect().width);
         }
     }, [windowWidth, windowHeight]);
-//visible canvas
+    //visible canvas
     function drawImage(layer) {
         const img = new Image();
         //img.setAttribute('crossOrigin', '*');
@@ -319,7 +340,7 @@ export const Board = () => {
             ctx.font = `${fontStyleText1} ${fontSizeText1}px ${fontText1}`;
             ctx.fillText(textinputText1, xInputText1, yInputText1, 150);
         }
-//hidden canvas
+        //hidden canvas
         const imgHidden = new Image();
         imgHidden.src = layer
         imgHidden.onload = () => {
@@ -338,14 +359,6 @@ export const Board = () => {
         setEpitaph1(textinputText1);
     }
 
-    console.log(name);
-    console.log(epitaph);
-    console.log(xInput);
-    console.log(yInput);
-    console.log(xInputText);
-    console.log(yInputText);
-    console.log(xInputText1);
-    console.log(yInputText1);
 
     useEffect(() => {
         drawImage(canvasImage.TombStone);
@@ -354,9 +367,29 @@ export const Board = () => {
 
     }
         , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText])//redrawn on changes
- 
 
-   function saveImage() {
+
+    async function activateTombstone() {
+
+        await Moralis.enableWeb3();
+        const options = {
+            contractAddress: "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e", //NFTombstone mainnet
+            functionName: "changeActiveTombstone",
+            abi: nfTombstoneABI,
+            params: {
+                _newTombstone: chosenTrait.TombStoneID, //branding mainnet
+            },
+        };
+        await contractProcessor.fetch({
+            params: options,
+        });
+        const transaction = await Moralis.executeFunction(options);
+        await transaction.wait()
+
+
+    }
+
+    function saveImage() {
         const result = (new Promise((resolve, reject) => {
             const imageToSave = new Image();
             imageToSave.src = hiddenCanvas.current.toDataURL('image/png', 1.0);
@@ -402,21 +435,21 @@ export const Board = () => {
                     </div>
                     {/* canvas div ends */}
                     {/* Stats div*/}
-                    <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "23rem" }}>
+                    <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "25rem", width: "22rem" }}>
                         {/* Individual Stats */}
                         <div className='font-mono text-white list-none flex pb-3'>
-                            <div className={`text-${(walletTraits.includes(`${chosenTrait.TombStoneID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3`}>TombStone: </div>
+                            <div className={`text-${(walletTraits.includes(`${chosenTrait.TombStoneID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>TombStone: </div>
                             {chosenTrait.TombStoneID}
                         </div>
 
 
                         <div className='font-mono text-white list-none flex pb-3'>
-                            <div className='text-spot-yellow'>Name: </div>
+                            <div className='text-spot-yellow pl-2'>Name: </div>
                             {textinput}
                         </div>
                         {/* End of Indiv Stats */}
                         {/* Buttons */}
-                         <div className="pt-1 pb-1 flex">
+                        {/* <div className="pt-1 pb-1 flex">
 
                             <Mint
                                 chosenTrait={chosenTrait}
@@ -426,18 +459,25 @@ export const Board = () => {
                                 canvas={chosenTrait}
                                 savedImage={savedImage}
                                 name={name}
-                                epitaph={`${(epitaph)+" "+(epitaph1)} `}
+                                epitaph={`${(epitaph) + " " + (epitaph1)} `}
                             />
-        </div>
-                          <div className='font-mono text-white list-none flex pb-3 text-sm'>
-                            <div className='text-[red] pr-3 text-xl'>* </div>
+        </div>*/}
+                        <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
+                            <div className='text-[red] pr-2 text-xl'>* </div>
                             TombStone not in your wallet.
                         </div>
-                        <div className="flex"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
+                        {/*<div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
+                        <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
+
+                            Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
+                        </div>*/}
                     </div>
+
                     <div className="gap-4 pt-8 pl-2 grid grid-col-4">
                         <div className="flex">
                             <div className='col-span-2 text-white pr-4'>Name: </div><div><input type="text"
@@ -446,11 +486,11 @@ export const Board = () => {
                                 onChange={textinputUser.bind(this)}
                             /></div>
 
-                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={xInput} onChange={(e) => setXInput(e.target.valueAsNumber)} style={getBackgroundSize()} /></div></div>
+                            <div className='col-span-2 text-white px-2'>X: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={xInput} onChange={(e) => setXInput(e.target.valueAsNumber)} style={getBackgroundSize()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInput} onChange={(e) => setYInput(e.target.valueAsNumber)} style={getBackgroundSize1()} /></div></div>
+                            <div className='col-span-1 text-white px-2'>Y: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={yInput} onChange={(e) => setYInput(e.target.valueAsNumber)} style={getBackgroundSize1()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                            <div className='col-span-1 text-white px-2'>Size: </div><div className='pr-2'><input type="text"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
@@ -465,11 +505,11 @@ export const Board = () => {
                                 onChange={textinputUserText.bind(this)}
                             /></div>
 
-                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={xInputText} onChange={(e) => setXInputText(e.target.valueAsNumber)} style={getBackgroundSize2()} /></div></div>
+                            <div className='col-span-2 text-white px-2'>X: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={xInputText} onChange={(e) => setXInputText(e.target.valueAsNumber)} style={getBackgroundSize2()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInputText} onChange={(e) => setYInputText(e.target.valueAsNumber)} style={getBackgroundSize3()} /></div></div>
+                            <div className='col-span-1 text-white px-2'>Y: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={yInputText} onChange={(e) => setYInputText(e.target.valueAsNumber)} style={getBackgroundSize3()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                            <div className='col-span-1 text-white px-2'>Size: </div><div className='pr-2'><input type="text"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
@@ -484,11 +524,11 @@ export const Board = () => {
                                 onChange={textinputUserText1.bind(this)}
                             /></div>
 
-                            <div className='col-span-2 text-white px-2'>X: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={xInputText1} onChange={(e) => setXInputText1(e.target.valueAsNumber)} style={getBackgroundSize4()} /></div></div>
+                            <div className='col-span-2 text-white px-2'>X: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={xInputText1} onChange={(e) => setXInputText1(e.target.valueAsNumber)} style={getBackgroundSize4()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Y: </div><div class="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" class="slider" value={yInputText1} onChange={(e) => setYInputText1(e.target.valueAsNumber)} style={getBackgroundSize5()} /></div></div>
+                            <div className='col-span-1 text-white px-2'>Y: </div><div className="slideContainer"><div className="pt-1"><input type="range" min={0} max={350} id="slider" className="slider" value={yInputText1} onChange={(e) => setYInputText1(e.target.valueAsNumber)} style={getBackgroundSize5()} /></div></div>
 
-                            <div className='col-span-1 text-white px-2'>Size: </div><div><input type="text"
+                            <div className='col-span-1 text-white px-2'>Size: </div><div className='pr-2'><input type="text"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12" placeholder="Font size"
                                 value={fontSizeText1}
                                 onChange={userFontSizeText1.bind(this)}
@@ -497,12 +537,12 @@ export const Board = () => {
                             <div className='w-36'><Select options={textFontStyleOptionsText1} onChange={handleChangeStyleText1} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                     </div>
-                  </div>{/* Canvas Row Div Ends*/}
+                </div>{/* Canvas Row Div Ends*/}
                 <div className='overflow-y-auto'>
                     <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                         {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
                     </div></div>
-            </div>
+            </div >
 
         )
 
