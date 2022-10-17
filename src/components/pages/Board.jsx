@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Select from 'react-select';
 import Card from '../Card';
 import traits from '../../traits';
-import unnamedData from '../../metadata.jsx'
+import nftombstoneData from '../../contracts/nftombstoneMetadata.json'
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Moralis from 'moralis';
 import Authenticate from '../Authenticate';
@@ -17,41 +17,42 @@ import axios from 'axios';
 export const Board = () => {
     const { account, isAuthenticated } = useMoralis();
     const userAddress = account
-    const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";
+    const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
     const [filter, setFilter] = useState('');
     const [savedImage, setSavedImage] = useState('empty image') //Saving image for sending to IPFS. This part isn't active yet!
     const contractProcessor = useWeb3ExecuteFunction();
+    const nfTombstoneMetaData = nftombstoneData;
 
     //for text on canvas
-    const [textinput, setTextinput] = useState('Name');
-    const [xInput, setXInput] = useState('185');
+    const [textinput, setTextinput] = useState('Gravedigger');
+    const [xInput, setXInput] = useState('160');
     const [yInput, setYInput] = useState('260');
     const [fontSize, setFontSize] = useState('30');
-    const [xInputX2, setXInputX2] = useState('198');
+    const [xInputX2, setXInputX2] = useState('163');
     const [yInputX2, setYInputX2] = useState('260');
     const [fontSizeX2, setFontSizeX2] = useState('30');
-    const [font, setFont] = useState('Metal');
+    const [font, setFont] = useState('Gala');
     const [fontStyle, setFontStyle] = useState('normal');
 
-    const [textinputText, setTextinputText] = useState('Line 1');
-    const [xInputText, setXInputText] = useState('207');
+    const [textinputText, setTextinputText] = useState('A Spot');
+    const [xInputText, setXInputText] = useState('198');
     const [yInputText, setYInputText] = useState('287');
     const [fontSizeText, setFontSizeText] = useState('15');
-    const [xInputTextX2, setXInputTextX2] = useState('217');
+    const [xInputTextX2, setXInputTextX2] = useState('201');
     const [yInputTextX2, setYInputTextX2] = useState('287');
     const [fontSizeTextX2, setFontSizeTextX2] = useState('15');
-    const [fontText, setFontText] = useState('Metal');
+    const [fontText, setFontText] = useState('Durka');
     const [fontStyleText, setFontStyleText] = useState('normal');
 
-    const [textinputText1, setTextinputText1] = useState('Line 2');
-    const [xInputText1, setXInputText1] = useState('207');
-    const [yInputText1, setYInputText1] = useState('307');
+    const [textinputText1, setTextinputText1] = useState('Production');
+    const [xInputText1, setXInputText1] = useState('177');
+    const [yInputText1, setYInputText1] = useState('310');
     const [fontSizeText1, setFontSizeText1] = useState('15');
-    const [xInputText1X2, setXInputText1X2] = useState('217');
-    const [yInputText1X2, setYInputText1X2] = useState('307');
+    const [xInputText1X2, setXInputText1X2] = useState('180');
+    const [yInputText1X2, setYInputText1X2] = useState('313');
     const [fontSizeText1X2, setFontSizeText1X2] = useState('15');
-    const [fontText1, setFontText1] = useState('Metal');
+    const [fontText1, setFontText1] = useState('Durka');
     const [fontStyleText1, setFontStyleText1] = useState('normal');
 
 
@@ -213,6 +214,7 @@ export const Board = () => {
     const [tombstoneFlair, setTombstoneFlair] = useState();
     const [tombstoneGround, setTombstoneGround] = useState();
     const [tombstoneTop, setTombstoneTop] = useState();
+    const [tombstoneId, setTombstoneId] = useState();
     const [name, setName] = useState();
     const [epitaph, setEpitaph] = useState();
     const [epitaph1, setEpitaph1] = useState();
@@ -265,10 +267,9 @@ export const Board = () => {
     const [walletTraits, setWalletTraits] = useState([])
     const [apiLoaded, setApiLoaded] = useState(false)
     const [checkMyTraits, setCheckMyTraits] = useState(false)
-    const unnamedNFTdata = unnamedData;
 
     function getTraits() {
-        const options = { chain: "0xa86a", address: userAddress, token_address: spotTraitsContract };
+        const options = { chain: "0xa86a", address: userAddress, token_address: nfTombstoneContract };
         Moralis.Web3API.account.getNFTsForContract(options).then((data) => {
             const result = data.result
             setWalletTraits(result.map(nft => nft.token_id))
@@ -377,7 +378,7 @@ export const Board = () => {
             ctxHidden.clearRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
             ctxHidden.drawImage(imgHidden, 0, 0, 900, 900);
             ctxHidden.font = `${fontStyle} ${fontSizeX2}px ${font}`;
-            ctxHidden.fillText(textinput, xInputX2, yInputX2);
+            ctxHidden.fillText(textinput, xInputX2, yInputX2, 300);
             ctxHidden.font = `${fontStyleText} ${fontSizeTextX2}px ${fontText}`;
             ctxHidden.fillText(textinputText, xInputTextX2, yInputTextX2, 300);
             ctxHidden.font = `${fontStyleText1} ${fontSizeText1X2}px ${fontText1}`;
@@ -398,21 +399,33 @@ export const Board = () => {
     }
         , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText, font, fontText, fontText1])//redrawn on changes
 
-    function updateImage() {
-        drawImage(canvasImage.TombStone);
-        drawImage(canvasImage.Text);
-        valueX2();
+    useEffect(() => {
+        updateTraitMetaData();
+    }, [chosenTrait])
+
+
+
+
+    function updateTraitMetaData() {
+        setTombstoneBackground(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[0].value);
+        setTomstoneBehind(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[1].value);
+        setTombstoneBase(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[2].value);
+        setTombstoneFlair(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[3].value);
+        setTombstoneTop(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[4].value);
+        setTombstoneGround(nftombstoneData[`${(chosenTrait.TombStoneID - 1)}`].attributes[5].value);
+        setTombstoneId(chosenTrait.TombStoneID);
     }
+
 
     async function activateTombstone() {
 
         await Moralis.enableWeb3();
         const options = {
-            contractAddress: "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e", //NFTombstone mainnet
+            contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //NFTombstone mainnet
             functionName: "changeActiveTombstone",
             abi: nfTombstoneABI,
             params: {
-                _newTombstone: chosenTrait.TombStoneID, //branding mainnet
+                _newTombstone: chosenTrait.TombStoneID, //NFTombstone mainnet
             },
         };
         await contractProcessor.fetch({
@@ -437,7 +450,7 @@ export const Board = () => {
     }
 
     // Add feature: Filter owned trait cards
-    const [ownedCards, setOwnedCards] = useState(false)
+    const [ownedCards, setOwnedCards] = useState(true)
     //---------------------------------//
 
 
@@ -473,22 +486,29 @@ export const Board = () => {
                     <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "25rem", width: "22rem" }}>
                         {/* Individual Stats */}
                         <div className='font-mono text-white list-none flex pb-3'>
-                            <div className={`text-${(walletTraits.includes(`${chosenTrait.TombStoneID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>TombStone: </div>
+                            <div className={`text-${(walletTraits.includes(`${chosenTrait.TombStoneID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>TombStone ID: </div>
                             {chosenTrait.TombStoneID}
                         </div>
 
 
                         <div className='font-mono text-white list-none flex pb-3'>
-                            <div className='text-spot-yellow pl-2'>Name: </div>
+                            <div className='text-spot-yellow pl-2 pr-2'>Name: </div>
                             {textinput}
                         </div>
                         {/* End of Indiv Stats */}
                         {/* Buttons */}
-                        {/* <div className="pt-1 pb-1 flex">
+                        <div className="pt-1 pb-1 flex">
 
                             <Mint
                                 chosenTrait={chosenTrait}
                                 walletTraits={walletTraits}
+                                background={tomebstoneBackground}
+                                behind={tombstoneBehind}
+                                flair={tombstoneFlair}
+                                ground={tombstoneGround}
+                                tombstone={tombstoneBase}
+                                top={tombstoneTop}
+                                id={chosenTrait.TombStoneID}
                                 saveImage={saveImage}
                                 userAddress={userAddress}
                                 canvas={chosenTrait}
@@ -496,7 +516,7 @@ export const Board = () => {
                                 name={name}
                                 epitaph={`${(epitaph) + " " + (epitaph1)} `}
                             />
-        </div>*/}
+                        </div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
                             <div className='text-[red] pr-2 text-xl'>* </div>
                             TombStone not in your wallet.
@@ -506,12 +526,12 @@ export const Board = () => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
 
-                        {/*<div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
 
                             Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
-                        </div>*/}
+                        </div>
                     </div>
 
                     <div className="gap-4 pt-8 pl-2 grid grid-col-4">
@@ -531,7 +551,7 @@ export const Board = () => {
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
+                            <div className='w-36'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Gala", value: "Gala" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptions} onChange={handleChangeStyle} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                         <div className="flex">
@@ -550,7 +570,7 @@ export const Board = () => {
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
+                            <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Durka", value: "Durka" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                         <div className="flex">
@@ -569,7 +589,7 @@ export const Board = () => {
                                 value={fontSizeText1}
                                 onChange={userFontSizeText1.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptionsText1} onChange={handleChangeText1} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
+                            <div className='w-36'><Select options={textFontOptionsText1} onChange={handleChangeText1} defaultValue={{ label: "Durka", value: "Durka" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptionsText1} onChange={handleChangeStyleText1} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                     </div>
