@@ -67,38 +67,39 @@ function Mint(props) {
       "name": "NFTombstone",
       "description": "Engraved NFTombstone",
       "image": imgURL,
+      "edition": props.id,
       "attributes": [
         {
           "trait_type": "Background:",
-          "value": props.unnamedEyes
+          "value": props.background
         },
         {
           "trait_type": "Behind",
-          "value": props.unnamedMouth
+          "value": props.behind
         },
         {
           "trait_type": "Flair",
-          "value": props.unnamedHat
+          "value": props.flair
         },
         {
           "trait_type": "Ground",
-          "value": props.unnamedSkin
+          "value": props.ground
         },
         {
           "trait_type": "Tombstone",
-          "value": props.unnamedNose
+          "value": props.tombstone
         },
         {
           "trait_type": "Top",
-          "value": props.unnamedSpecial
+          "value": props.top
         },
         {
           "trait_type": "Name",
-          "value": props.unnamedLines
+          "value": props.name
         },
         {
           "trait_type": "Epitaph",
-          "value": props.unnamedBrand
+          "value": props.epitaph
         },
 
       ],
@@ -114,10 +115,10 @@ function Mint(props) {
 
     await Moralis.enableWeb3();
     const sendOptions = {
-      contractAddress: "0xB043aaEb4337EA4BbB20C2ec5D846b00a0825ba5", //nfTombstone mainnet
+      contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //nfTombstone mainnet
       functionName: "engraveTombstone",
       abi: nfTombstoneABI,
-      msgValue: Moralis.Units.ETH(0.2),
+      msgValue: Moralis.Units.ETH(0.5),
       params: {
         _tokenID: props.id,
         newTokenUri: metaDataUrl
