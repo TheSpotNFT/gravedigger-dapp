@@ -1,5 +1,65 @@
+@font-face {
+    font-family: 'Blade';
+    src: url('./assets/fonts/Blade.ttf');
+}
+
+@font-face {
+    font-family: 'Bombing';
+    src: url('./assets/fonts/Bombing.ttf');
+}
+
+@font-face {
+    font-family: 'Devil';
+    src: url('./assets/fonts/Devil.ttf');
+}
+
+@font-face {
+    font-family: 'Drip';
+    src: url('./assets/fonts/Drip.ttf');
+}
+
+@font-face {
+    font-family: 'Durka';
+    src: url('./assets/fonts/Durka.ttf');
+}
+
+@font-face {
+    font-family: 'Emm';
+    src: url('./assets/fonts/Emm.ttf');
+}
+
+@font-face {
+    font-family: 'Eternal';
+    src: url('./assets/fonts/Eternal.ttf');
+}
+
+@font-face {
+    font-family: 'Fresh';
+    src: url('./assets/fonts/FreshTrack.ttf');
+}
+
+@font-face {
+    font-family: 'Gala';
+    src: url('./assets/fonts/Gala.ttf');
+}
+
+@font-face {
+    font-family: 'Metal';
+    src: url('./assets/fonts/MetalGod.TTF');
+}
+
+@font-face {
+    font-family: 'Predator';
+    src: url('./assets/fonts/Predator.ttf');
+}
+
+@font-face {
+    font-family: 'Simple';
+    src: url('./assets/fonts/Simple.ttf');
+}
+
 .slideContainer {
-    width: 200px;
+    width: 150px;
 
 }
 
