@@ -58,6 +58,55 @@
     src: url('./assets/fonts/Simple.ttf');
 }
 
+.blade {
+    font-family: 'Blade';
+}
+
+.bombing {
+    font-family: 'Bombing';
+}
+
+.devil {
+    font-family: 'Devil';
+}
+
+.drip {
+    font-family: 'Drip';
+}
+
+.durka {
+    font-family: 'Durka';
+}
+
+.emm {
+    font-family: 'Emm';
+}
+
+.eternal {
+    font-family: 'Eternal';
+}
+
+.fresh {
+    font-family: 'Fresh';
+}
+
+.gala {
+    font-family: 'Gala';
+
+}
+
+.metal {
+    font-family: 'Metal';
+}
+
+.predator {
+    font-family: 'Predator';
+}
+
+.simple {
+    font-family: 'Simple';
+}
+
 .slideContainer {
     width: 150px;
 
