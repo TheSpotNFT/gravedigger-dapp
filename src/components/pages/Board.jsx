@@ -31,7 +31,7 @@ export const Board = () => {
     const [xInputX2, setXInputX2] = useState('198');
     const [yInputX2, setYInputX2] = useState('260');
     const [fontSizeX2, setFontSizeX2] = useState('30');
-    const [font, setFont] = useState('Arial');
+    const [font, setFont] = useState('Metal');
     const [fontStyle, setFontStyle] = useState('normal');
 
     const [textinputText, setTextinputText] = useState('Line 1');
@@ -41,7 +41,7 @@ export const Board = () => {
     const [xInputTextX2, setXInputTextX2] = useState('217');
     const [yInputTextX2, setYInputTextX2] = useState('287');
     const [fontSizeTextX2, setFontSizeTextX2] = useState('15');
-    const [fontText, setFontText] = useState('Arial');
+    const [fontText, setFontText] = useState('Metal');
     const [fontStyleText, setFontStyleText] = useState('normal');
 
     const [textinputText1, setTextinputText1] = useState('Line 2');
@@ -51,7 +51,7 @@ export const Board = () => {
     const [xInputText1X2, setXInputText1X2] = useState('217');
     const [yInputText1X2, setYInputText1X2] = useState('307');
     const [fontSizeText1X2, setFontSizeText1X2] = useState('15');
-    const [fontText1, setFontText1] = useState('Arial');
+    const [fontText1, setFontText1] = useState('Metal');
     const [fontStyleText1, setFontStyleText1] = useState('normal');
 
 
@@ -99,7 +99,7 @@ export const Board = () => {
 
     //name font info
     const textFontOptions = [
-        { value: "Arial", label: "Arial" },
+
         { value: "Comic Sans MS", label: "Comic Sans MS" },
         { value: "Courier New", label: "Courier New" },
         { value: "Times New Roman", label: "Times New Roman" },
@@ -107,6 +107,19 @@ export const Board = () => {
         { value: "Sans-serif", label: "Sans-serif" },
         { value: "Serif", label: "Serif" },
         { value: "Cambria", label: "Cambria" },
+        { value: "Blade", label: "Blade" },
+        { value: "Bombing", label: "Bombing" },
+        { value: "Devil", label: "Devil" },
+        { value: "Drip", label: "Drip" },
+        { value: "Durka", label: "Durka" },
+        { value: "Emm", label: "Emm" },
+        { value: "Eternal", label: "Eternal" },
+        { value: "Fresh", label: "Fresh" },
+        { value: "Gala", label: "Gala" },
+        { value: "Metal", label: "Metal" },
+        { value: "Predator", label: "Predator" },
+        { value: "Simple", label: "Simple" },
+
     ];
 
     const textFontStyleOptions = [
@@ -116,14 +129,21 @@ export const Board = () => {
 
     //epitaph line 1 
     const textFontOptionsText = [
-        { value: "Arial", label: "Arial" },
-        { value: "Comic Sans MS", label: "Comic Sans MS" },
         { value: "Courier New", label: "Courier New" },
         { value: "Times New Roman", label: "Times New Roman" },
         { value: "Fantasy", label: "Fantasy" },
-        { value: "Sans-serif", label: "Sans-serif" },
-        { value: "Serif", label: "Serif" },
-        { value: "Cambria", label: "Cambria" },
+        { value: "Blade", label: "Blade" },
+        { value: "Bombing", label: "Bombing" },
+        { value: "Devil", label: "Devil" },
+        { value: "Drip", label: "Drip" },
+        { value: "Durka", label: "Durka" },
+        { value: "Emm", label: "Emm" },
+        { value: "Eternal", label: "Eternal" },
+        { value: "Fresh", label: "Fresh" },
+        { value: "Gala", label: "Gala" },
+        { value: "Metal", label: "Metal" },
+        { value: "Predator", label: "Predator" },
+        { value: "Simple", label: "Simple" },
     ];
 
     const textFontStyleOptionsText = [
@@ -132,14 +152,22 @@ export const Board = () => {
     ];
     //epitaph line 2
     const textFontOptionsText1 = [
-        { value: "Arial", label: "Arial" },
-        { value: "Comic Sans MS", label: "Comic Sans MS" },
+
         { value: "Courier New", label: "Courier New" },
         { value: "Times New Roman", label: "Times New Roman" },
         { value: "Fantasy", label: "Fantasy" },
-        { value: "Sans-serif", label: "Sans-serif" },
-        { value: "Serif", label: "Serif" },
-        { value: "Cambria", label: "Cambria" },
+        { value: "Blade", label: "Blade" },
+        { value: "Bombing", label: "Bombing" },
+        { value: "Devil", label: "Devil" },
+        { value: "Drip", label: "Drip" },
+        { value: "Durka", label: "Durka" },
+        { value: "Emm", label: "Emm" },
+        { value: "Eternal", label: "Eternal" },
+        { value: "Fresh", label: "Fresh" },
+        { value: "Gala", label: "Gala" },
+        { value: "Metal", label: "Metal" },
+        { value: "Predator", label: "Predator" },
+        { value: "Simple", label: "Simple" },
 
     ];
     const textFontStyleOptionsText1 = [
@@ -208,7 +236,7 @@ export const Board = () => {
         Epitaph: '',
     })
 
-    //To fetch users nfts
+    /*To fetch users nfts
 
     function fetchUsersNfts() {
         const options = {
@@ -227,12 +255,12 @@ export const Board = () => {
                 console.error(error);
             });
     }
-
+*/
     /*Set an array of save UnnamedNFT traits which are unburnable and available to all.
     const start = 3000;
     const end = 3009;
     const branding = [...Array(end - start + 1).keys()].map(x => x + start);
-*/
+    */
     {/* For retrieval of traits */ }
     const [walletTraits, setWalletTraits] = useState([])
     const [apiLoaded, setApiLoaded] = useState(false)
@@ -366,8 +394,13 @@ export const Board = () => {
         valueX2();
 
     }
-        , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText])//redrawn on changes
+        , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText, font, fontText, fontText1])//redrawn on changes
 
+    function updateImage() {
+        drawImage(canvasImage.TombStone);
+        drawImage(canvasImage.Text);
+        valueX2();
+    }
 
     async function activateTombstone() {
 
@@ -470,6 +503,11 @@ export const Board = () => {
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
+                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={updateImage}>Refresh Tombstone</button></div>
+                        <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
+                            Some custom fonts require an image update to render
+                        </div>
                         {/*<div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
@@ -495,7 +533,7 @@ export const Board = () => {
                                 value={fontSize}
                                 onChange={userFontSize.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontOptions} onChange={handleChange} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptions} onChange={handleChangeStyle} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                         <div className="flex">
@@ -514,7 +552,7 @@ export const Board = () => {
                                 value={fontSizeText}
                                 onChange={userFontSizeText.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontOptionsText} onChange={handleChangeText} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptionsText} onChange={handleChangeStyleText} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                         <div className="flex">
@@ -533,7 +571,7 @@ export const Board = () => {
                                 value={fontSizeText1}
                                 onChange={userFontSizeText1.bind(this)}
                             /></div>
-                            <div className='w-36'><Select options={textFontOptionsText1} onChange={handleChangeText1} defaultValue={{ label: "Arial", value: "Arial" }} /></div>
+                            <div className='w-36'><Select options={textFontOptionsText1} onChange={handleChangeText1} defaultValue={{ label: "Metal", value: "Metal" }} /></div>
                             <div className='w-36'><Select options={textFontStyleOptionsText1} onChange={handleChangeStyleText1} defaultValue={{ label: "Normal", value: "normal" }} /></div>
                         </div>
                     </div>
