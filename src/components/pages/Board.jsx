@@ -301,6 +301,7 @@ export const Board = () => {
     function updateCanvasTraits(trait) {
         setCanvasImage(prevImage => ({ ...prevImage, [trait.traitType]: trait.image }))
         setChosenTrait(prevTrait => ({ ...prevTrait, [trait.traitType]: trait.traitName, [trait.traitType + 'ID']: trait.id }))
+
     }
 
     function createCard(trait) { //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
@@ -392,6 +393,7 @@ export const Board = () => {
         drawImage(canvasImage.TombStone);
         drawImage(canvasImage.Text);
         valueX2();
+
 
     }
         , [canvasImage, canvas, windowWidth, windowHeight, xInput, yInput, xInputText, yInputText, textinput, textinputText, fontSize, fontSizeText, textFontOptionsText, textFontStyleOptionsText, font, fontText, fontText1])//redrawn on changes
@@ -503,11 +505,7 @@ export const Board = () => {
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
-                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={updateImage}>Refresh Tombstone</button></div>
-                        <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
-                            Some custom fonts require an image update to render
-                        </div>
+
                         {/*<div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
@@ -580,6 +578,8 @@ export const Board = () => {
                     <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                         {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
                     </div></div>
+                <div className='blade text-slate-900'>T</div><div className='bombing text-slate-900'>H</div><div className='devil text-slate-900'>E</div><div className='drip text-slate-900'>S</div><div className='durka text-slate-900'>P</div><div className='emm text-slate-900'>O</div><div className='eternal text-slate-900'>T</div><div className='fresh text-slate-900'>2</div><div className='gala text-slate-900'>0</div><div className='metal text-slate-900'>2</div><div className='predator text-slate-900'>2</div><div className='simple text-slate-900'>!</div>
+
             </div >
 
         )
