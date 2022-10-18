@@ -38,7 +38,7 @@ function MintCollection(props) {
   useEffect(() => {
     multiply();
   }, [textinput]);
-  console.log(amountXValue);
+
 
   async function isApprovedForAll() {
     const approvedForAll = {
@@ -97,7 +97,7 @@ function MintCollection(props) {
 
   }
 
-  console.log(textinput);
+
   if (isLoading) {
     return (
       <div><button className="inline-flex m-1 rounded-lg px-4 py-2 border-2 border-spot-yellow text-spot-yellow
