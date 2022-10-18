@@ -13,6 +13,7 @@ import Mint from '../Mint';
 import '../../Board.css'
 import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
+import MintCollection from '../../components/MintCollection';
 
 export const Board = () => {
     const { account, isAuthenticated } = useMoralis();
@@ -483,7 +484,7 @@ export const Board = () => {
                     </div>
                     {/* canvas div ends */}
                     {/* Stats div*/}
-                    <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "25rem", width: "22rem" }}>
+                    <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "28rem", width: "22rem" }}>
                         {/* Individual Stats */}
                         <div className='font-mono text-white list-none flex pb-3'>
                             <div className={`text-${(walletTraits.includes(`${chosenTrait.TombStoneID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>TombStone ID: </div>
@@ -532,6 +533,7 @@ export const Board = () => {
 
                             Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
                         </div>
+                        < MintCollection />
                     </div>
 
                     <div className="gap-4 pt-8 pl-2 grid grid-col-4">
