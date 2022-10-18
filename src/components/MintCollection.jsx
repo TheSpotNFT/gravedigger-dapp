@@ -119,8 +119,8 @@ function MintCollection(props) {
             value={textinput}
             onChange={textinputUser.bind(this)}
           /> </div>
-          <button className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={mintNFT}>Mint</button>
+         <button className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-sm" onClick={mintNFT}>Mint New Tombstone</button>
         </div>
 
 
