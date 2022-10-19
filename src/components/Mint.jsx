@@ -26,25 +26,6 @@ function Mint(props) {
     return props.saveImage()
   }
 
-  async function isApprovedForAll() {
-    const approvedForAll = {
-      chain: "avalanche",
-      address: "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e",
-      function_name: "isApprovedForAll",
-      abi: unnamedAbi,
-      params: {
-        owner: userAddress,
-        operator: "0xB043aaEb4337EA4BbB20C2ec5D846b00a0825ba5"
-      },
-    };
-    const areYouApproved = await Moralis.Web3API.native.runContractFunction(
-      approvedForAll
-    );
-    setIsApproved(areYouApproved);
-  }
-  useEffect(() => {
-    isApprovedForAll();
-  }, []);
 
   function checkTraits() {
     let isSafeBG = props.solidBG.some(ai => props.chosenTrait.BackgroundID === ai)
@@ -118,7 +99,6 @@ function Mint(props) {
       contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //nfTombstone mainnet
       functionName: "engraveTombstone",
       abi: nfTombstoneABI,
-      msgValue: Moralis.Units.ETH(0.5),
       params: {
         _tokenID: props.id,
         newTokenUri: metaDataUrl
