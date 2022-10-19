@@ -498,7 +498,7 @@ export const Board = () => {
                         </div>
                         {/* End of Indiv Stats */}
                         {/* Buttons */}
-                        <div className="pt-1 pb-1 flex">
+{/*  <div className="pt-1 pb-1 flex">
 
                             <Mint
                                 chosenTrait={chosenTrait}
@@ -517,7 +517,7 @@ export const Board = () => {
                                 name={name}
                                 epitaph={`${(epitaph) + " " + (epitaph1)} `}
                             />
-                        </div>
+                        </div>*/}
                         <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
                             <div className='text-[red] pr-2 text-xl'>* </div>
                             TombStone not in your wallet.
@@ -527,12 +527,12 @@ export const Board = () => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
 
-                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                                {/* <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
 
                             Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
-                        </div>
+                        </div>*/}
                         < MintCollection />
                     </div>
 
