@@ -522,11 +522,11 @@ export const Board = () => {
                             <div className='text-[red] pr-2 text-xl'>* </div>
                             TombStone not in your wallet.
                         </div>
-                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                        /*<div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
-
+*/
                                 {/* <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
