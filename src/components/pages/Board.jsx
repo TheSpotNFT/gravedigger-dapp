@@ -455,11 +455,11 @@ export const Board = () => {
     //---------------------------------//
 
 
-    if (!isAuthenticated) {
+   /* if (!isAuthenticated) {
         return (
             <Authenticate />
         );
-    } else
+    } else*/
         // Main Component Return
         return (
             <div className='container flex-auto mx-auto w-full'>
@@ -533,7 +533,7 @@ export const Board = () => {
 
                             Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
                         </div>*/}
-                        < MintCollection />
+                      /*  < MintCollection />*/
                     </div>
 
                     <div className="gap-4 pt-8 pl-2 grid grid-col-4">
