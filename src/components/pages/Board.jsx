@@ -500,7 +500,7 @@ export const Board = () => {
                         {/* Buttons */}
 {/*  <div className="pt-1 pb-1 flex">
 
-                            <Mint
+                            <Engrave
                                 chosenTrait={chosenTrait}
                                 walletTraits={walletTraits}
                                 background={tomebstoneBackground}
