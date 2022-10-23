@@ -9,7 +9,7 @@ import nfTombstoneABI from '../contracts/nfTombstoneABI.json';
 
 
 
-function Mint(props) {
+function Engrave(props) {
   const [isLoading, setIsLoading] = useState(false)
   const nfTombstonesContract = "0x9521807adf320d1cdf87afdf875bf438d1d92d87";
   const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
@@ -151,4 +151,4 @@ function Mint(props) {
     )
 }
 
-export default Mint;
+export default Engrave;
