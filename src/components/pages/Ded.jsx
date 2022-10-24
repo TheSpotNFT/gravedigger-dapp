@@ -6,7 +6,7 @@ import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Moralis from 'moralis';
 import Authenticate from '../Authenticate';
 import SetApproval from '../SetApproval';
-import Mint from '../Mint';
+import Engrave from '../Engrave';
 import '../../Board.css'
 import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
