@@ -15,8 +15,7 @@ import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
 import MintCollection from '../../components/MintCollection';
 
-export const Board = () => {
-    const { account, isAuthenticated } = useMoralis();
+export const Board = ({account}) => {
     const userAddress = account
     const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';

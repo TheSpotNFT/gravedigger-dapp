@@ -4,7 +4,7 @@ import LogoutButton from './Logout'
 import { GiHamburgerMenu } from "react-icons/gi"
 
 
-export const Nav = () => {
+export const Nav = ({account, web3Modal, loadWeb3Modal, web3Provider, setWeb3Provider, logoutOfWeb3Modal}) => {
     const [open, setOpen] = useState(false);
 
     return (
@@ -29,7 +29,12 @@ export const Nav = () => {
 
                         <GiHamburgerMenu name={open ? 'close' : 'menu'} />
                     </div>
-                    <LogoutButton />
+                    <LogoutButton account={account}
+            web3Modal={web3Modal}
+            loadWeb3Modal={loadWeb3Modal}
+            web3Provider={web3Provider}
+            setWeb3Provider={setWeb3Provider}
+            logoutOfWeb3Modal={logoutOfWeb3Modal}/>
 
                 </div>
             </div>
