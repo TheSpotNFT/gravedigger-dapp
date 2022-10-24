@@ -11,8 +11,8 @@ import '../../Board.css'
 import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
 
-export const Ded = () => {
-    const { account, isAuthenticated } = useMoralis();
+export const Ded = ({account}) => {
+    const isAuthenticated = Boolean(account);
     const userAddress = account
     const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
@@ -146,7 +146,7 @@ export const Ded = () => {
                         {/* Buttons */}
                         <div className="pt-1 pb-1 flex">
 
-                            <Mint
+                            {/* <Mint
 
                                 walletTraits={walletTraits}
 
@@ -154,7 +154,7 @@ export const Ded = () => {
 
 
 
-                            />
+                            /> */}
                         </div>
                         <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
                             <div className='text-[red] pr-2 text-xl'>* </div>
