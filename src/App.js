@@ -20,6 +20,7 @@ function App() {
   // minifridge edits
   // using web3Modal to handle login and account logic
   const [account, setAccount] = useState("");
+  const [txProcessing, setTxProcessing] = useState(false);
   const [web3Provider, setWeb3Provider] = useState(null);
   const web3Modal = web3ModalSetup();
 
@@ -123,7 +124,22 @@ function App() {
           />
           <div className="flex justify-center items-center gap-2">
             <Routes>
-              <Route path="/" exact element={<Board account={account} />} />
+              <Route
+                path="/"
+                exact
+                element={
+                  <Board
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
               <Route path="/roadmap" exact element={<Roadmap />} />
               <Route path="/team" exact element={<Team />} />
               <Route path="/ecosystem" exact element={<SpotEcosystem />} />

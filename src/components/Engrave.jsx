@@ -1,154 +1,222 @@
-import { stringify } from 'postcss';
-import React, { useEffect, useState } from 'react'
+import { stringify } from "postcss";
+import React, { useEffect, useState } from "react";
 import { useWeb3ExecuteFunction, useMoralisCloudFunction } from "react-moralis";
-import spotNFTAbi from '../contracts/spotNFTAbi.json';
-import Moralis from 'moralis';
-import unnamedData from '../metadata';
-import unnamedAbi from '../contracts/spotNFTAbi.json';
-import nfTombstoneABI from '../contracts/nfTombstoneABI.json';
+import spotNFTAbi from "../contracts/spotNFTAbi.json";
+import Moralis from "moralis";
+import unnamedData from "../metadata";
+import unnamedAbi from "../contracts/spotNFTAbi.json";
+import nfTombstoneABI from "../contracts/nfTombstoneABI.json";
+import axios from "axios";
+import { ethers, Contract } from "ethers";
+import {
+  TOMBSTONE_ADDRESS,
+  TOMBSTONE_ABI,
+} from "./Contracts/TombstoneContract";
 
-
-
-function Engrave(props) {
-  const [isLoading, setIsLoading] = useState(false)
-  const nfTombstonesContract = "0x9521807adf320d1cdf87afdf875bf438d1d92d87";
-  const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
-  const chosenNfTombstone = useState();
-  const chosenText = useState();
-  const contractProcessor = useWeb3ExecuteFunction();
-  const [isApproved, setIsApproved] = useState();
-
-  let userAddress = props.userAddress
-
-  const { data: mintData, error: mintError, fetch: mintFetch, isFetching: mintFetching, isLoading: mintLoading } = useWeb3ExecuteFunction();
-
-  function getImage() {
-    return props.saveImage()
-  }
-
+export default function Engrave({
+  props,
+  chosenTrait,
+  walletTraits,
+  background,
+  behind,
+  flair,
+  ground,
+  tombstone,
+  top,
+  id,
+  saveImage,
+  account,
+  canvas,
+  savedImage,
+  name,
+  epitaph,
+  txProcessing,
+  setTxProcessing,
+  ownedCards,
+  web3Provider,
+  tombstoneSelected,
+}) {
+  const {
+    data: mintData,
+    error: mintError,
+    fetch: mintFetch,
+    isFetching: mintFetching,
+    isLoading: mintLoading,
+  } = useWeb3ExecuteFunction();
 
   function checkTraits() {
-    let isSafeBG = props.solidBG.some(ai => props.chosenTrait.BackgroundID === ai)
-    if ((props.walletTraits.includes(String(props.chosenTrait.BackgroundID)) || isSafeBG) && props.walletTraits.includes(String(props.chosenTrait.BodyID)) && props.walletTraits.includes(String(props.chosenTrait.HeadID)) &&
-      props.walletTraits.includes(String(props.chosenTrait.MouthID)) && props.walletTraits.includes(String(props.chosenTrait.EyesID)) && (props.walletTraits.includes(String(props.chosenTrait.HeadwearID)) || props.chosenTrait.HeadwearID === '599')) {
+    // let isSafeBG = props.solidBG.some(
+    //   (ai) => props.chosenTrait.BackgroundID === ai
+    // );
+    if (
+      walletTraits.includes(String(chosenTrait.BackgroundID)) &&
+      walletTraits.includes(String(chosenTrait.BodyID)) &&
+      walletTraits.includes(String(chosenTrait.HeadID)) &&
+      walletTraits.includes(String(chosenTrait.MouthID)) &&
+      walletTraits.includes(String(chosenTrait.EyesID)) &&
+      (walletTraits.includes(String(chosenTrait.HeadwearID)) ||
+        chosenTrait.HeadwearID === "599")
+    ) {
       return true;
     } else return false;
   }
 
-  async function engraveTombstone() {
-
-    setIsLoading(true)
-    const base64 = await getImage()
-    const imageData = new Moralis.File("img.png", { base64: base64 });
-    await imageData.saveIPFS();
-    const imgURL = await imageData.ipfs();
-    console.log(imgURL)
-
-    const metadata = {
-      "name": "NFTombstone",
-      "description": "Engraved NFTombstone",
-      "image": imgURL,
-      "edition": props.id,
-      "attributes": [
-        {
-          "trait_type": "Background:",
-          "value": props.background
-        },
-        {
-          "trait_type": "Behind",
-          "value": props.behind
-        },
-        {
-          "trait_type": "Flair",
-          "value": props.flair
-        },
-        {
-          "trait_type": "Ground",
-          "value": props.ground
-        },
-        {
-          "trait_type": "Tombstone",
-          "value": props.tombstone
-        },
-        {
-          "trait_type": "Top",
-          "value": props.top
-        },
-        {
-          "trait_type": "Name",
-          "value": props.name
-        },
-        {
-          "trait_type": "Epitaph",
-          "value": props.epitaph
-        },
-
-      ],
-    }
-    console.log(metadata)
-
-
-
-    const metaDataFile = new Moralis.File("file.json", { base64: btoa(JSON.stringify(metadata)) });
-    await metaDataFile.saveIPFS();
-    const metaDataUrl = await metaDataFile.ipfs();
-    console.log(metaDataUrl)
-
-    await Moralis.enableWeb3();
-    const sendOptions = {
-      contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //nfTombstone mainnet
-      functionName: "engraveTombstone",
-      abi: nfTombstoneABI,
-      params: {
-        _tokenID: props.id,
-        newTokenUri: metaDataUrl
+  async function uploadToMoralis(filename, contents) {
+    const options = {
+      method: "POST",
+      url: "https://deep-index.moralis.io/api/v2/ipfs/uploadFolder",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY,
       },
+      data: [{ path: filename, content: contents }],
     };
-    const transaction = await contractProcessor.fetch({
-      params: sendOptions,
-      onError: (err) => {
-        setIsLoading(false);
-        alert(JSON.stringify(err.data.message));
-      },
-      onSuccess: (tx) => {
-        tx.wait(5)
-          .then(alert("Minted Successfully! View your NFT on Campfire, Kalao or Joepegs!"))
-          .then(setIsLoading(false))
-          .then(console.log(tx));
-      },
-    });
 
+    let response = await axios.request(options);
+    return response;
   }
 
+  async function setTokenURI(tokenURI, id) {
+    setTxProcessing(true);
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (TOMBSTONE_ABI && TOMBSTONE_ADDRESS && signer) {
+          const contract = new Contract(
+            TOMBSTONE_ADDRESS,
+            TOMBSTONE_ABI,
+            signer
+          );
+          let options = {
+            value: ethers.utils.parseEther(".1"),
+          };
+          console.log(id);
+          console.log(tokenURI);
 
-  if (isLoading) {
+          let tx = await contract.engraveTombstone(id, tokenURI);
+          console.log(tx.hash);
+          props.setTxProcessing(false);
+          alert(
+            "Engraved! Refresh your metadata on Campfire, Kalao or Joepegs!"
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTxProcessing(false);
+    }
+  }
+
+  async function engraveTombstone() {
+    setTxProcessing(true);
+    try {
+      let signature = await web3Provider
+        .getSigner()
+        .signMessage(
+          `Allow The Spot to process metadata upload and token URI setting for token ${id}`
+        );
+      const base64ImgContents = await saveImage();
+      let imgResponse = await uploadToMoralis(
+        `${id}-img.png`,
+        base64ImgContents
+      );
+
+      let imgURL = imgResponse.data.length > 0 ? imgResponse.data[0].path : "";
+
+      const metadata = {
+        name: "NFTombstone",
+        description: "Engraved NFTombstone",
+        image: imgURL,
+        edition: id,
+        attributes: [
+          {
+            trait_type: "Background:",
+            value: background,
+          },
+          {
+            trait_type: "Behind",
+            value: behind,
+          },
+          {
+            trait_type: "Flair",
+            value: flair,
+          },
+          {
+            trait_type: "Ground",
+            value: ground,
+          },
+          {
+            trait_type: "Tombstone",
+            value: tombstone,
+          },
+          {
+            trait_type: "Top",
+            value: top,
+          },
+          {
+            trait_type: "Name",
+            value: name,
+          },
+          {
+            trait_type: "Epitaph",
+            value: epitaph,
+          },
+        ],
+      };
+
+      let jsonResponse = await uploadToMoralis(`${id}-json.json`, metadata);
+
+      let jsonURL =
+        jsonResponse.data.length > 0 ? jsonResponse.data[0].path : "";
+
+      await setTokenURI(jsonURL, id);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTxProcessing(false);
+    }
+  }
+
+  if (txProcessing) {
     return (
-      <div><button className="inline-flex m-1 rounded-lg px-4 py-2 border-2 border-spot-yellow text-spot-yellow
-     duration-300 font-mono font-bold text-base" disabled>
-        <svg className="inline animate-ping h-5 w-5 mr-3" viewBox="0 0 35 35">
-          <circle className="path" cx="12" cy="15" r="10" fill="yellow" stroke="yellow" strokeWidth="2"></circle>
-        </svg>
-        Processing...
-      </button>
+      <div>
+        <button
+          className="inline-flex m-1 rounded-lg px-4 py-2 border-2 border-spot-yellow text-spot-yellow
+     duration-300 font-mono font-bold text-base"
+          disabled
+        >
+          <svg className="inline animate-ping h-5 w-5 mr-3" viewBox="0 0 35 35">
+            <circle
+              className="path"
+              cx="12"
+              cy="15"
+              r="10"
+              fill="yellow"
+              stroke="yellow"
+              strokeWidth="2"
+            ></circle>
+          </svg>
+          Processing...
+        </button>
       </div>
-    )
+    );
   } else
     return (
-
       <div className="flex w-full">
         <div className="w-full pr-5 pl-1">
-          <button className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={engraveTombstone}>Engrave</button>
-
-
+          <button
+            className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
+            disabled={!ownedCards || !tombstoneSelected}
+            onClick={() => engraveTombstone()}
+          >
+            Engrave
+          </button>
         </div>
-
-
-
-
       </div>
-
-    )
+    );
 }
-
-export default Engrave;
