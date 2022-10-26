@@ -12,6 +12,7 @@ import {
   TOMBSTONE_ADDRESS,
   TOMBSTONE_ABI,
 } from "./Contracts/TombstoneContract";
+import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "./Contracts/EngraverContract";
 
 export default function Engrave({
   props,
@@ -84,12 +85,8 @@ export default function Engrave({
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        if (TOMBSTONE_ABI && TOMBSTONE_ADDRESS && signer) {
-          const contract = new Contract(
-            TOMBSTONE_ADDRESS,
-            TOMBSTONE_ABI,
-            signer
-          );
+        if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+          const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
           let options = {
             value: ethers.utils.parseEther(".1"),
           };
