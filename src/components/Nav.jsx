@@ -27,6 +27,7 @@ export const Nav = ({
               <img src={logo} alt="logo" className="m-0 w-20"></img>
 
               <a href="https://thespot.art">The Spot</a>
+              <a href="https://joepegs.com/collections/0xe3525413c2a15daec57c92234361934f510356b8">View Tombstones</a>
             </ul>
           </div>
           <div
