@@ -1,5 +1,5 @@
-export const TOMBSTONE_ADDRESS = "0xe3525413c2a15daec57C92234361934f510356b8";
-export const TOMBSTONE_ABI = [
+export const GRAVEDIGGER_ADDRESS = "0xe3525413c2a15daec57C92234361934f510356b8";
+export const GRAVEDIGGER_ABI = [
 	{
 		"inputs": [
 			{
