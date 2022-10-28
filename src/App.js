@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import Moralis from "moralis";
 import SpotEcosystem from "./components/pages/SpotEcosystem";
 import Ded from "./components/pages/Ded";
+import { Unnamed } from "./components/pages/Unnamed";
 import { useState, useCallback } from "react";
 import { web3ModalSetup } from "./helpers/Web3Modal";
 import { ethers } from "ethers";
@@ -129,6 +130,22 @@ function App() {
                 exact
                 element={
                   <Board
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/unnamed"
+                exact
+                element={
+                  <Unnamed
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
