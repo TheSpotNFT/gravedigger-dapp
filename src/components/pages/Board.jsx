@@ -305,7 +305,7 @@ export const Board = ({
         },
         headers: {
           accept: "application/json",
-          "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY,
+          "X-API-Key": 'dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo', //process.env.REACT_APP_MORALIS_API_KEY
         },
       };
       try {
@@ -574,11 +574,10 @@ export const Board = ({
           {/* Individual Stats */}
           <div className="font-mono text-white list-none flex pb-3">
             <div
-              className={`text-${
-                walletTraits.includes(`${chosenTrait.TombStoneID}`)
-                  ? "spot-yellow"
-                  : "[red]"
-              } font-bold pr-3 pl-2`}
+              className={`text-${walletTraits.includes(`${chosenTrait.TombStoneID}`)
+                ? "spot-yellow"
+                : "[red]"
+                } font-bold pr-3 pl-2`}
             >
               TombStone ID:{" "}
             </div>
