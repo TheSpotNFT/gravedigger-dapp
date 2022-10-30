@@ -9,9 +9,11 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Roadmap from "./components/pages/roadmap";
 import Team from "./components/pages/team";
 import Footer from "./components/Footer";
+import AnalogCollection from "./components/pages/AnalogCollection"
 import Moralis from "moralis";
 import SpotEcosystem from "./components/pages/SpotEcosystem";
 import Ded from "./components/pages/Ded";
+import Staking from "./components/pages/Staking";
 import { Unnamed } from "./components/pages/Unnamed";
 import { useState, useCallback } from "react";
 import { web3ModalSetup } from "./helpers/Web3Modal";
@@ -157,6 +159,25 @@ function App() {
                   />
                 }
               />
+               <Route path="/analog" exact element={<AnalogCollection 
+            account={account}
+            web3Modal={web3Modal}
+            loadWeb3Modal={loadWeb3Modal}
+            web3Provider={web3Provider}
+            setWeb3Provider={setWeb3Provider}
+            logoutOfWeb3Modal={logoutOfWeb3Modal}
+            txProcessing={txProcessing}
+            setTxProcessing={setTxProcessing}/>} />
+
+             <Route path="/staking" exact element={<Staking 
+            account={account}
+            web3Modal={web3Modal}
+            loadWeb3Modal={loadWeb3Modal}
+            web3Provider={web3Provider}
+            setWeb3Provider={setWeb3Provider}
+            logoutOfWeb3Modal={logoutOfWeb3Modal}
+            txProcessing={txProcessing}
+            setTxProcessing={setTxProcessing}/>} />
               <Route path="/roadmap" exact element={<Roadmap />} />
               <Route path="/team" exact element={<Team />} />
               <Route path="/ecosystem" exact element={<SpotEcosystem />} />

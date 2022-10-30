@@ -16,6 +16,8 @@ export const Nav = ({
     { name: "NFTombstones", link: "/" },
     { name: "View Engraved NFTombstones", link: "https://joepegs.com/collections/0xe3525413c2a15daec57c92234361934f510356b8" },
     { name: "Unnamed Branding", link: "/unnamed" },
+    { name: "Analog", link: "/analog" },
+    { name: "Spot Staking", link: "/staking" },
     { name: "Twitter", link: "https://twitter.com/TheSpotnft" },
     { name: "Discord", link: "https://discord.com/invite/4wvC6xTFyB" },
   ];
