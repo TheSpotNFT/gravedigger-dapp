@@ -10,40 +10,154 @@ import Engrave from '../Engrave';
 import '../../Board.css'
 import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
+import { ethers, Contract } from "ethers";
+import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "../Contracts/EngraverContract";
+import image1 from "../../tombstoneimages/1.png"
 
-export const Ded = ({account}) => {
+export const Ded = ({
+    account,
+    web3Modal,
+    loadWeb3Modal,
+    web3Provider,
+    setWeb3Provider,
+    logoutOfWeb3Modal,
+    txProcessing,
+    setTxProcessing, }) => {
     const isAuthenticated = Boolean(account);
     const userAddress = account
     const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
     const [filter, setFilter] = useState('');
     const contractProcessor = useWeb3ExecuteFunction();
+    const [activeTombstone, setActiveTombstone] = useState();
+    const [graveyardInventory, setGraveyardInventory] = useState();
 
-    function fetchUsersNfts() {
-        const options = {
-            method: 'GET',
-            url: `https://deep-index.moralis.io/api/v2/${userAddress}/nft`,
-            params: { chain: 'avalanche', format: 'decimal' },
-            headers: { accept: 'application/json', 'X-API-Key': 'test' }
-        };
+    async function getActiveTombstone() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+                    const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
 
-        axios
-            .request(options)
-            .then(function (response) {
-                console.log(response.data);
-                console.log(response.data.result[10].metadata['image']);
+                    let activeTombstoneHex = await contract.addressToTombstone(account);
+                    setActiveTombstone(parseInt(activeTombstoneHex, 16));
 
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
+                    console.log(activeTombstoneHex);
+
+                    setTxProcessing(false);
+                    alert(
+                        `Active Tombstone ${activeTombstoneHex}`
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
     }
 
     useEffect(() => {
-        fetchUsersNfts()
+        getActiveTombstone()
 
     }
         , [])
+
+    //need function to set approval to send ded nfts to contract
+    async function setApprovalForAll() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+                    const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
+
+                    let activeTombstoneHex = await contract.setApprovalForAll(account);
+                    setActiveTombstone(parseInt(activeTombstoneHex, 16));
+
+                    console.log(activeTombstoneHex);
+
+                    setTxProcessing(false);
+                    alert(
+                        `Approval to send ded nft to graveyard!`
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
+
+    useEffect(() => {
+        setApprovalForAll()
+    }
+        , [])
+
+    //need function to send ded nfts
+    async function sendDedNft() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+                    const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
+
+                    let sendNft = await contract.dedOne(contract, "");//need to input selected nft to be sent
+                    console.log();
+
+                    setTxProcessing(false);
+                    alert(
+                        `NFT sent to graveyard!`
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
+
+    useEffect(() => {
+        sendDedNft()
+    }
+        , [])
+
+
+    useEffect(() => {
+        const getGraveyardNfts = async () => {
+            const options = {
+                method: "GET",
+                url: `https://deep-index.moralis.io/api/v2/0xc5578685415D720BF7d17f2F5F0976d23881C6BF/nft`,
+                params: {
+                    chain: "avalanche",
+                    format: "decimal",
+                },
+                headers: {
+                    accept: "application/json",
+                    "X-API-Key": 'dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo', //process.env.REACT_APP_MORALIS_API_KEY
+                },
+            };
+            try {
+                let response = await axios.request(options);
+                console.log(response);
+                let data = response.data;
+                setGraveyardInventory(data.result.map((nft) => nft.token_id));
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getGraveyardNfts();
+    }, [account]);
 
 
     {/* For retrieval of traits */ }
@@ -64,16 +178,6 @@ export const Ded = ({account}) => {
         Name: '',
         Epitaph: '',
     })
-
-    function getNFTsAddress() {
-        const options = { chain: "0xa86a", address: userAddress, token_address: spotTraitsContract };
-        Moralis.Web3API.account.getNFTsForContract(options).then((data) => {
-            const result = data.result
-            setWalletTraits(result.map(nft => nft.token_id))
-            setApiLoaded(true)
-        });
-    }
-
 
     function createCard(trait) { //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         return (
@@ -113,40 +217,35 @@ export const Ded = ({account}) => {
     const [ownedCards, setOwnedCards] = useState(false)
     //---------------------------------//
 
+    // Main Component Return
+    return (
+        <div className='container flex-auto mx-auto w-full'>
 
-    if (!isAuthenticated) {
-        return (
-            <Authenticate />
-        );
-    } else
-        // Main Component Return
-        return (
-            <div className='container flex-auto mx-auto w-full'>
+            {/* Canvas Row*/}
+            <div className="lg:sticky top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+                {/* canvas div */}
+                <div className="text-white font-mono"><img className="w-2/3" src={image1}></img>{/*Show active tombstone image*/}
+                    Active Tombstone</div>
+                {/* canvas div ends */}
+                {/* Stats div*/}
+                <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "25rem", width: "22rem" }}>
+                    {/* Individual Stats */}
+                    <div className='font-mono text-white list-none flex pb-3'>
+                        <div className="text-red font-bold pr-3 pl-2">Nft Selected (name of collection): </div>
 
-                {/* Canvas Row*/}
-                <div className="lg:sticky top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
-                    {/* canvas div */}
-                    <img className="w-full" src="../../tombstoneimages/1.png"></img>
-
-                    {/* canvas div ends */}
-                    {/* Stats div*/}
-                    <div className='grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "25rem", width: "22rem" }}>
-                        {/* Individual Stats */}
-                        <div className='font-mono text-white list-none flex pb-3'>
-                            <div className="text-red font-bold pr-3 pl-2">TombStone: </div>
-
-                        </div>
+                    </div>
 
 
-                        <div className='font-mono text-white list-none flex pb-3'>
-                            <div className='text-spot-yellow pl-2'>Name: </div>
+                    <div className='font-mono text-white list-none flex pb-3'>
+                        <div className='text-spot-yellow pl-2'>Token Id Selected: </div>
 
-                        </div>
-                        {/* End of Indiv Stats */}
-                        {/* Buttons */}
-                        <div className="pt-1 pb-1 flex">
+                    </div>
+                    {/* End of Indiv Stats */}
+                    {/* Buttons */}
+                    <div className="pt-1 pb-1 flex">
 
-                            {/* <Mint
+
+                        {/* <Mint
 
                                 walletTraits={walletTraits}
 
@@ -155,32 +254,27 @@ export const Ded = ({account}) => {
 
 
                             /> */}
-                        </div>
-                        <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
-                            <div className='text-[red] pr-2 text-xl'>* </div>
-                            TombStone not in your wallet.
-                        </div>
-                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
-                                setOwnedCards(!ownedCards)
-                            }}>{!ownedCards ? 'My TombStones' : 'View All TombStones'}</button></div>
-                        <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base">Activate Tombstone {chosenTrait.TombStoneID}</button></div>
-                        <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
-
-                            Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
-                        </div>
                     </div>
+                    <div className='font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2'>
+                        Current Active Tombstone: {activeTombstone}
+                    </div>
+                    <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" /*onClick={loadNfts}*/>View My NFTs</button></div> {/* on Click -> load/show users nft cards*/}
+                    <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" /*onClick={approveDedNft}*/>Approve to send selected NFT to the Graveyard</button></div>
+                    <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" /*onClick={sendNft}*/>Send Selected NFT to the Graveyard</button></div> {/*must approve first*/}
+                </div>
 
 
-                </div>{/* Canvas Row Div Ends*/}
-                <div className='overflow-y-auto'>
-                    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
-                        {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
-                    </div></div>
-            </div >
+            </div>{/* Canvas Row Div Ends*/}
+            <div className='overflow-y-auto'>
+                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+                    {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
+                </div></div>
+        </div >
 
-        )
+    )
 
 }
 export default Ded;

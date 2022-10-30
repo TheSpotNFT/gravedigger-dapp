@@ -160,7 +160,15 @@ function App() {
               <Route path="/roadmap" exact element={<Roadmap />} />
               <Route path="/team" exact element={<Team />} />
               <Route path="/ecosystem" exact element={<SpotEcosystem />} />
-              <Route path="/ded" exact element={<Ded account={account} />} />
+              <Route path="/ded" exact element={<Ded 
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing} />} />
             </Routes>
           </div>
         </div>

@@ -15,6 +15,8 @@ import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
 import MintCollection from "../../components/MintCollection";
 import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
+import { ethers, Contract } from "ethers";
+import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "../Contracts/EngraverContract";
 
 export const Board = ({
   account,
@@ -293,6 +295,36 @@ export const Board = ({
     // });
   }
 
+  async function activateTombstone() {
+    setTxProcessing(true);
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+          const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
+          let options = {
+            value: ethers.utils.parseEther(".1"),
+          };
+          console.log(chosenTrait.TombStoneID);
+
+
+          let tx = await contract.changeActiveTombstone(chosenTrait.TombStoneID);
+          console.log(tx.hash);
+          setTxProcessing(false);
+          alert(
+            `Tombstone ${chosenTrait.TombStoneID} Activated! You may now send ded nfts to the graveyard...`
+          );
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTxProcessing(false);
+    }
+  }
+
   useEffect(() => {
     const getTraits = async () => {
       const options = {
@@ -490,22 +522,6 @@ export const Board = ({
     setTombstoneId(chosenTrait.TombStoneID);
   }
 
-  async function activateTombstone() {
-    await Moralis.enableWeb3();
-    const options = {
-      contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //NFTombstone mainnet
-      functionName: "changeActiveTombstone",
-      abi: nfTombstoneABI,
-      params: {
-        _newTombstone: chosenTrait.TombStoneID, //NFTombstone mainnet
-      },
-    };
-    await contractProcessor.fetch({
-      params: options,
-    });
-    const transaction = await Moralis.executeFunction(options);
-    await transaction.wait();
-  }
 
   function saveImage() {
     const result = new Promise((resolve, reject) => {
@@ -646,15 +662,14 @@ export const Board = ({
               }}
             >
               {!ownedCards ? "My TombStones" : "View All TombStones"}
-            </button>
-          </div>
+            </button></div>
 
-          {/* <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+          <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
-                        <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
+          <div className='font-mono text-white list-none flex pb-3 text-sm pt-2'>
 
-                            Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
-                        </div>*/}
+            Activate your tombstone to send ded nfts to it. You may only have 1 tombstone activate at a time.
+          </div>
           <MintCollection
             account={account}
             txProcessing={txProcessing}
