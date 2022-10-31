@@ -46,7 +46,7 @@ export default function Mint(
       headers: {
         accept: "application/json",
         "content-type": "application/json",
-        "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+        "X-API-Key": process.env.REACT_APP_MORALIS_API_KEY,
       },
       data: [{ path: filename, content: contents }],
     };
