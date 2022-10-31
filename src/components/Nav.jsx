@@ -13,7 +13,8 @@ export const Nav = ({
 }) => {
 
   let Links = [
-    { name: "NFTombstones", link: "/" },
+    { name: "Home", link: "/" },
+    { name: "NFTombstones", link: "/gravedigger" },
     { name: "View Engraved NFTombstones", link: "https://joepegs.com/collections/0xe3525413c2a15daec57c92234361934f510356b8" },
     { name: "Unnamed Branding", link: "/unnamed" },
     { name: "Analog", link: "/analog" },

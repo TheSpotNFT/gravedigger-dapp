@@ -8,7 +8,9 @@ import { useChain } from "react-moralis";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Roadmap from "./components/pages/roadmap";
 import Team from "./components/pages/team";
+import Learning from "./components/pages/learning";
 import Footer from "./components/Footer";
+import Main from "./components/pages/Main";
 import AnalogCollection from "./components/pages/AnalogCollection"
 import Moralis from "moralis";
 import SpotEcosystem from "./components/pages/SpotEcosystem";
@@ -131,6 +133,22 @@ function App() {
                 path="/"
                 exact
                 element={
+                  <Main
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/gravedigger"
+                exact
+                element={
                   <Board
                     account={account}
                     web3Modal={web3Modal}
@@ -182,6 +200,7 @@ function App() {
               <Route path="/team" exact element={<Team />} />
               <Route path="/ecosystem" exact element={<SpotEcosystem />} />
               <Route path="/ded" exact element={<Ded account={account} />} />
+              <Route path="/learning" exact element={<Learning />}/>
             </Routes>
           </div>
         </div>
