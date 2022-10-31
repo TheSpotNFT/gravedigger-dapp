@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Select from "react-select";
 import Card from "../Card";
-import traits from "../../traits";
+import traits from "../../tombstoneTraits";
 import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Moralis from "moralis";

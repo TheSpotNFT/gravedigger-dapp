@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from '../Card';
-import traits from '../../traits';
+import traits from '../../tombstoneTraits';
 import unnamedData from '../../metadata.jsx'
 import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import Moralis from 'moralis';
@@ -11,7 +11,7 @@ import '../../Board.css'
 import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
 
-export const Ded = ({account}) => {
+export const Ded = ({ account }) => {
     const isAuthenticated = Boolean(account);
     const userAddress = account
     const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";

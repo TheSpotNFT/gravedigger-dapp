@@ -15,6 +15,7 @@ import AnalogCollection from "./components/pages/AnalogCollection"
 import Moralis from "moralis";
 import SpotEcosystem from "./components/pages/SpotEcosystem";
 import Ded from "./components/pages/Ded";
+import {Goatd} from "./components/pages/Goatd";
 import Staking from "./components/pages/Staking";
 import { Unnamed } from "./components/pages/Unnamed";
 import { useState, useCallback } from "react";
@@ -166,6 +167,22 @@ function App() {
                 exact
                 element={
                   <Unnamed
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/goatd"
+                exact
+                element={
+                  <Goatd
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
