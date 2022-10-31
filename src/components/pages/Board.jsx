@@ -507,6 +507,25 @@ export const Board = ({
     await transaction.wait();
   }
 
+  //window scroll
+  const [showButton, setShowButton] = useState(false);
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      if (window.pageYOffset > 300) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    });
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // for smoothly scrolling
+    });
+  };
+
   function saveImage() {
     const result = new Promise((resolve, reject) => {
       const imageToSave = new Image();
@@ -539,7 +558,7 @@ export const Board = ({
   return (
     <div className="container flex-auto mx-auto w-full">
       {/* Canvas Row*/}
-      <div className="lg:sticky top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+      <div className="top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
         {/* canvas div */}
 
         <div
@@ -892,6 +911,13 @@ export const Board = ({
       <div className="metal text-slate-900">2</div>
       <div className="predator text-slate-900">2</div>
       <div className="simple text-slate-900">!</div>
+      <div>
+        {showButton && (
+          <button onClick={scrollToTop} className="back-to-top">
+            &#94;
+          </button>
+        )}
+      </div>
     </div>
   );
 };

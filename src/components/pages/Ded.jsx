@@ -22,9 +22,9 @@ export const Ded = ({ account }) => {
     function fetchUsersNfts() {
         const options = {
             method: 'GET',
-            url: `https://deep-index.moralis.io/api/v2/${userAddress}/nft`,
+            url: `https://deep-index.moralis.io/api/v2/0x32bD2811Fb91BC46756232A0B8c6b2902D7d8763/nft`,
             params: { chain: 'avalanche', format: 'decimal' },
-            headers: { accept: 'application/json', 'X-API-Key': 'test' }
+            headers: { accept: 'application/json', 'X-API-Key': 'dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo' }
         };
 
         axios
