@@ -29,7 +29,13 @@ export const Goatd = ({
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
 
     const [filter, setFilter] = useState('');
-
+    const onClickUrl = (url) => {
+        return () => openInNewTab(url);
+    };
+    const openInNewTab = (url) => {
+        const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+        if (newWindow) newWindow.opener = null;
+    };
 
     {/* For Image retrieval */ }
     const [canvasImage, setCanvasImage] = useState({
@@ -205,55 +211,55 @@ export const Goatd = ({
 
     const [traitFetch, setTraitFetch] = useState();
 
-  async function checkDNA(currentDNA) {
-    try {
-      const { ethereum } = window;
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-        if (GOATD_ABI && GOATD_ADDRESS && signer) {
-          const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
+    async function checkDNA(currentDNA) {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (GOATD_ABI && GOATD_ADDRESS && signer) {
+                    const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
 
-          let fetch = await contract.checkDNA(currentDNA);
-          return fetch;
+                    let fetch = await contract.checkDNA(currentDNA);
+                    return fetch;
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
         }
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
+
+        return "";
     }
 
-    return "";
-  }
+    const [pfpFecth, setPfpFetch] = useState();
 
-  const [pfpFecth, setPfpFetch] = useState();
+    //Calling Traits Contract and PFP Contract using Moralis below.
+    const currentDNA =
+        "" +
+        chosenTrait.BodyID +
+        chosenTrait.HeadID +
+        chosenTrait.EyesID +
+        chosenTrait.MouthID +
+        chosenTrait.HeadwearID;
 
-  //Calling Traits Contract and PFP Contract using Moralis below.
-  const currentDNA =
-    "" +
-    chosenTrait.BodyID +
-    chosenTrait.HeadID +
-    chosenTrait.EyesID +
-    chosenTrait.MouthID +
-    chosenTrait.HeadwearID;
+    useEffect(() => {
+        const handleDNA = async () => {
+            if (currentDNA) {
+                console.log(currentDNA);
+                let fetch = await checkDNA(currentDNA);
+                console.log("Fetch: " + fetch);
 
-  useEffect(() => {
-    const handleDNA = async () => {
-      if (currentDNA) {
-        console.log(currentDNA);
-        let fetch = await checkDNA(currentDNA);
-        console.log("Fetch: " + fetch);
+                if (fetch) {
+                    setTraitFetch(fetch);
+                    setPfpFetch(fetch);
+                    setTraitsAvailability(fetch);
+                }
+            }
+        };
 
-        if (fetch) {
-          setTraitFetch(fetch);
-          setPfpFetch(fetch);
-          setTraitsAvailability(fetch);
-        }
-      }
-    };
-
-    handleDNA();
-  }, [chosenTrait]);
+        handleDNA();
+    }, [chosenTrait]);
 
     //Pass current DNA of selected traits in checkDNA function of NFT contract. Set Availability to 0 if available.
     const [traitsAvailability, setTraitsAvailability] = useState('1')
@@ -297,32 +303,32 @@ export const Goatd = ({
                     {/* Individual Stats */}
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Background: </div>
-                        {chosenTrait.Background} (ID: {chosenTrait.BackgroundID})
+                        {chosenTrait.Background} (ID: {chosenTrait.BackgroundID}) <div className={`${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) || (solidBG.some(ai => chosenTrait.BackgroundID === "")) ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BackgroundID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.BodyID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Body: </div>
-                        {chosenTrait.Body} (ID: {chosenTrait.BodyID})
+                        {chosenTrait.Body} (ID: {chosenTrait.BodyID})<div className={`${walletTraits.includes(`${chosenTrait.BodyID}`) || chosenTrait.BodyID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BodyID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.HeadID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Head: </div>
-                        {chosenTrait.Head} (ID: {chosenTrait.HeadID})
+                        {chosenTrait.Head} (ID: {chosenTrait.HeadID})<div className={`${walletTraits.includes(`${chosenTrait.HeadID}`) || chosenTrait.HeadID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.EyesID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Eyes: </div>
-                        {chosenTrait.Eyes} (ID: {chosenTrait.EyesID})
+                        {chosenTrait.Eyes} (ID: {chosenTrait.EyesID})<div className={`${walletTraits.includes(`${chosenTrait.EyesID}`) || chosenTrait.EyesID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.EyesID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.MouthID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Mouth: </div>
-                        {chosenTrait.Mouth} (ID: {chosenTrait.MouthID})
+                        {chosenTrait.Mouth} (ID: {chosenTrait.MouthID})<div className={`${walletTraits.includes(`${chosenTrait.MouthID}`) || chosenTrait.MouthID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.MouthID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "spot-yellow" : "[red]"} font-bold pr-3`}>Headwear: </div>
-                        {chosenTrait.Headwear} (ID: {chosenTrait.HeadwearID})
+                        {chosenTrait.Headwear} (ID: {chosenTrait.HeadwearID})<div className={`${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadwearID}/`)} > Buy Now!</div>
                     </div>
                     {/* End of Indiv Stats */}
                     {/* Buttons */}
