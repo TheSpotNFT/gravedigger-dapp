@@ -203,95 +203,57 @@ export const Goatd = ({
 
     //Junk attempt to do checkDNA with ethers. Crashes once you select 4 traits.
 
-    /*const [traitFetch, setTraitFetch] = useState();
+    const [traitFetch, setTraitFetch] = useState();
 
-    async function checkCurrentDNA(currentDNA) {
+  async function checkDNA(currentDNA) {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (GOATD_ABI && GOATD_ADDRESS && signer) {
+          const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
 
-        try {
-            const checkCurrentDNA = async () => {
-                const { ethereum } = window;
-                if (ethereum) {
-                    const provider = new ethers.providers.Web3Provider(ethereum);
-                    const signer = provider.getSigner();
-                    if (GOATD_ABI && GOATD_ADDRESS && signer) {
-                        const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
-                        let options = {
-                            value: ethers.utils.parseEther(".3"),
-                        };
-
-                        let fetch = await contract.checkDNA(currentDNA);
-                        setTraitFetch(fetch);
-
-                    }
-                }
-            };
-            checkCurrentDNA();
+          let fetch = await contract.checkDNA(currentDNA);
+          return fetch;
         }
-        catch (error) {
-            console.log(error);
-        } finally {
-
-        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
     }
 
-    const [pfpFecth, setPfpFetch] = useState();
+    return "";
+  }
 
-    async function checkPfpDNA(currentDNA) {
+  const [pfpFecth, setPfpFetch] = useState();
 
-        try {
-            const checkCurrentDNA = async () => {
-                const { ethereum } = window;
-                if (ethereum) {
-                    const provider = new ethers.providers.Web3Provider(ethereum);
-                    const signer = provider.getSigner();
-                    if (GOATD_ABI && GOATD_ADDRESS && signer) {
-                        const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
-                        let options = {
-                            value: ethers.utils.parseEther(".3"),
-                        };
+  //Calling Traits Contract and PFP Contract using Moralis below.
+  const currentDNA =
+    "" +
+    chosenTrait.BodyID +
+    chosenTrait.HeadID +
+    chosenTrait.EyesID +
+    chosenTrait.MouthID +
+    chosenTrait.HeadwearID;
 
-                        let fetch = await contract.checkDNA(currentDNA);
-                        setPfpFetch(fetch);
+  useEffect(() => {
+    const handleDNA = async () => {
+      if (currentDNA) {
+        console.log(currentDNA);
+        let fetch = await checkDNA(currentDNA);
+        console.log("Fetch: " + fetch);
 
-                    }
-                }
-            };
-            checkCurrentDNA();
+        if (fetch) {
+          setTraitFetch(fetch);
+          setPfpFetch(fetch);
+          setTraitsAvailability(fetch);
         }
-        catch (error) {
-            console.log(error);
-        } finally {
+      }
+    };
 
-        }
-    }
-
-    useEffect(() => {
-        checkCurrentDNA();
-        checkPfpDNA();
-    }
-        , [chosenTrait])
-        */
-    //Calling Traits Contract and PFP Contract using Moralis below.
-    const currentDNA = "" + chosenTrait.BodyID + chosenTrait.HeadID + chosenTrait.EyesID + chosenTrait.MouthID + chosenTrait.HeadwearID;
-
-    //Below is code that utilizes Moralis for checkDNA
-
-    const { data: traitData, error: traitError, fetch: traitFetch, isFetching: traitFetching, isLoading: traitLoading } = useWeb3ExecuteFunction({
-        abi: spotNFTAbi,
-        contractAddress: spotNFTContract,
-        functionName: "checkDNA",
-        params: {
-            DNA: currentDNA,
-        },
-    });
-    const { data: pfpData, error: pfpError, fetch: pfpFetch, isFetching: pfpFetching, isLoading: pfpLoading } = useWeb3ExecuteFunction({
-        abi: spotTraitsAbi,
-        contractAddress: spotTraitsContract,
-        functionName: "checkDNA",
-        params: {
-            DNA: currentDNA,
-        },
-    });
+    handleDNA();
+  }, [chosenTrait]);
 
     //Pass current DNA of selected traits in checkDNA function of NFT contract. Set Availability to 0 if available.
     const [traitsAvailability, setTraitsAvailability] = useState('1')
