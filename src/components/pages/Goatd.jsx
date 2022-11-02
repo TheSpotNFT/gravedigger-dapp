@@ -221,6 +221,7 @@ export const Goatd = ({
                     const contract = new Contract(GOATD_ADDRESS, GOATD_ABI, signer);
 
                     let fetch = await contract.checkDNA(currentDNA);
+
                     return fetch;
                 }
             }
@@ -249,7 +250,7 @@ export const Goatd = ({
                 console.log(currentDNA);
                 let fetch = await checkDNA(currentDNA);
                 console.log("Fetch: " + fetch);
-
+                //let fetchString = fetch.toString();
                 if (fetch) {
                     setTraitFetch(fetch);
                     setPfpFetch(fetch);
@@ -265,7 +266,7 @@ export const Goatd = ({
     const [traitsAvailability, setTraitsAvailability] = useState('1')
     useEffect(function () {
         if (currentDNA.length > 14) {
-            traitFetch()
+            checkDNA()
                 .then((data) => setTraitsAvailability(JSON.stringify(data)))
         }
     }, [chosenTrait])
