@@ -14,7 +14,9 @@ import "../../Board.css";
 import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
 import MintCollection from "../../components/MintCollection";
+import sendNFT from "../../components/sendNFTombstoned";
 import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
+import SendNFTombstoned from "../../components/sendNFTombstoned";
 
 export const Board = ({
   account,
@@ -588,7 +590,7 @@ export const Board = ({
         {/* Stats div*/}
         <div
           className="grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-          style={{ height: "28rem", width: "22rem" }}
+          style={{ height: "31rem", width: "22rem" }}
         >
           {/* Individual Stats */}
           <div className="font-mono text-white list-none flex pb-3">
@@ -679,7 +681,18 @@ export const Board = ({
             txProcessing={txProcessing}
             setTxProcessing={setTxProcessing}
           />
+          <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
+
+            Send your NFTombstone to an address and get them NFTombstoned! When they get NFTombstoned they will receive your NFTombstone as a soulbound token!
+          </div><div className="pr-5">
+            <SendNFTombstoned
+              id={chosenTrait.TombStoneID}
+              account={account}
+              txProcessing={txProcessing}
+              setTxProcessing={setTxProcessing}
+            /></div>
         </div>
+
 
         <div className="gap-4 pt-8 pl-2 grid grid-col-4">
           <div className="flex">
