@@ -375,31 +375,91 @@ export const ScribbleUpdate = ({
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
 
-                    <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 w-1/2"></img>
+                    <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 w-1/2 pr-6 pt-2"></img>
+                    <div
+                        className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
+                        style={{ height: "16rem", width: "18rem" }}
+                    >
+                        {/* Individual Stats */}
+                        <div className="font-mono text-white list-none flex pb-3">
+                            <div
+                                className={`text-spot-yellow font-bold pr-3 pl-2`}
+                            >
+                                Scribble Custom ID:
+                            </div>
+                            {chosenTrait.TombStoneID}
+                        </div>
+
+
+
+                        {/* End of Indiv Stats */}
+                        {/* Buttons */}
+
+
+                        <div className="pr-2">
+                            <div className="w-full flex">
+                                <div className="w-full pl-1 pr-3">
+
+                                    <div className="container">
+                                        <div className="pl-1 pb-2"><label class="text-white form-label">Choose File</label></div>
+                                        <input className="text-white pb-2 pl-1" type="file" onChange={changeHandler} />
+                                        <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
+       hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={handleSubmission}>Upload Custom Image</button>
+                                    </div>
+
+
+                                </div>
+                            </div></div>
+
+                        <ScribbleMint
+                            chosenTrait={chosenTrait}
+                            walletTraits={walletTraits}
+                            background={tomebstoneBackground}
+                            behind={tombstoneBehind}
+                            flair={tombstoneFlair}
+                            ground={tombstoneGround}
+                            tombstone={tombstoneBase}
+                            top={tombstoneTop}
+                            id={chosenTrait.TombStoneID}
+                            imgURL={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`}
+                            account={account}
+                            canvas={chosenTrait}
+                            savedImage={savedImage}
+                            pieceName={textinput}
+                            name={"name"}
+                            color={"color"}
+                            noun={"noun"}
+                            scribbleNote={textinputText1}
+                            txProcessing={txProcessing}
+                            setTxProcessing={setTxProcessing}
+                            ownedCards={ownedCards}
+                            web3Provider={web3Provider}
+                            nftSelected={nftSelected}
+                        />
+
+                    </div>
                     <div className="pb-6 md: pl-6">
-                        <h1 className="text-left font-mono text-lg text-yellow-400 pt-1 pb-6">
+                        <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs Metadata Update
                         </h1>
 
                         <div className="gap-4 pt-1 pl-2 grid grid-col-4">
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-5">Piece Name: </div>
+                                <div className="col-span-2 text-white pr-6">Collector's Name: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Piece Name Chosen
+                                    Junk
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Collector's Name: </div>
+                                <div className="col-span-2 text-white pr-5">Piece Name: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Name Chosen
+                                    Trash
                                 </div>
-
-
                             </div>
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Color: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Color Chosen By Collector
+                                    Brown
                                 </div>
 
 
@@ -407,7 +467,7 @@ export const ScribbleUpdate = ({
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Noun: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Noun Chosen By Collector
+                                    Junk
                                 </div>
 
 
@@ -417,7 +477,7 @@ export const ScribbleUpdate = ({
                                 <div>
                                     <input
                                         type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-48 h-6"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-6"
                                         placeholder="Scribble Field"
                                         value={textinputText1}
                                         onChange={textinputUserText1.bind(this)}
@@ -441,77 +501,16 @@ export const ScribbleUpdate = ({
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
-                <div
-                    className="grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                    style={{ height: "14rem", width: "20rem" }}
-                >
-                    {/* Individual Stats */}
-                    <div className="font-mono text-white list-none flex pb-3">
-                        <div
-                            className={`text-spot-yellow font-bold pr-3 pl-2`}
-                        >
-                            Scribble Custom ID:
-                        </div>
-                        {chosenTrait.TombStoneID}
-                    </div>
 
-
-
-                    {/* End of Indiv Stats */}
-                    {/* Buttons */}
-
-
-                    <div className="pr-2">
-                        <div className="w-full flex">
-                            <div className="w-full pl-1 pr-3">
-
-                                <div className="container">
-                                    <label class="text-white form-label">Choose File</label>
-                                    <input className="text-white" type="file" onChange={changeHandler} />
-                                    <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
-       hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={handleSubmission}>Upload Custom Image</button>
-                                </div>
-
-
-                            </div>
-                        </div></div>
-
-                    <ScribbleMint
-                        chosenTrait={chosenTrait}
-                        walletTraits={walletTraits}
-                        background={tomebstoneBackground}
-                        behind={tombstoneBehind}
-                        flair={tombstoneFlair}
-                        ground={tombstoneGround}
-                        tombstone={tombstoneBase}
-                        top={tombstoneTop}
-                        id={chosenTrait.TombStoneID}
-                        imgURL={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`}
-                        account={account}
-                        canvas={chosenTrait}
-                        savedImage={savedImage}
-                        pieceName={textinput}
-                        name={"name"}
-                        color={"color"}
-                        noun={"noun"}
-                        scribbleNote={textinputText1}
-                        txProcessing={txProcessing}
-                        setTxProcessing={setTxProcessing}
-                        ownedCards={ownedCards}
-                        web3Provider={web3Provider}
-                        nftSelected={nftSelected}
-                    />
-
-                </div>
 
             </div>
-            <div className="overflow-y-auto">
+            {/*} <div className="overflow-y-auto">
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
                         ? ownedFilter.map(createCard)
                         : dataSearch.map(createCard)}
                 </div>
-            </div>
+                    </div>*/}
 
         </div>
     );
