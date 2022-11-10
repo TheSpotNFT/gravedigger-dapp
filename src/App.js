@@ -21,6 +21,9 @@ import { Unnamed } from "./components/pages/Unnamed";
 import { useState, useCallback } from "react";
 import { web3ModalSetup } from "./helpers/Web3Modal";
 import { ethers } from "ethers";
+import { Scribble } from "./components/pages/ScribbleCustoms";
+import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
+
 
 function App() {
   // minifridge edits
@@ -151,6 +154,38 @@ function App() {
                 exact
                 element={
                   <Board
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/scribble"
+                exact
+                element={
+                  <Scribble
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/scribbleupdate"
+                exact
+                element={
+                  <ScribbleUpdate
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
