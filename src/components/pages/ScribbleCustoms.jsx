@@ -501,10 +501,13 @@ export const Scribble = ({
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
                     <img src={image1} alt="logo" className="m-0 w-1/2"></img>
-                    <div className="pb-6 md: pl-10 w-1/2">
+                    <div className="pb-6 md: pl-4 w-1/2">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs
                         </h1>
+                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6">
+                            Enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
+                        </h3>
 
                         <div className="gap-4 pt-1 pl-2 grid grid-col-1 justify-items-end pr-14">
                             <div className="flex flex-col-2">
@@ -513,7 +516,7 @@ export const Scribble = ({
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Name"
+                                        placeholder="Name (optional)"
                                         value={textinput}
                                         onChange={textinputUser.bind(this)}
                                     />
@@ -525,7 +528,7 @@ export const Scribble = ({
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Name"
+                                        placeholder="Name (optional)"
                                         value={textinputText2}
                                         onChange={textinputUserText2.bind(this)}
                                     />
