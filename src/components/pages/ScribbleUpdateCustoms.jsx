@@ -367,7 +367,7 @@ export const ScribbleUpdate = ({
 
     // Main Component Return
     return (
-        <div className="container flex-auto mx-auto w-full">
+        <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
             <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
@@ -375,7 +375,7 @@ export const ScribbleUpdate = ({
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
 
-                    <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 w-1/2 pr-6 pt-2"></img>
+                    <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
                         style={{ height: "16rem", width: "18rem" }}
@@ -473,7 +473,7 @@ export const ScribbleUpdate = ({
 
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Personal Message: </div>
+                                <div className="col-span-2 text-white pr-6">Lore: </div>
                                 <div>
                                     <input
                                         type="text"

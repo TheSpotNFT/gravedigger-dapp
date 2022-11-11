@@ -114,7 +114,7 @@ export default function Learning() {
           </div>
         </div>
         <div className="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-34 pt-4 sm:mt-0 text-center sm:text-left">
-          <p className="leading-relaxed text-xl mb-4 text-justify">Coming Soon..</p> 
+          <p className="leading-relaxed text-xl mb-4 text-justify">NFTombstones bring customizable dNFTs that are customizable by the collector and sendable as soul bound tokens to unexpecting wallets. Mint your NFTombstone, engrave it with you personal name and message, even send ded nfts to your tombstone! If you hold a Spot NFT you can resurrect ded NFTs that have been sent to the graveyard. As stated before you can send your engraved NFTombstone to another wallet as a soul bound token, stuck there FOREVER!!! What message will you send? What NFTs will get sent to the graveyard? What will you engrave????</p> 
         </div>
       </div>
     </div>
