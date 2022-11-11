@@ -493,15 +493,15 @@ export const Scribble = ({
 
     // Main Component Return
     return (
-        <div className="container flex-auto mx-auto w-full">
+        <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="top-20 grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900">
                 {/* canvas div */}
 
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
-                    <img src={image1} alt="logo" className="m-0 w-1/2"></img>
-                    <div className="pb-6 md: pl-4 w-1/2">
+                    <img src={image1} alt="logo" className="m-0 h-96"></img>
+                    <div className="pb-6 pl-4 w-1/2">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs
                         </h1>
@@ -569,7 +569,7 @@ export const Scribble = ({
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div
-                    className="grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
+                    className="grow border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
                     style={{ height: "18rem", width: "22rem" }}
                 >
                     {/* Individual Stats */}
@@ -640,7 +640,7 @@ export const Scribble = ({
             </div>
             {/* Canvas Row Div Ends*/}
             <div className="overflow-y-auto">
-                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
                         ? ownedFilter.map(createMindMatterCard)
                         : dataSearch.map(createMindMatterCard)}

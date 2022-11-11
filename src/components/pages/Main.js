@@ -8,6 +8,7 @@ import evolve from "../../assets/1.png";
 import cemetery from "../../assets/Cemetery.PNG";
 import unnamednft from "../../assets/logounnamed.png";
 import fragments from "../../assets/question.png";
+import scribbleCardGraphic from "../../assets/scribble/scribbleMain.png";
 
 
 const Main = ({
@@ -80,7 +81,7 @@ const Main = ({
               </button>
       </div>
 </div>
-    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 xxl:grid-cols-6 gap-10 font-mono text-spot-yellow bg-slate-900">
+    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-10 font-mono text-spot-yellow bg-slate-900">
       <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
         <img className="w-full" src={thespot} alt=""></img>
         <div className="px-6 py-4">
@@ -125,7 +126,44 @@ const Main = ({
           </div>
         </div>
       </div>
-
+      <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
+        <img className="w-full" src={cemetery} alt=""></img>
+        <div className="px-6 py-4">
+          <div className="font-bold text-xl mb-2 flex justify-center">
+            <h1>The Cemetery</h1>
+          </div>
+          <div className="text-slate-50 text-base">
+            <div className="flex flex-col space-y-4 py-4">
+              <button
+                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
+      onClick={onClickUrl("/gravedigger")}
+              >
+                Enter The Cemetery
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
+        <img className="w-full" src={scribbleCardGraphic} alt=""></img>
+        <div className="px-6 py-4">
+          <div className="font-bold text-xl mb-2 flex justify-center">
+            <h1>Scribble Warlock Customs</h1>
+          </div>
+          <div className="text-slate-50 text-base">
+            <div className="flex flex-col space-y-4 py-4">
+              <button
+                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
+      onClick={onClickUrl("/scribble")}
+              >
+                Enter Customs
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
         <img className="w-full" src={analog} alt=""></img>
         <div className="px-6 py-4">
@@ -184,25 +222,7 @@ const Main = ({
           </div>
         </div>
       </div>
-      <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
-        <img className="w-full" src={cemetery} alt=""></img>
-        <div className="px-6 py-4">
-          <div className="font-bold text-xl mb-2 flex justify-center">
-            <h1>The Cemetery</h1>
-          </div>
-          <div className="text-slate-50 text-base">
-            <div className="flex flex-col space-y-4 py-4">
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-      onClick={onClickUrl("/gravedigger")}
-              >
-                Enter The Cemetery
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+     
      {/* <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
         <img className="w-full" src={fragments} alt=""></img>
         <div className="px-6 py-4">
