@@ -224,6 +224,8 @@ export const Scribble = ({
         getNfts();
     }, [collection]);
 */
+
+
     useEffect(() => {
         const getTraits = async () => {
             const options = {

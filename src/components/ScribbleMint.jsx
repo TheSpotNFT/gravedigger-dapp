@@ -50,6 +50,10 @@ export default function ScribbleMint({
         isLoading: mintLoading,
     } = useWeb3ExecuteFunction();
 
+    function alertClick() {
+        alert("Wen Mint??! Follow @ScribbleWarl0ck on bird app to find out more..");
+    }
+
 
     async function uploadToMoralis(filename, contents) {
         const options = {
@@ -178,12 +182,22 @@ export default function ScribbleMint({
                     <button
                         className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
      hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
+
+                        onClick={alertClick}
+                    >
+                        Mint Custom Card
+                    </button>
+                    {/*<button
+                        className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
                         disabled={!mintEnabled || mintEnabled}
                         onClick={() => scribbleMint()}
                     >
                         Mint Custom Card
-                    </button>
+        </button>*/}
                 </div>
             </div>
         );
+
+
 }
