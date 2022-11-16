@@ -385,7 +385,7 @@ export const Scribble = ({
     return (
         <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900">
+            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
                 {/* canvas div */}
 
                 <div
@@ -524,7 +524,7 @@ export const Scribble = ({
 
             {/* Canvas Row Div Ends*/}
             <div className="overflow-y-auto">
-                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+                <div className="justify-center px-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
                         ? ownedFilter.map(createMindMatterCard)
                         : dataSearch.map(createMindMatterCard)}
