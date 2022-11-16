@@ -26,7 +26,7 @@ export const Nav = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="main-nav pb-20">
+    <nav className="main-nav pb-40">
       <div className="shadow-md w-full fixed top-0 left-0 pb-4 md:pb-0 bg-spot-yellow">
         <div className="md:flex items-center justify-between bg-spot-yellow py-0 px-7">
           <div className="desktop-nav">

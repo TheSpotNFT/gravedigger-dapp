@@ -3,18 +3,11 @@ import Select from "react-select";
 import Card from "../ScribbleCard";
 import traits from "../../traits";
 import traitsCustoms from "../../scribbleCustoms";
-import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
-import Authenticate from "../Authenticate";
-import spotNFTAbi from "../../contracts/spotNFTAbi.json";
-import spotTraitsAbi from "../../contracts/spotTraitsAbi.json";
-import SetApproval from "../SetApproval";
 import ScribbleMint from "../ScribbleMint";
 import "../../Board.css";
-import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
-import MintCollection from "../MintCollection";
-import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
 import image1 from "../../assets/scribble/CARD_PLACEHOLDER.jpg"
+import DisplayCards from "../ScribbleCard1";
 
 
 export const Scribble = ({
@@ -29,12 +22,8 @@ export const Scribble = ({
 }) => {
     const isAuthenticated = Boolean(account);
     const userAddress = account;
-    const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
-    const spotNFTContract = "0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC";
     const [filter, setFilter] = useState("");
-    const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
 
-    const nfTombstoneMetaData = nftombstoneData;
 
     //scribble
     const [contractSelected, setContractSelected] = useState();
@@ -47,37 +36,13 @@ export const Scribble = ({
     const wastelandContract = "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154";
     const resonateContract = "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2";
 
-    //for text on canvas
+
     const [textinput, setTextinput] = useState("");
-    const [xInput, setXInput] = useState("160");
-    const [yInput, setYInput] = useState("260");
-    const [fontSize, setFontSize] = useState("30");
-    const [xInputX2, setXInputX2] = useState("163");
-    const [yInputX2, setYInputX2] = useState("260");
-    const [fontSizeX2, setFontSizeX2] = useState("30");
-
     const [collection, setCollection] = useState("0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1");
-
     const [textinputText, setTextinputText] = useState("");
-    const [xInputText, setXInputText] = useState("198");
-    const [yInputText, setYInputText] = useState("287");
-    const [fontSizeText, setFontSizeText] = useState("15");
-    const [xInputTextX2, setXInputTextX2] = useState("201");
-    const [yInputTextX2, setYInputTextX2] = useState("287");
-    const [fontSizeTextX2, setFontSizeTextX2] = useState("15");
-    const [fontText, setFontText] = useState("Durka");
-    const [fontStyleText, setFontStyleText] = useState("normal");
-
     const [textinputText1, setTextinputText1] = useState("");
     const [textinputText2, setTextinputText2] = useState("");
-    const [xInputText1, setXInputText1] = useState("177");
-    const [yInputText1, setYInputText1] = useState("310");
-    const [fontSizeText1, setFontSizeText1] = useState("15");
-    const [xInputText1X2, setXInputText1X2] = useState("180");
-    const [yInputText1X2, setYInputText1X2] = useState("313");
-    const [fontSizeText1X2, setFontSizeText1X2] = useState("15");
-    const [fontText1, setFontText1] = useState("Durka");
-    const [fontStyleText1, setFontStyleText1] = useState("normal");
+    const [catalogNumber, setCatalogNumber] = useState("1");
 
 
     //user input text vars
@@ -85,14 +50,8 @@ export const Scribble = ({
     const textinputUser = (event) => {
         setTextinput(event.target.value);
     };
-    const userFontSize = (event) => {
-        setFontSize(event.target.value);
-    };
     const textinputUserText = (event) => {
         setTextinputText(event.target.value);
-    };
-    const userFontSizeText = (event) => {
-        setFontSizeText(event.target.value);
     };
     const textinputUserText1 = (event) => {
         setTextinputText1(event.target.value);
@@ -100,20 +59,17 @@ export const Scribble = ({
     const textinputUserText2 = (event) => {
         setTextinputText2(event.target.value);
     };
-    const userFontSizeText1 = (event) => {
-        setFontSizeText1(event.target.value);
-    };
 
     //name font info
     const collectionOptions = [
-        { value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1", label: "Mind Matter" },
-        { value: "0x424F2C77341d692496544197Cc39708F214EEfc4", label: "Overload" },
-        { value: "0x5DF36A4E61800e8cc7e19d6feA2623926C8EF960", label: "Tales" },
-        { value: "0x8d17f8Ca6EFE4c85981A4C73c5927beEe2Ad1168", label: "Peaches and Strawbs" },
-        { value: "0x8f1e73AA735A33e3E01573665dc7aB66DDFBa4B2", label: "Abstract" },
-        { value: "0xeCf0d76AF401E400CBb5C4395C76e771b358FE06", label: "Unfinished" },
-        { value: "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154", label: "Wasteland" },
-        { value: "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2", label: "Resonate" },
+        { value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1", label: "Mind Matter", catalog: "1" },
+        { value: "0x424F2C77341d692496544197Cc39708F214EEfc4", label: "Overload", catalog: "2" },
+        { value: "0x5DF36A4E61800e8cc7e19d6feA2623926C8EF960", label: "Tales", catalog: "3" },
+        { value: "0x8d17f8Ca6EFE4c85981A4C73c5927beEe2Ad1168", label: "Peaches and Strawbs", catalog: "4" },
+        { value: "0x8f1e73AA735A33e3E01573665dc7aB66DDFBa4B2", label: "Abstract", catalog: "5" },
+        { value: "0xeCf0d76AF401E400CBb5C4395C76e771b358FE06", label: "Unfinished", catalog: "6" },
+        { value: "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154", label: "Wasteland", catalog: "7" },
+        { value: "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2", label: "Resonate", catalog: "8" },
     ];
     const [collectionDescription, setCollectionDescription] = useState("Mind Matter")
 
@@ -121,8 +77,9 @@ export const Scribble = ({
         console.log("handleChange", selectedOption.value);
         setCollection(selectedOption.value);
         setCollectionDescription(selectedOption.label);
+        setCatalogNumber(selectedOption.catalog);
     };
-
+    console.log(catalogNumber);
     /*async function getHasClaimed(tokenURI, id) {
       setTxProcessing(true);
       try {
@@ -150,41 +107,17 @@ export const Scribble = ({
       }
     }
   */
-    //For Metadata
-    const [tomebstoneBackground, setTombstoneBackground] = useState();
-    const [tombstoneBase, setTombstoneBase] = useState();
-    const [tombstoneBehind, setTomstoneBehind] = useState();
-    const [tombstoneFlair, setTombstoneFlair] = useState();
-    const [tombstoneGround, setTombstoneGround] = useState();
-    const [tombstoneTop, setTombstoneTop] = useState();
-    const [tombstoneId, setTombstoneId] = useState();
-    const [name, setName] = useState();
-    const [epitaph, setEpitaph] = useState();
-    const [epitaph1, setEpitaph1] = useState();
+
 
     {
-        /* For Image retrieval */
-    }
-    const [canvasImage, setCanvasImage] = useState({
-        TombStone: "",
-        Text: "",
-    });
-    {
-        /* For Traits retrieval */
+        /* For Data retrieval */
     }
     const [chosenTrait, setChosenTrait] = useState({
-        TombStone: "1",
-        TombStoneID: "1",
+        Scribble: "1",
+        ScribbleID: "1",
         Custom: "",
         CustomID: "1",
-        BackGround: "",
-        Base: "",
-        Behind: "",
-        Flair: "",
-        Ground: "",
-        Top: "",
-        Name: "",
-        Epitaph: "",
+
     });
 
 
@@ -192,8 +125,6 @@ export const Scribble = ({
         /* For retrieval of traits */
     }
     const [walletTraits, setWalletTraits] = useState([]);
-    const [apiLoaded, setApiLoaded] = useState(false);
-    const [checkMyTraits, setCheckMyTraits] = useState(false);
     const [nftSelected, setNftSelected] = useState(false);
 
     //https://api.joepegs.dev/v2/users/{address}/items
@@ -254,10 +185,6 @@ export const Scribble = ({
     }, [collection, account]);
 
     function updateCanvasTraits(trait) {
-        setCanvasImage((prevImage) => ({
-            ...prevImage,
-            [trait.traitType]: trait.image,
-        }));
         setChosenTrait((prevTrait) => ({
             ...prevTrait,
             [trait.traitType]: trait.traitName,
@@ -280,6 +207,7 @@ export const Scribble = ({
                     <Card
                         nftName={collectionDescription}
                         id={trait.id}
+                        image={trait.image1}
                     />
                 </div>
             );
@@ -295,9 +223,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image2}
                         id={trait.id}
                     />
                 </div>
@@ -314,9 +240,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image3}
                         id={trait.id}
                     />
                 </div>
@@ -333,9 +257,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image4}
                         id={trait.id}
                     />
                 </div>
@@ -352,9 +274,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image5}
                         id={trait.id}
                     />
                 </div>
@@ -371,9 +291,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image6}
                         id={trait.id}
                     />
                 </div>
@@ -390,9 +308,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image7}
                         id={trait.id}
                     />
                 </div>
@@ -409,9 +325,7 @@ export const Scribble = ({
                     {" "}
                     <Card
                         nftName={collectionDescription}
-                        traitType={trait.traitType}
-                        traitName={trait.traitName}
-                        image={trait.image}
+                        image={trait.image8}
                         id={trait.id}
                     />
                 </div>
@@ -452,32 +366,6 @@ export const Scribble = ({
     useEffect(() => {
         colorAndNameEntered();
     }, [textinputText, textinputText1]);
-
-    useEffect(() => {
-        updateTraitMetaData();
-    }, [chosenTrait]);
-
-    function updateTraitMetaData() {
-        setTombstoneBackground(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[0].value
-        );
-        setTomstoneBehind(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[1].value
-        );
-        setTombstoneBase(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[2].value
-        );
-        setTombstoneFlair(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[3].value
-        );
-        setTombstoneTop(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[4].value
-        );
-        setTombstoneGround(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[5].value
-        );
-        setTombstoneId(chosenTrait.TombStoneID);
-    }
 
     function drawCards() {
         return (
@@ -577,31 +465,24 @@ export const Scribble = ({
                     {/* Individual Stats */}
                     <div className="font-mono text-white list-none flex pb-3">
                         <div
-                            className={`text-${walletTraits.includes(`${chosenTrait.TombStoneID}`)
+                            className={`text-${walletTraits.includes(`${chosenTrait.ScribbleID}`)
                                 ? "spot-yellow"
                                 : "[red]"
                                 } font-bold pr-3 pl-2`}
                         >
                             {collectionDescription} ID:{" "}
                         </div>
-                        {chosenTrait.TombStoneID}
+                        {chosenTrait.ScribbleID}
                     </div>
 
 
                     <ScribbleMint
                         chosenTrait={chosenTrait}
                         walletTraits={walletTraits}
-                        background={tomebstoneBackground}
-                        behind={tombstoneBehind}
-                        flair={tombstoneFlair}
-                        ground={tombstoneGround}
-                        tombstone={tombstoneBase}
-                        top={tombstoneTop}
-                        id={chosenTrait.TombStoneID}
+                        id={chosenTrait.ScribbleID}
                         // saveImage={saveImage}
                         account={account}
                         canvas={chosenTrait}
-                        savedImage={savedImage}
                         name={textinputText2}
                         color={textinputText}
                         noun={textinputText1}
@@ -640,6 +521,7 @@ export const Scribble = ({
 
                 </div>
             </div>
+
             {/* Canvas Row Div Ends*/}
             <div className="overflow-y-auto">
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
