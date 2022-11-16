@@ -378,7 +378,7 @@ export const Scribble = ({
     }
 
     // Add feature: Filter owned trait cards
-    const [ownedCards, setOwnedCards] = useState(true);
+    const [ownedCards, setOwnedCards] = useState(false);
     //---------------------------------//
 
     // Main Component Return

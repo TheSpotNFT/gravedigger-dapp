@@ -659,9 +659,7 @@ const traits = [
   { id: 71, image1: image71_1, image2: image71_2, image3: image71_3, image4: image71_4, image5: image71_5, image6: image71_6, image7: image71_7, image8: image71_8, nftName: 'Scribble', traitType: 'Scribble', },
   { id: 72, image1: image72_1, image2: image72_2, image3: image72_3, image4: image72_4, image5: image72_5, image6: image72_6, image7: image72_7, image8: image72_8, nftName: 'Scribble', traitType: 'Scribble', },
   { id: 73, image1: image73_1, image2: image73_2, image3: image73_3, image4: image73_4, image5: image73_5, image6: image73_6, image7: image73_7, image8: image73_8, nftName: 'Scribble', traitType: 'Scribble', },
-  { id: 1, image1: image64_1, image2: image64_2, image3: image64_3, image4: image64_4, nftName: 'Scribble', traitType: 'Scribble', },
-  { id: 2, image1: image64_1, image2: image64_2, image3: image64_3, image4: image64_4, nftName: 'Scribble', traitType: 'Scribble', },
-  { id: 3, image1: image64_1, image2: image64_2, image3: image64_3, image4: image64_4, nftName: 'Scribble', traitType: 'Scribble', },
+
 
 
 ]
