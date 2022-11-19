@@ -1,6 +1,5 @@
 import { stringify } from "postcss";
 import React, { useEffect, useState } from "react";
-import { useWeb3ExecuteFunction, useMoralisCloudFunction } from "react-moralis";
 import spotNFTAbi from "../contracts/spotNFTAbi.json";
 import Moralis from "moralis";
 import unnamedData from "../metadata";
@@ -8,14 +7,11 @@ import unnamedAbi from "../contracts/spotNFTAbi.json";
 import nfTombstoneABI from "../contracts/nfTombstoneABI.json";
 import axios from "axios";
 import { ethers, Contract } from "ethers";
-import {
-    TOMBSTONE_ADDRESS,
-    TOMBSTONE_ABI,
-} from "./Contracts/TombstoneContract";
+import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "./Contracts/ScribbleContract";
 import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "./Contracts/EngraverContract";
 import image1 from "../assets/scribble/CARD_PLACEHOLDER.jpg"
 
-export default function ScribbleMint({
+export default function ScribbleUpdateMetadata({
     props,
     chosenTrait,
     walletTraits,
@@ -28,12 +24,14 @@ export default function ScribbleMint({
     id,
     saveImage,
     account,
-    noun,
-    name,
+    customNoun,
+    customColor,
     pieceName,
-    color,
+    collectorName,
     imgURL,
     scribbleNote,
+    collectionClaimedWith,
+    idClaimedWith,
     nftSelected,
     txProcessing,
     setTxProcessing,
@@ -41,13 +39,7 @@ export default function ScribbleMint({
     web3Provider,
     tombstoneSelected,
 }) {
-    const {
-        data: mintData,
-        error: mintError,
-        fetch: mintFetch,
-        isFetching: mintFetching,
-        isLoading: mintLoading,
-    } = useWeb3ExecuteFunction();
+
 
 
     async function uploadToMoralis(filename, contents) {
@@ -74,15 +66,15 @@ export default function ScribbleMint({
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
-                    const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
+                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
+                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
                     let options = {
                         value: ethers.utils.parseEther(".1"),
                     };
                     console.log(id);
                     console.log(tokenURI);
 
-                    let tx = await contract.engraveTombstone(id, tokenURI);
+                    let tx = await contract.changeURI(id, tokenURI);
                     console.log(tx.hash);
                     props.setTxProcessing(false);
                     alert(
@@ -109,8 +101,8 @@ export default function ScribbleMint({
                 image: imgURL, //ipfs CID
                 attributes: [
                     {
-                        trait_type: "Name:",
-                        value: name,
+                        trait_type: "Collector's Name:",
+                        value: collectorName,
                     },
                     {
                         trait_type: "Piece Name:",
@@ -118,11 +110,19 @@ export default function ScribbleMint({
                     },
                     {
                         trait_type: "Color",
-                        value: color,
+                        value: customColor,
                     },
                     {
                         trait_type: "Noun",
-                        value: noun,
+                        value: customNoun,
+                    },
+                    {
+                        trait_type: "Collection Claimed With",
+                        value: collectionClaimedWith,
+                    },
+                    {
+                        trait_type: "Claimed With ID",
+                        value: idClaimedWith,
                     },
                     {
                         trait_type: "A Note From Scribble",

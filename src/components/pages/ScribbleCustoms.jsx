@@ -406,7 +406,7 @@ export const Scribble = ({
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Name (optional)"
+                                        placeholder="Ur Name (opt)"
                                         value={textinput}
                                         onChange={textinputUser.bind(this)}
                                     />
@@ -418,7 +418,7 @@ export const Scribble = ({
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Name (optional)"
+                                        placeholder="Card Name (opt)"
                                         value={textinputText2}
                                         onChange={textinputUserText2.bind(this)}
                                     />

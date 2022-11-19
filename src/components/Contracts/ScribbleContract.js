@@ -1,6 +1,6 @@
-export const SCRIBBLECLAIM_ADDRESS = "0x23259626a7420D23E429C3A9e843c37895603031"; //TESTNET
+export const SCRIBBLECLAIM_ADDRESS = "0x3Ee14E36bb72cc2Ef6e4122f873008d066589924"; //Mainnet
 export const SCRIBBLECLAIM_ABI = [
-    [
+    
         {
             "inputs": [],
             "stateMutability": "nonpayable",
@@ -361,6 +361,32 @@ export const SCRIBBLECLAIM_ABI = [
             "type": "function"
         },
         {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "royaltyAmount_",
+                    "type": "uint256"
+                }
+            ],
+            "name": "setRoyaltyAmount",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_treasuryWallet",
+                    "type": "address"
+                }
+            ],
+            "name": "setTreasuryWalletAddress",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
             "anonymous": false,
             "inputs": [
                 {
@@ -426,6 +452,19 @@ export const SCRIBBLECLAIM_ABI = [
             "name": "withdraw",
             "outputs": [],
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "_royaltyAmount",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -789,6 +828,35 @@ export const SCRIBBLECLAIM_ABI = [
         {
             "inputs": [
                 {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                }
+            ],
+            "name": "royaltyInfo",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
                     "internalType": "bytes4",
                     "name": "interfaceID",
                     "type": "bytes4"
@@ -836,6 +904,19 @@ export const SCRIBBLECLAIM_ABI = [
             ],
             "stateMutability": "view",
             "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "treasuryWallet",
+            "outputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
         }
-    ]
+    
 ]

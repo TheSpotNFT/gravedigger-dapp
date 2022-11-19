@@ -9,7 +9,7 @@ import Authenticate from "../Authenticate";
 import spotNFTAbi from "../../contracts/spotNFTAbi.json";
 import spotTraitsAbi from "../../contracts/spotTraitsAbi.json";
 import SetApproval from "../SetApproval";
-import ScribbleMint from "../ScribbleUpdateMeta";
+import ScribbleUpdateMetadata from "../ScribbleUpdateMeta";
 import "../../Board.css";
 import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
@@ -48,6 +48,30 @@ export const ScribbleUpdate = ({
     const wastelandContract = "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154";
     const resonateContract = "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2";
 
+    //Metadata
+    const [collectorName, setCollectorName] = useState("");
+    const [collectionUsedToClaim, setCollectionUsedToClaim] = useState("");
+    const [idClaimedWith, setIdClaimedWith] = useState("");
+    const [customColor, setCustomColor] = useState("");
+    const [customNoun, setCustomNoun] = useState("");
+    const [metaData, setMetaData] = useState([]);
+    const [jsonMetaData, setJsonMetaData] = useState([]);
+    let response;
+
+
+    function updateMetaData() {
+        //setJsonMetaData(JSON.parse(metaData.data.result[0].metadata));
+        getTraits();
+        setMetaData(JSON.parse(response.data.result[`${textinputText - 1}`].metadata))
+        setCollectorName(metaData.attributes[0].value);
+        setTextinput(metaData.attributes[1].value);
+        setCustomColor(metaData.attributes[2].value);
+        setCustomNoun(metaData.attributes[3].value);
+        setCollectionUsedToClaim(metaData.attributes[4].value);
+        setIdClaimedWith(metaData.attributes[5].value);
+    }
+
+
     //for text on canvas
     const [textinput, setTextinput] = useState("");
     const [xInput, setXInput] = useState("160");
@@ -59,7 +83,7 @@ export const ScribbleUpdate = ({
 
     const [collection, setCollection] = useState("0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1");
 
-    const [textinputText, setTextinputText] = useState("");
+    const [textinputText, setTextinputText] = useState("1");
     const [xInputText, setXInputText] = useState("198");
     const [yInputText, setYInputText] = useState("287");
     const [fontSizeText, setFontSizeText] = useState("15");
@@ -103,7 +127,7 @@ export const ScribbleUpdate = ({
 
     //name font info
     const collectionOptions = [
-        { value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1", label: "Mind Matters" },
+        { value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1", label: "Mind Matter" },
         { value: "0x424F2C77341d692496544197Cc39708F214EEfc4", label: "Overload" },
         { value: "0x5DF36A4E61800e8cc7e19d6feA2623926C8EF960", label: "Tales" },
         { value: "0x8d17f8Ca6EFE4c85981A4C73c5927beEe2Ad1168", label: "Peaches and Strawbs" },
@@ -112,7 +136,7 @@ export const ScribbleUpdate = ({
         { value: "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154", label: "Wasteland" },
         { value: "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2", label: "Resonate" },
     ];
-    const [collectionDescription, setCollectionDescription] = useState("Mind matters")
+    const [collectionDescription, setCollectionDescription] = useState("Mind Matter")
 
     const handleChange = (selectedOption) => {
         console.log("handleChange", selectedOption.value);
@@ -219,32 +243,35 @@ export const ScribbleUpdate = ({
         getNfts();
     }, [collection]);
 */
-    useEffect(() => {
-        const getTraits = async () => {
-            const options = {
-                method: "GET",
-                url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
-                params: {
-                    chain: "avalanche",
-                    format: "decimal",
-                    token_addresses: collection,
-                },
-                headers: {
-                    accept: "application/json",
-                    "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
-                },
-            };
-            try {
-                let response = await axios.request(options);
-                console.log(response);
-                let data = response.data;
-                setWalletTraits(data.result.map((nft) => nft.token_id));
-            } catch (error) {
-                console.log(error);
-            }
+    async function getTraits() {
+        const options = {
+            method: "GET",
+            url: `https://deep-index.moralis.io/api/v2/nft/0x3Ee14E36bb72cc2Ef6e4122f873008d066589924`,
+            params: {
+                chain: "avalanche",
+                format: "decimal",
+                token_addresses: collection,
+            },
+            headers: {
+                accept: "application/json",
+                "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+            },
         };
+        try {
+            response = await axios.request(options);
+            // let setMetaData = JSON.parse(response.data.result[0].metadata);
+            // let data = response.data.result;
+            //setWalletTraits(data.result.map((nft) => nft.token_id));
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
         getTraits();
-    }, [collection, account]);
+    }, [collection, account, textinputText]);
+
+
 
     function updateCanvasTraits(trait) {
         setCanvasImage((prevImage) => ({
@@ -378,18 +405,27 @@ export const ScribbleUpdate = ({
                     <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                        style={{ height: "16rem", width: "18rem" }}
+                        style={{ height: "20rem", width: "18rem" }}
                     >
                         {/* Individual Stats */}
-                        <div className="font-mono text-white list-none flex pb-3">
+                        <div className="font-mono text-white list-none flex pb-3 pt-4">
                             <div
                                 className={`text-spot-yellow font-bold pr-3 pl-2`}
                             >
                                 Scribble Custom ID:
                             </div>
-                            {chosenTrait.TombStoneID}
+                            <input
+                                type="number"
+                                className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12 h-6"
+                                placeholder="id"
+                                value={textinputText}
+                                onChange={textinputUserText.bind(this)}
+                            />
                         </div>
-
+                        <div className="pr-5 pl-2">
+                            <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
+       hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={updateMetaData}>Refresh Token Metadata</button>
+                        </div>
 
 
                         {/* End of Indiv Stats */}
@@ -411,24 +447,20 @@ export const ScribbleUpdate = ({
                                 </div>
                             </div></div>
 
-                        <ScribbleMint
+                        <ScribbleUpdateMetadata
                             chosenTrait={chosenTrait}
                             walletTraits={walletTraits}
-                            background={tomebstoneBackground}
-                            behind={tombstoneBehind}
-                            flair={tombstoneFlair}
-                            ground={tombstoneGround}
-                            tombstone={tombstoneBase}
-                            top={tombstoneTop}
-                            id={chosenTrait.TombStoneID}
+                            id={textinputText}
                             imgURL={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`}
                             account={account}
                             canvas={chosenTrait}
                             savedImage={savedImage}
                             pieceName={textinput}
-                            name={"name"}
-                            color={"color"}
-                            noun={"noun"}
+                            collectorName={collectorName}
+                            customColor={customColor}
+                            customNoun={customNoun}
+                            collectionClaimedWith={collectionUsedToClaim}
+                            idClaimedWith={idClaimedWith}
                             scribbleNote={textinputText1}
                             txProcessing={txProcessing}
                             setTxProcessing={setTxProcessing}
@@ -447,19 +479,26 @@ export const ScribbleUpdate = ({
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Collector's Name: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Junk
+                                    {collectorName}
                                 </div>
                             </div>
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-5">Piece Name: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Trash
+
+                                    <input
+                                        type="text"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-6"
+                                        placeholder="Piece Name"
+                                        value={textinput}
+                                        onChange={textinputUser.bind(this)}
+                                    />
                                 </div>
                             </div>
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Color: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Brown
+                                    {customColor}
                                 </div>
 
 
@@ -467,7 +506,23 @@ export const ScribbleUpdate = ({
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Noun: </div>
                                 <div className="text-spot-yellow font-mono">
-                                    Junk
+                                    {customNoun}
+                                </div>
+
+
+                            </div>
+                            <div className="flex">
+                                <div className="col-span-2 text-white pr-6">Collection Used to Claim: </div>
+                                <div className="text-spot-yellow font-mono">
+                                    {collectionUsedToClaim}
+                                </div>
+
+
+                            </div>
+                            <div className="flex">
+                                <div className="col-span-2 text-white pr-6">Id Claimed With: </div>
+                                <div className="text-spot-yellow font-mono">
+                                    {idClaimedWith}
                                 </div>
 
 
@@ -495,6 +550,7 @@ export const ScribbleUpdate = ({
 
 
                             </div>
+
                         </div>
                     </div>
 
