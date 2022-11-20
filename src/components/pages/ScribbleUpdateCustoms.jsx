@@ -273,7 +273,7 @@ export const ScribbleUpdate = ({
     async function getTraits() {
         const options = {
             method: "GET",
-            url: `https://deep-index.moralis.io/api/v2/nft/0x3Ee14E36bb72cc2Ef6e4122f873008d066589924`,
+            url: `https://deep-index.moralis.io/api/v2/nft/0x4b819687607f0772a1fa81ff550758B4024cD531`,
             params: {
                 chain: "avalanche",
                 format: "decimal",
