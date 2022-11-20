@@ -8,7 +8,8 @@ import "../../Board.css";
 import axios from "axios";
 import image1 from "../../assets/scribble/CARD_PLACEHOLDER.jpg"
 import DisplayCards from "../ScribbleCard1";
-
+import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
+import { ethers, Contract } from "ethers";
 
 export const Scribble = ({
     account,
@@ -193,6 +194,36 @@ export const Scribble = ({
         setNftSelected(true);
     }
 
+    async function getHasClaimed(tokenURI, id) {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
+                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
+                    let options = {
+                        value: ethers.utils.parseEther(".1"),
+                    };
+                    console.log(id);
+                    console.log(tokenURI);
+
+                    let tx = await contract.changeURI(id, tokenURI);
+                    console.log(tx.hash);
+                    setTxProcessing(false);
+                    alert(
+                        "Customized! Refresh the metadata on Campfire, Kalao or Joepegs!"
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
+
     function createMindMatterCard(trait) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         if (collection == "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1") { //Mind Matter
@@ -355,7 +386,7 @@ export const Scribble = ({
     const [mintEnabled, setMintEnabled] = useState(false);
 
     function colorAndNameEntered() {
-        if (textinputText.length > 0 && textinputText1 > 0) {
+        if (textinputText.length != 0 && textinputText1 != 0) {
             setMintEnabled(true);
         }
         else {
@@ -390,7 +421,7 @@ export const Scribble = ({
 
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
-                    <img src={image1} alt="logo" className="m-0 h-96"></img>
+                    <img src={image1} alt="logo" className="m-0 h-96 xs:hidden"></img>
                     <div className="pb-6 pl-4 w-1/2">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs

@@ -13,9 +13,8 @@ import ScribbleUpdateMetadata from "../ScribbleUpdateMeta";
 import "../../Board.css";
 import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
-import MintCollection from "../MintCollection";
-import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
-import image1 from "../../assets/scribble/CARD_PLACEHOLDER.jpg"
+import { ethers, Contract } from "ethers";
+import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 
 
 export const ScribbleUpdate = ({
@@ -143,6 +142,34 @@ export const ScribbleUpdate = ({
         setCollection(selectedOption.value);
         setCollectionDescription(selectedOption.label);
     };
+
+    async function flipPauseState() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
+                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
+                    let options = {
+                        value: ethers.utils.parseEther(".1"),
+                    };
+
+                    let tx = await contract.flipPausedState();
+                    console.log(tx.hash);
+                    setTxProcessing(false);
+                    alert(
+                        "Flipped Pause State!"
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
 
     /*async function getHasClaimed(tokenURI, id) {
       setTxProcessing(true);
@@ -405,7 +432,7 @@ export const ScribbleUpdate = ({
                     <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                        style={{ height: "20rem", width: "18rem" }}
+                        style={{ height: "19rem", width: "18rem" }}
                     >
                         {/* Individual Stats */}
                         <div className="font-mono text-white list-none flex pb-3 pt-4">
@@ -468,7 +495,14 @@ export const ScribbleUpdate = ({
                             web3Provider={web3Provider}
                             nftSelected={nftSelected}
                         />
+                        <div className="pl-1 pr-5 pt-10"><button
+                            className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
 
+                            onClick={flipPauseState}
+                        >
+                            Flip Paused State
+                        </button></div>
                     </div>
                     <div className="pb-6 md: pl-6">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
