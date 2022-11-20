@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Select from "react-select";
-import Card from "../ScribbleCard";
+import Card from "../ScribbleCard1";
 import traits from "../../traits";
 import traitsCustoms from "../../scribbleCustoms";
 import ScribbleMint from "../ScribbleMint";
@@ -11,7 +11,7 @@ import DisplayCards from "../ScribbleCard1";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { ethers, Contract } from "ethers";
 
-export const Scribble = ({
+export const ScribbleCustomCheck = ({
     account,
     web3Modal,
     loadWeb3Modal,
@@ -20,6 +20,7 @@ export const Scribble = ({
     logoutOfWeb3Modal,
     txProcessing,
     setTxProcessing,
+
 }) => {
     const isAuthenticated = Boolean(account);
     const userAddress = account;
@@ -193,8 +194,9 @@ export const Scribble = ({
         }));
         setNftSelected(true);
     }
-
-    async function getHasClaimed(tokenURI, id) {
+    const [claimed, setClaimed] = useState();
+    let hasClaimed;
+    async function getHasClaimed() {
         setTxProcessing(true);
         try {
             const { ethereum } = window;
@@ -206,15 +208,19 @@ export const Scribble = ({
                     let options = {
                         value: ethers.utils.parseEther(".1"),
                     };
-                    console.log(id);
-                    console.log(tokenURI);
 
-                    let tx = await contract.changeURI(id, tokenURI);
-                    console.log(tx.hash);
+
+                    hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID);
+                    console.log(hasClaimed);
                     setTxProcessing(false);
-                    alert(
-                        "Customized! Refresh the metadata on Campfire, Kalao or Joepegs!"
-                    );
+                    setClaimed(hasClaimed);
+
+                    if (hasClaimed === 1) {
+                        setClaimed("Claimed");
+                    }
+                    if (hasClaimed === 0) {
+                        setClaimed("Not Claimed");
+                    }
                 }
             }
         } catch (error) {
@@ -223,6 +229,8 @@ export const Scribble = ({
             setTxProcessing(false);
         }
     }
+
+
 
     function createMindMatterCard(trait) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
@@ -409,90 +417,58 @@ export const Scribble = ({
     }
 
     // Add feature: Filter owned trait cards
-    const [ownedCards, setOwnedCards] = useState(true);
+    const [ownedCards, setOwnedCards] = useState(false);
     //---------------------------------//
+    let nftResponse;
 
+    async function getNFTs() {
+        const options = {
+            method: "GET",
+            url: `https://deep-index.moralis.io/api/v2/nft/${collection}`,
+            params: {
+                chain: "avalanche",
+                format: "decimal",
+                token_addresses: collection,
+            },
+            headers: {
+                accept: "application/json",
+                "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+            },
+        };
+        try {
+            nftResponse = await axios.request(options);
+            // let setMetaData = JSON.parse(response.data.result[0].metadata);
+            // let data = response.data.result;
+            //setWalletTraits(data.result.map((nft) => nft.token_id));
+            console.log(nftResponse);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getNFTs();
+    }, [collection, account]);
     // Main Component Return
     return (
         <div className="flex-auto mx-auto w-full">
-            {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
+            {/* Canvas Row*/}<h1 className="text-center font-mono text-lg text-yellow-400 pt-5 pb-6">
+                Scribble Customs
+            </h1>
+            <div className="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
                 {/* canvas div */}
 
                 <div
-                    className="flex p-1 mb-10 sm:mb-10">
+                    className="flex p-1 mb-10 sm:mb-10 col-start-2">
                     <img src={image1} alt="logo" className="m-0 h-96 xs:hidden"></img>
-                    <div className="pb-6 pl-4 w-1/2">
-                        <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
-                            Scribble Customs
-                        </h1>
-                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6">
-                            Enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
-                        </h3>
 
-                        <div className="gap-4 pt-1 pl-2 grid grid-col-1 justify-items-end pr-14">
-                            <div className="flex flex-col-2">
-                                <div className="col-span-2 text-white pr-4">Collector: </div>
-                                <div className="pl-1">
-                                    <input
-                                        type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Ur Name (opt)"
-                                        value={textinput}
-                                        onChange={textinputUser.bind(this)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Piece: </div>
-                                <div className="pl-1">
-                                    <input
-                                        type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Card Name (opt)"
-                                        value={textinputText2}
-                                        onChange={textinputUserText2.bind(this)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Color: </div>
-                                <div className="pl-1">
-                                    <input
-                                        type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Color"
-                                        value={textinputText}
-                                        onChange={textinputUserText.bind(this)}
-                                    />
-                                </div>
-
-
-                            </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Noun: </div>
-                                <div className="pl-1">
-                                    <input
-                                        type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
-                                        placeholder="Noun"
-                                        value={textinputText1}
-                                        onChange={textinputUserText1.bind(this)}
-                                    />
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <h3 className="text-center font-mono text-xs text-white pt-4 pb-6">Want to See if an NFT has claimed a custom? Click <a href="/scribblecustomcheck">HERE</a></h3>
-                    </div>
 
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div
-                    className="grow border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                    style={{ height: "18rem", width: "22rem" }}
+                    className="grow border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-start-3 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
+                    style={{ height: "20rem", width: "22rem" }}
                 >
                     {/* Individual Stats */}
                     <div className="font-mono text-white list-none flex pb-3">
@@ -506,39 +482,25 @@ export const Scribble = ({
                         </div>
                         {chosenTrait.ScribbleID}
                     </div>
+                    <div className="pr-5"><button
+                        className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
 
+                        onClick={getHasClaimed}
+                    >   Check if Claimed
+                    </button>
+                    </div>
 
-                    <ScribbleMint
-                        chosenTrait={chosenTrait}
-                        walletTraits={walletTraits}
-                        id={chosenTrait.ScribbleID}
-                        // saveImage={saveImage}
-                        account={account}
-                        canvas={chosenTrait}
-                        name={textinputText2}
-                        color={textinputText}
-                        noun={textinputText1}
-                        collection={collection}
-                        mintEnabled={mintEnabled}
-                        collectorName={textinput}
-                        collectionDescription={collectionDescription}
-                        txProcessing={txProcessing}
-                        setTxProcessing={setTxProcessing}
-                        ownedCards={ownedCards}
-                        web3Provider={web3Provider}
-                        nftSelected={nftSelected}
-                    />
                     {/* End of Indiv Stats */}
                     {/* Buttons */}
 
-                    <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
-                        <div className="text-[red] pr-2 text-xl">* </div>
-                        NFT has already claimed a custom!
+                    <div className={`font-mono text-white font-bold pr-3 pl-2 pt-4`}>
+                        The NFT Has {claimed} a Custom Scribble Card
                     </div>
                     <div className="pr-2">
                         <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
 
-                            Select Collection to use to Claim Custom Token.
+                            Select Collection to Check if Token has Claimed a Custom.
                         </div><div className="w-full flex">
                             <div className="w-full pl-2 pr-2">
                                 <Select
@@ -548,6 +510,14 @@ export const Scribble = ({
                                 />
                             </div>
                         </div></div>
+                    <div className="pr-5 pt-4"><a href="/scribble"><button
+                        className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
+
+
+                    >   Back to Claim a Custom
+                    </button></a>
+                    </div>
 
 
 
@@ -556,13 +526,13 @@ export const Scribble = ({
 
             {/* Canvas Row Div Ends*/}
             <div className="overflow-y-auto">
-                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-5 xl:grid-cols-8 gap-5 font-mono text-spot-yellow">
                     {ownedCards
                         ? ownedFilter.map(createMindMatterCard)
                         : dataSearch.map(createMindMatterCard)}
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 };
