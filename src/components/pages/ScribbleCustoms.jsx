@@ -75,12 +75,12 @@ export const Scribble = ({
     const [collectionDescription, setCollectionDescription] = useState("Mind Matter")
 
     const handleChange = (selectedOption) => {
-        console.log("handleChange", selectedOption.value);
+
         setCollection(selectedOption.value);
         setCollectionDescription(selectedOption.label);
         setCatalogNumber(selectedOption.catalog);
     };
-    console.log(catalogNumber);
+
     /*async function getHasClaimed(tokenURI, id) {
       setTxProcessing(true);
       try {
