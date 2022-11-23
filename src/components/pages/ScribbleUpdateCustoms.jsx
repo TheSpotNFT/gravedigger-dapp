@@ -3,8 +3,6 @@ import Select from "react-select";
 import Card from "../Card";
 import traits from "../../traits";
 import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import Moralis from "moralis";
 import Authenticate from "../Authenticate";
 import spotNFTAbi from "../../contracts/spotNFTAbi.json";
 import spotTraitsAbi from "../../contracts/spotTraitsAbi.json";
@@ -33,8 +31,7 @@ export const ScribbleUpdate = ({
     const spotNFTContract = "0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC";
     const [filter, setFilter] = useState("");
     const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
-    const contractProcessor = useWeb3ExecuteFunction();
-    const nfTombstoneMetaData = nftombstoneData;
+
 
     //scribble
     const [contractSelected, setContractSelected] = useState();

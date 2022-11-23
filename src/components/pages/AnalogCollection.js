@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Card from "../AnalogCards";
 import analogNfts from "../../AnalogNfts";
-import { useMoralis } from "react-moralis";
-import Moralis from "moralis";
 
 const renderCard = (analogNfts, index) => {
   return (
@@ -20,13 +18,12 @@ const renderCard = (analogNfts, index) => {
 };
 
 const AnalogCollection = () => {
-  const { account, isAuthenticated } = useMoralis();
   const analogContract = "0xBe18CF471925d683c272AAFe9d1aaFDA99612B69";
   const [checkMyNFTs, setCheckMyNFTs] = useState(false);
   const [walletNFTs, setWalletNFTs] = useState([]);
   const [apiLoaded, setApiLoaded] = useState(false);
-  const userAddress = account;
   const [filterButton, setFilterButton] = useState(1);
+
   const onClickUrl = (url) => {
     return () => openInNewTab(url);
   };
@@ -40,22 +37,6 @@ const AnalogCollection = () => {
     { name: "AnalogNFTrade", link: "https://discord.com/invite/4wvC6xTFyB" },
   ];
 
-  function getNFTs() {
-    const options = {
-      chain: "avalanche",
-      address: userAddress,
-      token_address: analogContract,
-    };
-    Moralis.Web3API.account.getNFTsForContract(options).then((data) => {
-      const result = data.result;
-      setWalletNFTs(result.map((nft) => nft.token_id));
-      setApiLoaded(true);
-      console.log({ result });
-    });
-  }
-  useEffect(() => {
-    getNFTs();
-  }, [checkMyNFTs, account]);
 
   return (
     <div className="px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">

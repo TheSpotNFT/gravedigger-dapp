@@ -3,8 +3,6 @@ import Select from "react-select";
 import Card from "../Card";
 import traits from "../../tombstoneTraits";
 import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import Moralis from "moralis";
 import Authenticate from "../Authenticate";
 import spotNFTAbi from "../../contracts/spotNFTAbi.json";
 import spotTraitsAbi from "../../contracts/spotTraitsAbi.json";
@@ -34,7 +32,6 @@ export const Board = ({
   const spotNFTContract = "0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC";
   const [filter, setFilter] = useState("");
   const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
-  const contractProcessor = useWeb3ExecuteFunction();
   const nfTombstoneMetaData = nftombstoneData;
 
   //for text on canvas
@@ -249,31 +246,7 @@ export const Board = ({
     Epitaph: "",
   });
 
-  /*To fetch users nfts
 
-    function fetchUsersNfts() {
-        const options = {
-            method: 'GET',
-            url: `https://deep-index.moralis.io/api/v2/${userAddress}/nft`,
-            params: { chain: 'avalanche', format: 'decimal' },
-            headers: { accept: 'application/json', 'X-API-Key': 'test' }
-        };
-
-        axios
-            .request(options)
-            .then(function (response) {
-                console.log(response.data);
-            })
-            .catch(function (error) {
-                console.error(error);
-            });
-    }
-*/
-  /*Set an array of save UnnamedNFT traits which are unburnable and available to all.
-    const start = 3000;
-    const end = 3009;
-    const branding = [...Array(end - start + 1).keys()].map(x => x + start);
-    */
   {
     /* For retrieval of traits */
   }
@@ -492,22 +465,6 @@ export const Board = ({
     setTombstoneId(chosenTrait.TombStoneID);
   }
 
-  async function activateTombstone() {
-    await Moralis.enableWeb3();
-    const options = {
-      contractAddress: "0xe3525413c2a15daec57C92234361934f510356b8", //NFTombstone mainnet
-      functionName: "changeActiveTombstone",
-      abi: nfTombstoneABI,
-      params: {
-        _newTombstone: chosenTrait.TombStoneID, //NFTombstone mainnet
-      },
-    };
-    await contractProcessor.fetch({
-      params: options,
-    });
-    const transaction = await Moralis.executeFunction(options);
-    await transaction.wait();
-  }
 
   //window scroll
   const [showButton, setShowButton] = useState(false);

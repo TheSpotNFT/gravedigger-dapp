@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import thespot from "../../assets/thespotmaster.png";
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
 import goatdmain from "../../assets/goatdmain.png";
 import analog from "../../assets/analogtitle.png";
 import apechain from "../../assets/apechain.png";
@@ -21,9 +20,6 @@ const Main = ({
   txProcessing,
   setTxProcessing,
 }) => {
-  const { Moralis } = useMoralis();
-  const { authenticate } = useMoralis();
-  const contractProcessor = useWeb3ExecuteFunction();
   const [spotsMinted, setSpotsMinted] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const onClickUrl = (url) => {
@@ -33,32 +29,6 @@ const Main = ({
     const newWindow = window.open(url, "_blank", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
   };
-
-
-
-  async function getNumberMinted() {
-    const ABI = [
-      {
-        inputs: [],
-        name: "nftCount",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-      },
-    ];
-
-    const nftCountOptions = {
-      chain: "avalanche",
-      address: "0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8",
-      function_name: "nftCount",
-      abi: ABI,
-      params: {},
-    };
-    const nftsMinted = await Moralis.Web3API.native.runContractFunction(
-      nftCountOptions
-    );
-    setSpotsMinted(nftsMinted);
-  }
 
   function alertClick() {
     alert("The Evolution is Coming Soon...");

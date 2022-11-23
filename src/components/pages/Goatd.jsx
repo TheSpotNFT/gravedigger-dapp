@@ -1,12 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from '../Card';
 import traits from '../../goatdTraits';
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import Moralis from 'moralis';
-import Authenticate from '../Authenticate';
-import spotNFTAbi from '../Contracts/SpotNFTAbi.json';
-import spotTraitsAbi from '../Contracts/SpotTraitsAbi.json';
-import SetApproval from '../SetApproval';
 import Mint from '../GoatdMint';
 import axios from 'axios';
 import { GOATD_ADDRESS, GOATD_ABI } from '../Contracts/GoatdContract';

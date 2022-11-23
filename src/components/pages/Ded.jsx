@@ -2,13 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from '../Card';
 import traits from '../../tombstoneTraits';
 import unnamedData from '../../metadata.jsx'
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import Moralis from 'moralis';
 import Authenticate from '../Authenticate';
-import SetApproval from '../SetApproval';
-import Engrave from '../Engrave';
 import '../../Board.css'
-import nfTombstoneABI from '../../contracts/nfTombstoneABI.json';
 import axios from 'axios';
 
 export const Ded = ({ account }) => {
@@ -17,7 +12,6 @@ export const Ded = ({ account }) => {
     const spotTraitsContract = "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e";
     const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
     const [filter, setFilter] = useState('');
-    const contractProcessor = useWeb3ExecuteFunction();
 
     function fetchUsersNfts() {
         const options = {
@@ -64,16 +58,6 @@ export const Ded = ({ account }) => {
         Name: '',
         Epitaph: '',
     })
-
-    function getNFTsAddress() {
-        const options = { chain: "0xa86a", address: userAddress, token_address: spotTraitsContract };
-        Moralis.Web3API.account.getNFTsForContract(options).then((data) => {
-            const result = data.result
-            setWalletTraits(result.map(nft => nft.token_id))
-            setApiLoaded(true)
-        });
-    }
-
 
     function createCard(trait) { //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         return (

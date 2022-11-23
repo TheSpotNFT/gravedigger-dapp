@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from '../Card';
 import unnamedCards from '../../unnamedCardData';//changed from traits
 import unnamedData from '../Contracts/UnnamedMetaData'
-import { useMoralis, useWeb3ExecuteFunction } from "react-moralis";
-import Moralis from 'moralis';
 import Authenticate from '../Authenticate';
 import spotNFTAbi from '../../contracts/spotNFTAbi.json';
 import spotTraitsAbi from '../../contracts/spotTraitsAbi.json';
