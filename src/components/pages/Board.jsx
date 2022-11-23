@@ -27,7 +27,6 @@ export const Board = ({
   setTxProcessing,
 }) => {
   const isAuthenticated = Boolean(account);
-  const userAddress = account;
   const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
   const spotNFTContract = "0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC";
   const [filter, setFilter] = useState("");
@@ -246,7 +245,31 @@ export const Board = ({
     Epitaph: "",
   });
 
+  /*To fetch users nfts
 
+    function fetchUsersNfts() {
+        const options = {
+            method: 'GET',
+            url: `https://deep-index.moralis.io/api/v2/${userAddress}/nft`,
+            params: { chain: 'avalanche', format: 'decimal' },
+            headers: { accept: 'application/json', 'X-API-Key': 'test' }
+        };
+
+        axios
+            .request(options)
+            .then(function (response) {
+                console.log(response.data);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+*/
+  /*Set an array of save UnnamedNFT traits which are unburnable and available to all.
+    const start = 3000;
+    const end = 3009;
+    const branding = [...Array(end - start + 1).keys()].map(x => x + start);
+    */
   {
     /* For retrieval of traits */
   }
@@ -466,6 +489,7 @@ export const Board = ({
   }
 
 
+
   //window scroll
   const [showButton, setShowButton] = useState(false);
   useEffect(() => {
@@ -501,18 +525,7 @@ export const Board = ({
   const [ownedCards, setOwnedCards] = useState(true);
   //---------------------------------//
 
-  if (!isAuthenticated) {
-    return (
-      <Authenticate
-        account={account}
-        web3Modal={web3Modal}
-        loadWeb3Modal={loadWeb3Modal}
-        web3Provider={web3Provider}
-        setWeb3Provider={setWeb3Provider}
-        logoutOfWeb3Modal={logoutOfWeb3Modal}
-      />
-    );
-  }
+
   // Main Component Return
   return (
     <div className="container flex-auto mx-auto w-full">
@@ -590,26 +603,7 @@ export const Board = ({
           />
           {/* End of Indiv Stats */}
           {/* Buttons */}
-          {/*  <div className="pt-1 pb-1 flex">
 
-                            <Engrave
-                                chosenTrait={chosenTrait}
-                                walletTraits={walletTraits}
-                                background={tomebstoneBackground}
-                                behind={tombstoneBehind}
-                                flair={tombstoneFlair}
-                                ground={tombstoneGround}
-                                tombstone={tombstoneBase}
-                                top={tombstoneTop}
-                                id={chosenTrait.TombStoneID}
-                                saveImage={saveImage}
-                                userAddress={userAddress}
-                                canvas={chosenTrait}
-                                savedImage={savedImage}
-                                name={name}
-                                epitaph={`${(epitaph) + " " + (epitaph1)} `}
-                            />
-                        </div>*/}
           <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
             <div className="text-[red] pr-2 text-xl">* </div>
             TombStone not in your wallet.
@@ -881,13 +875,13 @@ export const Board = ({
       <div className="metal text-slate-900">2</div>
       <div className="predator text-slate-900">2</div>
       <div className="simple text-slate-900">!</div>
-      <div>
+      {/*} <div>
         {showButton && (
           <button onClick={scrollToTop} className="back-to-top">
             &#94;
           </button>
         )}
-      </div>
+        </div>*/}
     </div>
   );
 };

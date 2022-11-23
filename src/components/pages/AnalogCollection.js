@@ -18,10 +18,6 @@ const renderCard = (analogNfts, index) => {
 };
 
 const AnalogCollection = () => {
-  const analogContract = "0xBe18CF471925d683c272AAFe9d1aaFDA99612B69";
-  const [checkMyNFTs, setCheckMyNFTs] = useState(false);
-  const [walletNFTs, setWalletNFTs] = useState([]);
-  const [apiLoaded, setApiLoaded] = useState(false);
   const [filterButton, setFilterButton] = useState(1);
 
   const onClickUrl = (url) => {
