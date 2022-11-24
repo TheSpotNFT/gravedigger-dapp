@@ -45,7 +45,7 @@ const Main = ({
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
                 onClick={onClickUrl("/learning")}
               >
-                Learn More --- The Educatooooor
+                The Spot for iNFT's on Avalanche --- Learn More  --- The Educatooooor
               </button>
       </div>
 </div>
