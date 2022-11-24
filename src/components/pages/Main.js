@@ -34,8 +34,6 @@ const Main = ({
     alert("The Evolution is Coming Soon...");
   }
  
-
-
   return (
     <div>
       <div className="pt-8 px-9 bg-slate-900">
@@ -45,7 +43,7 @@ const Main = ({
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
                 onClick={onClickUrl("/learning")}
               >
-                The Spot for iNFT's on Avalanche --- Learn More  --- The Educatooooor
+                The Spot for jNFT's on Avalanche --- Learn More  --- The Educatooooor
               </button>
       </div>
 </div>
@@ -71,9 +69,6 @@ const Main = ({
           </div>
         </div>
       </div>
-
-      
-
 
       <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
         <img className="w-full" src={goatdmain} alt=""></img>
