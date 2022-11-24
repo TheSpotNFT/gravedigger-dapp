@@ -289,19 +289,6 @@ export const Unnamed = ({
 
     //filtering
 
-
-    /*if (!isAuthenticated) {
-        return (
-            <Authenticate
-                account={account}
-                web3Modal={web3Modal}
-                loadWeb3Modal={loadWeb3Modal}
-                web3Provider={web3Provider}
-                setWeb3Provider={setWeb3Provider}
-                logoutOfWeb3Modal={logoutOfWeb3Modal}
-            />
-        );
-    }*/
     // Main Component Return
     return (
         <div className='container flex-auto mx-auto w-full'>

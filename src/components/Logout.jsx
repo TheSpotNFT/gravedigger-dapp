@@ -1,7 +1,4 @@
 import React from "react";
-import { useMoralis } from "react-moralis";
-//import Authenticate from "./Authenticate";
-import { useChain } from "react-moralis";
 
 function LogoutButton({
   account,

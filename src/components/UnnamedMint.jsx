@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useWeb3ExecuteFunction, useMoralisCloudFunction, useMoralis } from "react-moralis";
 import { UNNAMEDBRANDING_ABI, UNNAMEDBRANDING_ADDRESS } from './Contracts/UnnamedBrandedContract';
-import Moralis from 'moralis';
 import unnamedData from '../components/Contracts/UnnamedMetaData';
 import { UNNAMED_ABI, UNNAMED_ADDRESS } from './Contracts/UnnamednftContract';
 import axios from "axios";
@@ -41,7 +39,6 @@ export default function UnnamedMint({
     const spotContract = '0x0C6945E825fc3c80F0a1eA1d3E24d6854F7460d8' //thespot mainnet
     const chosenTrait = useState();
     const chosenBrand = useState();
-    const contractProcessor = useWeb3ExecuteFunction();
     const [isApproved, setIsApproved] = useState();
     const [ownSpot, setOwnSpot] = useState();
     const [freeMint, setFreeMint] = useState();
@@ -418,24 +415,6 @@ export default function UnnamedMint({
       
      }, [])
      */
-    async function setApproval() {
-        await Moralis.enableWeb3();
-        const options = {
-            contractAddress: "0x6BDAd2A83a8e70F459786a96a0a9159574685c0e", //unnamedNFT mainnet
-            functionName: "setApprovalForAll",
-            // abi: unnamedAbi,
-            params: {
-                operator: "0xB043aaEb4337EA4BbB20C2ec5D846b00a0825ba5", //branding mainnet
-                approved: "1",
-            },
-        };
-        await contractProcessor.fetch({
-            params: options,
-        });
-        const transaction = await Moralis.executeFunction(options);
-        await transaction.wait()
-        //  isApprovedForAll();
-    }
 
     if (txProcessing) {
         return (

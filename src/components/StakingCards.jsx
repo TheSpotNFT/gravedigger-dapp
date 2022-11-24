@@ -1,13 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import {
-  useMoralis,
-  useWeb3ExecuteFunction,
-  useMoralisWeb3Api,
-} from "react-moralis";
 import { STAKING_ABI, STAKING_ADDRESS } from "../components/Contracts/StakingAbi"
 import axios from "axios";
 import { ethers, Contract } from "ethers";
-import Moralis from 'moralis';
+
 
 //Production
 function Card(
@@ -17,7 +12,6 @@ function Card(
   setTxProcessing,
   web3Provider,
 ) {
-  console.log("component rendering");
   const isAuthenticated = Boolean(account);
   const userAddress = account;
   const chain = "avalanche";
@@ -27,7 +21,6 @@ function Card(
   const stakingContract = "0xfe5C0c66986Be8Fb16A5186Fd047eb035468db74"; //mainnet
   const [spotNftCount, setSpotNftCount] = useState([]);
   const [nftContractCount, setNftContractCount] = useState([]);
-  const contractProcessor = useWeb3ExecuteFunction();
   const [timeLeftSecs, setTimeLeftSecs] = useState([]);
   const [displayTime, setDisplayTime] = useState([]);
   const [userClaimed, setUserClaimed] = useState(["0"]);
@@ -56,9 +49,7 @@ function Card(
           const contract = new Contract(STAKING_ADDRESS, STAKING_ABI, signer);
 
           let timeRemaining = await contract.timeUntilClaimable(props.account, props.contract, props.contractIndex);
-          console.log(timeRemaining);
-          console.log(timeRemaining.toNumber())
-          //setTxProcessing(false);
+
           setTimeLeftSecs(timeRemaining.toNumber());
 
           let d = Math.floor(timeRemaining / (3600 * 24));
@@ -76,7 +67,7 @@ function Card(
     } catch (error) {
       console.log(error);
     } finally {
-      //setTxProcessing(false);
+
     }
   }
 
@@ -154,28 +145,15 @@ function Card(
         const signer = provider.getSigner();
         if (STAKING_ABI && STAKING_ADDRESS && signer) {
           const contract = new Contract(STAKING_ADDRESS, STAKING_ABI, signer);
-
           let hasClaimed = await contract.userToIndexClaimed(props.account, props.masterIndex);
-          console.log(hasClaimed.toNumber());
-          //setTxProcessing(false);
           setUserClaimed(hasClaimed.toNumber());
-          console.log("contract index", props.masterIndex, "Claimed", userClaimed, timeLeftSecs, props.stakingTimeSecs);
-          console.log("component rendering4");
-
           if (userClaimed === 0 && timeLeftSecs === 0) {
             return setDisplay(
               <div>
-                {/*} <h5>
-              Number of {props.nftName} in Wallet: {nftContractCount}
-            </h5>
-            <h5>Number of Spots in Wallet: {spotNftCount}</h5>*/}
-
-
                 <div className="flex flex-col space-y-4 py-4">
                   <button
                     className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
  font-mono text-l"
-
                   >
                     Staking Complete
                   </button>
@@ -190,18 +168,11 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
                 </div>
               </div>
-            )/*setStakeButton("Stake"),
-        setClaimButton("Claim");*/
+            )
           }
           else if (userClaimed === 0 && timeLeftSecs < props.stakingTimeSecs) {
             return setDisplay(
               <div>
-                {/*} <h5>
-              Number of {props.nftName} in Wallet: {nftContractCount}
-            </h5>
-            <h5>Number of Spots in Wallet: {spotNftCount}</h5>*/}
-
-
                 <div className="flex flex-col space-y-4 py-4">
                   <button
                     className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black duration-300 hover:border-white 
@@ -229,19 +200,12 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
                 </div>
               </div>
-            )/*setStakeButton("Stake"),
-        setClaimButton("Claim");*/
+            )
           }
           else
             if (userClaimed === 0) {
               return setDisplay(
                 <div>
-                  {/*} <h5>
-                Number of {props.nftName} in Wallet: {nftContractCount}
-              </h5>
-              <h5>Number of Spots in Wallet: {spotNftCount}</h5>*/}
-
-
                   <div className="flex flex-col space-y-4 py-4">
                     <button
                       className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
@@ -269,16 +233,13 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
                   </div>
                 </div>
-              )/*setStakeButton("Stake"),
-          setClaimButton("Claim");*/
-
+              )
             }
             else if (userClaimed === 1) {
               return setDisplay(<div className="flex flex-col space-y-4 py-4">
                 <button
                   className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
 font-mono text-l"
-
                 >
                   Claimed
                 </button>
@@ -289,183 +250,12 @@ font-mono text-l"
     } catch (error) {
       console.log(error);
     } finally {
-      //setTxProcessing(false);
     }
   }
 
   useEffect(() => {
     getUserClaimed();
   }, []);
-
-  /* MORALIS
-    async function getUserClaimed() {
-      const options = {
-        chain: chain,
-        address: "0xfe5C0c66986Be8Fb16A5186Fd047eb035468db74",
-        function_name: "userToIndexClaimed",
-        abi: [
-          {
-            inputs: [
-              {
-                internalType: "address",
-                name: "address",
-                type: "address",
-              },
-              {
-                internalType: "uint256",
-                name: "_contractIndex",
-                type: "uint256",
-              },
-            ],
-            name: "userToIndexClaimed",
-            outputs: [
-              {
-                internalType: "uint256",
-                name: "claimed",
-                type: "uint256",
-              },
-            ],
-            stateMutability: "view",
-            type: "function",
-          },
-        ],
-        params: {
-          address: account,
-          _contractIndex: props.masterIndex,
-        },
-      };
-      const hasClaimed = await Moralis.Web3API.native.runContractFunction(
-        options
-      );
-      setUserClaimed(hasClaimed);
-      console.log("contract index", props.masterIndex, "Claimed", hasClaimed, timeLeftSecs, props.stakingTimeSecs);
-      console.log("component rendering4");
-  
-      if (hasClaimed === "0" && timeLeftSecs === 0) {
-        return setDisplay(
-          <div>
-             <h5>
-                Number of {props.nftName} in Wallet: {nftContractCount}
-              </h5>
-              <h5>Number of Spots in Wallet: {spotNftCount}</h5>
-  
-  
-            <div className="flex flex-col space-y-4 py-4">
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-   font-mono text-l"
-  
-              >
-                Staking Complete
-              </button>
-  
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                onClick={claim}
-              >
-                Claim
-              </button>
-  
-            </div>
-          </div>
-        )setStakeButton("Stake"),
-          setClaimButton("Claim");
-      }
-      else if (hasClaimed === "0" && timeLeftSecs < props.stakingTimeSecs) {
-        return setDisplay(
-          <div>
-             <h5>
-                Number of {props.nftName} in Wallet: {nftContractCount}
-              </h5>
-              <h5>Number of Spots in Wallet: {spotNftCount}</h5>
-  
-  
-            <div className="flex flex-col space-y-4 py-4">
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black duration-300 hover:border-white 
-   font-mono text-l"
-                onClick={stake}
-              >
-                Stake
-              </button>
-  
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                onClick={getTimeLeft}
-              >
-                Update Time Remaining
-              </button>
-  
-              <button
-                className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                onClick={claim}
-              >
-                Claim
-              </button>
-  
-            </div>
-          </div>
-        setStakeButton("Stake"),
-          setClaimButton("Claim");
-      }
-      else
-        if (hasClaimed === "0") {
-          return setDisplay(
-            <div>
-               <h5>
-                  Number of {props.nftName} in Wallet: {nftContractCount}
-                </h5>
-                <h5>Number of Spots in Wallet: {spotNftCount}</h5>
-  
-  
-              <div className="flex flex-col space-y-4 py-4">
-                <button
-                  className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-    hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                  onClick={stake}
-                >
-                  Stake
-                </button>
-  
-                <button
-                  className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-    hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                  onClick={getTimeLeft}
-                >
-                  Update Time Remaining
-                </button>
-  
-                <button
-                  className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-    hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
-                  onClick={claim}
-                >
-                  Claim
-                </button>
-  
-              </div>
-            </div>
-          setStakeButton("Stake"),
-            setClaimButton("Claim");
-  
-        }
-        else {
-          return setDisplay(<div className="flex flex-col space-y-4 py-4">
-            <button
-              className="align-middle rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-   font-mono text-l"
-  
-            >
-              Claimed
-            </button>
-          </div>)
-        }
-  
-  
-    }*/
 
 
   async function getNFTsRemaining() {
@@ -491,9 +281,6 @@ font-mono text-l"
           const contract = new Contract(props.rewardContract, balanceOfAbi, signer);
 
           let NFTsLeft = await contract.balanceOf(stakingContract, props.stakingTokenId);
-          console.log(NFTsLeft);
-          console.log(NFTsRemaining);
-          //setTxProcessing(false);
           setNFTsRemaining(parseInt(NFTsLeft, 16));
         }
       }
@@ -673,28 +460,15 @@ font-mono text-l"
   function showInfo() {
     if (hide === false) {
       setHide(true);
-
-
-
-
     } else setHide(false);
+  }
+
+  useEffect(() => {
     getTimeLeft();
     getNFTsRemaining();
     getUserClaimed();
+  }, [hide])
 
-  }
-
-  /*  function stakingDisplay() {
-      if (userClaimed === "1") {
-        setUserClaimedBool(true);
-        console.log("contract index", props.masterIndex, "Claimed", userClaimedBool);
-        console.log("component rendering5");
-      } else setUserClaimedBool(false);
-      console.log("contract index", props.masterIndex, "Claimed", userClaimedBool);
-      console.log("component rendering5");
-  
-    }
-  */
 
   return (
     <div className="w-full rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">

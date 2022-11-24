@@ -1,8 +1,6 @@
 import { stringify } from 'postcss';
 import React, { useEffect, useState } from 'react'
-import { useWeb3ExecuteFunction, useMoralisCloudFunction } from "react-moralis";
 import spotNFTAbi from '../components/Contracts/SpotNFTAbi.json';
-import Moralis from 'moralis';
 import { GOATD_ADDRESS, GOATD_ABI } from '../components/Contracts/GoatdContract';
 import axios from "axios";
 import { ethers, Contract } from "ethers";
@@ -24,8 +22,6 @@ export default function Mint(
   const spotNFTContract = '0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC';
 
   let userAddress = props.userAddress
-
-  const { data: mintData, error: mintError, fetch: mintFetch, isFetching: mintFetching, isLoading: mintLoading } = useWeb3ExecuteFunction();
 
   function getImage() {
     return props.saveImage()
