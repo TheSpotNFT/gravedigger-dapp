@@ -351,7 +351,7 @@ export const Board = ({
     //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
     return (
       <div
-        key={trait.edition}
+        key={trait.id}
         onClick={() => {
           updateCanvasTraits(trait);
         }}
@@ -641,6 +641,7 @@ export const Board = ({
               account={account}
               txProcessing={txProcessing}
               setTxProcessing={setTxProcessing}
+              chosenTrait={chosenTrait}
             /></div>
         </div>
 

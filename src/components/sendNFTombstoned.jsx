@@ -1,7 +1,5 @@
-import { stringify } from "postcss";
 import React, { useEffect, useState } from "react";
 import spotNFTAbi from "../contracts/spotNFTAbi.json";
-import Moralis from "moralis";
 import unnamedData from "../metadata";
 import unnamedAbi from "../contracts/spotNFTAbi.json";
 import {
@@ -12,6 +10,7 @@ import {
   TOMBSTONE_ADDRESS,
   TOMBSTONE_ABI,
 } from "./Contracts/TombstoneContract";
+import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "./Contracts/EngraverContract";
 import { Contract, ethers } from "ethers";
 
 export default function SendNFTombstoned(props) {
@@ -96,6 +95,45 @@ export default function SendNFTombstoned(props) {
       props.setTxProcessing(false);
     }
   }
+  const [hasBeen, setHasBeen] = useState("0");
+
+  async function checkEngraved(props) {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
+          const contract = new Contract(
+            ENGRAVER_ADDRESS,
+            ENGRAVER_ABI,
+            signer
+          );
+
+          let options = {
+            value: ethers.utils.parseEther("0.25"),
+          };
+          console.log(props.id)
+          let engraved = await contract.hasBeenEngraved(props.id);
+          setHasBeen = engraved.isNumber();
+          console.log(engraved);
+
+        } else {
+          console.log("error with contract abi, address, or signer");
+        }
+
+      }
+
+    } catch (error) {
+      console.log("Error on mint");
+      console.log(error);
+    } finally {
+      props.setTxProcessing(false);
+    }
+  }
+  useEffect(() => { checkEngraved() }, [props.chosenTrait])
+  console.log(hasBeen);
+  console.log(props.id);
 
   async function sendNFT(uriFinal) {
     props.setTxProcessing(true);

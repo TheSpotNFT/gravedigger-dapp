@@ -1,8 +1,6 @@
 import { stringify } from "postcss";
 import React, { useEffect, useState } from "react";
-import { useWeb3ExecuteFunction, useMoralisCloudFunction } from "react-moralis";
 import spotNFTAbi from "../contracts/spotNFTAbi.json";
-import Moralis from "moralis";
 import unnamedData from "../metadata";
 import unnamedAbi from "../contracts/spotNFTAbi.json";
 import nfTombstoneABI from "../contracts/nfTombstoneABI.json";
@@ -42,13 +40,7 @@ export default function ScribbleMint({
     web3Provider,
     tombstoneSelected,
 }) {
-    const {
-        data: mintData,
-        error: mintError,
-        fetch: mintFetch,
-        isFetching: mintFetching,
-        isLoading: mintLoading,
-    } = useWeb3ExecuteFunction();
+
 
     function alertClick() {
         alert("Wen Mint??! Follow @ScribbleWarl0ck on bird app to find out more..");
