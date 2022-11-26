@@ -407,7 +407,44 @@ export const Scribble = ({
 
         );
     }
+    const [claimed, setClaimed] = useState();
+    let hasClaimed;
+    async function getHasClaimed() {
 
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
+                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
+                    let options = {
+                        value: ethers.utils.parseEther(".1"),
+                    };
+
+
+                    hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID);
+                    console.log(hasClaimed);
+
+                    setClaimed(hasClaimed);
+
+                    if (hasClaimed === 1) {
+                        setClaimed("ALREADY CLAIMED");
+                    }
+                    if (hasClaimed === 0) {
+                        setClaimed("Not Claimed");
+                    }
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+
+        }
+    }
+    useEffect(() => {
+        getHasClaimed();
+    }, [chosenTrait.ScribbleID])
     // Add feature: Filter owned trait cards
     const [ownedCards, setOwnedCards] = useState(true);
     //---------------------------------//
@@ -416,7 +453,7 @@ export const Scribble = ({
     return (
         <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
+            <div className="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-2 sm:p-5 bg-slate-900">
                 {/* canvas div */}
                 <div className="flex flex-cols place-content-center"><img src={image1} alt="logo" className="m-0 h-96"></img></div>
                 <div
@@ -497,7 +534,7 @@ export const Scribble = ({
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div
-                    className="grow border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
+                    className="border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
                     style={{ height: "18rem", width: "22rem" }}
                 >
                     {/* Individual Stats */}
@@ -538,8 +575,9 @@ export const Scribble = ({
                     {/* Buttons */}
 
                     <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
-                        <div className="text-[red] pr-2 text-xl">* </div>
-                        NFT has already claimed a custom!
+
+                        The chosen NFT has {claimed} a Custom Scribble Card
+
                     </div>
                     <div className="pr-2">
                         <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
