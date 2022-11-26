@@ -416,24 +416,24 @@ export const Scribble = ({
     return (
         <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
+            <div className="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-10 sm:p-5 bg-slate-900">
                 {/* canvas div */}
-
+                <div className="flex flex-cols place-content-center"><img src={image1} alt="logo" className="m-0 h-96"></img></div>
                 <div
-                    className="flex p-1 mb-10 sm:mb-10">
-                    <img src={image1} alt="logo" className="m-0 h-96 xs:hidden"></img>
-                    <div className="pb-6 pl-4 w-1/2">
+                    className="flex flex-cols w-auto col-span-1 p-1 mb-10 sm:mb-10">
+
+                    <div className="pb-6 pl-4">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs
                         </h1>
-                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6">
+                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6 sm:pr-16">
                             Enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
                         </h3>
 
-                        <div className="gap-4 pt-1 pl-2 grid grid-col-1 justify-items-end pr-14">
-                            <div className="flex flex-col-2">
-                                <div className="col-span-2 text-white pr-4">Collector: </div>
-                                <div className="pl-1">
+                        <div className="gap-4 pt-1 pl-2 grid grid-col-1 place-content-center pr-14">
+                            <div className="grid grid-cols-2">
+                                <div className=" text-white pr-4">Collector: </div>
+                                <div className="pl-1 pr-6">
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
@@ -443,9 +443,9 @@ export const Scribble = ({
                                     />
                                 </div>
                             </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Piece: </div>
-                                <div className="pl-1">
+                            <div className="grid grid-cols-2">
+                                <div className=" text-white pr-4">Piece: </div>
+                                <div className="pl-1 pr-6">
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
@@ -455,9 +455,9 @@ export const Scribble = ({
                                     />
                                 </div>
                             </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Color: </div>
-                                <div className="pl-1">
+                            <div className="grid grid-cols-2">
+                                <div className=" text-white pr-4">Color: </div>
+                                <div className="pl-1 pr-6">
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
@@ -469,9 +469,9 @@ export const Scribble = ({
 
 
                             </div>
-                            <div className="flex">
-                                <div className="col-span-2 text-white pr-4">Noun: </div>
-                                <div className="pl-1">
+                            <div className="grid grid-cols-2">
+                                <div className=" text-white pr-4">Noun: </div>
+                                <div className="pl-1 pr-6">
                                     <input
                                         type="text"
                                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-36 h-6"
@@ -484,7 +484,13 @@ export const Scribble = ({
 
                             </div>
                         </div>
-                        <h3 className="text-center font-mono text-xs text-white pt-4 pb-6">Want to See if an NFT has claimed a custom? Click <a href="/scribblecustomcheck">HERE</a></h3>
+                        <div className="sm:pr-16 pt-6"><a href="/scribblecustomcheck"><button
+                            className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
+
+                        >
+                            Check if an NFT has Claimed
+                        </button></a></div>
                     </div>
 
                 </div>

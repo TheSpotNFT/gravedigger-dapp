@@ -8,6 +8,11 @@ import cemetery from "../../assets/Cemetery.PNG";
 import unnamednft from "../../assets/logounnamed.png";
 import fragments from "../../assets/question.png";
 import scribbleCardGraphic from "../../assets/scribble/scribbleMainYellow.png";
+import goatd1 from "../../assets/BASEHEAD-Grey.png"
+import goatd2 from "../../assets/MOUTH-GOLDTOOTH.png"
+import goatd3 from "../../assets/EYES-WU.png"
+import goatd4 from "../../assets/BODY-WU.png"
+import goatd5 from "../../assets/HEADWEAR-WUHAT.png"
 
 
 const Main = ({
@@ -30,12 +35,24 @@ const Main = ({
     if (newWindow) newWindow.opener = null;
   };
 
+const observer = new IntersectionObserver(entries => {
+
+})
+
   function alertClick() {
     alert("The Evolution is Coming Soon...");
   }
  
   return (
     <div>
+      {/*<div>
+      <div className="relative">
+      <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd4} alt=""></img></div>
+      <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd1} alt=""></img></div>
+      <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd2} alt=""></img></div>
+      <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd3} alt=""></img></div>
+      <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd5} alt=""></img></div>
+  </div></div>*/}
       <div className="pt-8 px-9 bg-slate-900">
       <div className="w-full py-4 px-2 flex justify-center text-spot-yellow rounded overflow-hidden shadow-lg bg-slate-900">
       <button
