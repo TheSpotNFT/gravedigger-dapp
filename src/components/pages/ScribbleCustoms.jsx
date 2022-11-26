@@ -426,7 +426,7 @@ export const Scribble = ({
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs
                         </h1>
-                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6 sm:pr-16">
+                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6 sm:pr-10">
                             Enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
                         </h3>
 
