@@ -73,7 +73,8 @@ export const ScribbleCustomCheck = ({
         { value: "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154", label: "Wasteland", catalog: "7" },
         { value: "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2", label: "Resonate", catalog: "8" },
     ];
-    const [collectionDescription, setCollectionDescription] = useState("Mind Matter")
+    const [collectionDescription, setCollectionDescription] = useState("Mind Matter");
+
 
     const handleChange = (selectedOption) => {
 
@@ -208,15 +209,38 @@ export const ScribbleCustomCheck = ({
                     let options = {
                         value: ethers.utils.parseEther(".1"),
                     };
+                    if (catalogNumber === "1") {
+                        hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID); //mind matter
+                    }
+                    if (catalogNumber === "2") {
+                        hasClaimed = await contract.hasBeenClaimed6(chosenTrait.ScribbleID); //overload
+                    }
+                    if (catalogNumber === "3") {
+                        hasClaimed = await contract.hasBeenClaimed8(chosenTrait.ScribbleID); //tales
+                    }
+                    if (catalogNumber === "4") {
+                        hasClaimed = await contract.hasBeenClaimed1(chosenTrait.ScribbleID); //pns
+                    }
+                    if (catalogNumber === "5") {
+                        hasClaimed = await contract.hasBeenClaimed2(chosenTrait.ScribbleID); //abstract
+                    }
+                    if (catalogNumber === "6") {
+                        hasClaimed = await contract.hasBeenClaimed3(chosenTrait.ScribbleID); //unfinished
+                    }
+                    if (catalogNumber === "7") {
+                        hasClaimed = await contract.hasBeenClaimed4(chosenTrait.ScribbleID); //wasteland
+                    }
+                    if (catalogNumber === "8") {
+                        hasClaimed = await contract.hasBeenClaimed5(chosenTrait.ScribbleID); //resonate
+                    }
 
-
-                    hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID);
                     console.log(hasClaimed);
                     setTxProcessing(false);
                     setClaimed(hasClaimed);
 
+
                     if (hasClaimed === 1) {
-                        setClaimed("Claimed");
+                        setClaimed("CLAIMED");
                     }
                     if (hasClaimed === 0) {
                         setClaimed("Not Claimed");
@@ -230,7 +254,9 @@ export const ScribbleCustomCheck = ({
         }
     }
 
-
+    useEffect(() => {
+        getHasClaimed();
+    }, [chosenTrait.ScribbleID])
 
     function createMindMatterCard(trait) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
@@ -482,14 +508,7 @@ export const ScribbleCustomCheck = ({
                         </div>
                         {chosenTrait.ScribbleID}
                     </div>
-                    <div className="pr-5"><button
-                        className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
 
-                        onClick={getHasClaimed}
-                    >   Check if Claimed
-                    </button>
-                    </div>
 
                     {/* End of Indiv Stats */}
                     {/* Buttons */}
@@ -506,7 +525,7 @@ export const ScribbleCustomCheck = ({
                                 <Select
                                     options={collectionOptions}
                                     onChange={handleChange}
-                                    defaultValue={{ label: "Mind Matter", value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1" }}
+                                    defaultValue={{ label: "Mind Matter", value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1", catalog: "1" }}
                                 />
                             </div>
                         </div></div>

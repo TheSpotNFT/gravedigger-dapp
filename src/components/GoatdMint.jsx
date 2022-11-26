@@ -5,8 +5,6 @@ import { GOATD_ADDRESS, GOATD_ABI } from '../components/Contracts/GoatdContract'
 import axios from "axios";
 import { ethers, Contract } from "ethers";
 
-
-
 export default function Mint(
   props,
   id,
