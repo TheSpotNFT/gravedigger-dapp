@@ -582,7 +582,22 @@ import image73_5 from './assets/scribble/Abstract/scribbleplaceholder.png'
 import image73_6 from './assets/scribble/Unfinished/scribbleplaceholder.png'
 import image73_7 from './assets/scribble/Wasteland/scribbleplaceholder.png'
 import image73_8 from './assets/scribble/Resonate/scribbleplaceholder.png'
-
+import image74_1 from './assets/scribble/MindMatter/74.png'
+import image74_2 from './assets/scribble/Overload/scribbleplaceholder.png'
+import image74_3 from './assets/scribble/Tales/TalesPlaceholder.png'
+import image74_4 from './assets/scribble/PeachesAndStrawbs/scribbleplaceholder.png'
+import image74_5 from './assets/scribble/Abstract/scribbleplaceholder.png'
+import image74_6 from './assets/scribble/Unfinished/scribbleplaceholder.png'
+import image74_7 from './assets/scribble/Wasteland/scribbleplaceholder.png'
+import image74_8 from './assets/scribble/Resonate/scribbleplaceholder.png'
+import image75_1 from './assets/scribble/MindMatter/75.png'
+import image75_2 from './assets/scribble/Overload/scribbleplaceholder.png'
+import image75_3 from './assets/scribble/Tales/TalesPlaceholder.png'
+import image75_4 from './assets/scribble/PeachesAndStrawbs/scribbleplaceholder.png'
+import image75_5 from './assets/scribble/Abstract/scribbleplaceholder.png'
+import image75_6 from './assets/scribble/Unfinished/scribbleplaceholder.png'
+import image75_7 from './assets/scribble/Wasteland/scribbleplaceholder.png'
+import image75_8 from './assets/scribble/Resonate/scribbleplaceholder.png'
 
 
 const traits = [
@@ -659,6 +674,9 @@ const traits = [
   { id: 71, image1: image71_1, image2: image71_2, image3: image71_3, image4: image71_4, image5: image71_5, image6: image71_6, image7: image71_7, image8: image71_8, nftName: 'Scribble', traitType: 'Scribble', },
   { id: 72, image1: image72_1, image2: image72_2, image3: image72_3, image4: image72_4, image5: image72_5, image6: image72_6, image7: image72_7, image8: image72_8, nftName: 'Scribble', traitType: 'Scribble', },
   { id: 73, image1: image73_1, image2: image73_2, image3: image73_3, image4: image73_4, image5: image73_5, image6: image73_6, image7: image73_7, image8: image73_8, nftName: 'Scribble', traitType: 'Scribble', },
+  { id: 72, image1: image74_1, image2: image74_2, image3: image74_3, image4: image74_4, image5: image74_5, image6: image74_6, image7: image74_7, image8: image74_8, nftName: 'Scribble', traitType: 'Scribble', },
+  { id: 73, image1: image75_1, image2: image75_2, image3: image75_3, image4: image75_4, image5: image75_5, image6: image75_6, image7: image75_7, image8: image75_8, nftName: 'Scribble', traitType: 'Scribble', },
+
 
 
 
