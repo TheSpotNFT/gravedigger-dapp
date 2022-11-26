@@ -25,6 +25,16 @@ export const ScribbleUpdate = ({
     txProcessing,
     setTxProcessing,
 }) => {
+    const state = {
+        loading: true,
+        tokenId: [],
+        collectorName: [],
+        pieceName: [],
+        color: [],
+        noun: [],
+        collectionUsed: [],
+        idUsed: [],
+    }
     const isAuthenticated = Boolean(account);
     const userAddress = account;
     const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
@@ -54,50 +64,32 @@ export const ScribbleUpdate = ({
     const [jsonMetaData, setJsonMetaData] = useState([]);
     let response;
 
+    const [currentID, setCurrentID] = useState("1");
 
-    function updateMetaData() {
-        //setJsonMetaData(JSON.parse(metaData.data.result[0].metadata));
+    async function updateMetaData() {
         getTraits();
-        setMetaData(JSON.parse(response.data.result[`${textinputText - 1}`].metadata))
+        setCurrentID(textinputText - 1);
+        setMetaData(JSON.parse(response.data.result[`${currentID}`].metadata));
         setCollectorName(metaData.attributes[0].value);
         setTextinput(metaData.attributes[1].value);
         setCustomColor(metaData.attributes[2].value);
         setCustomNoun(metaData.attributes[3].value);
         setCollectionUsedToClaim(metaData.attributes[4].value);
         setIdClaimedWith(metaData.attributes[5].value);
+        setJsonMetaData(response.data);
+        console.log(currentID);
+        console.log(customNoun);
+        console.log(jsonMetaData);
     }
 
 
+
     //for text on canvas
-    const [textinput, setTextinput] = useState("");
-    const [xInput, setXInput] = useState("160");
-    const [yInput, setYInput] = useState("260");
-    const [fontSize, setFontSize] = useState("30");
-    const [xInputX2, setXInputX2] = useState("163");
-    const [yInputX2, setYInputX2] = useState("260");
-    const [fontSizeX2, setFontSizeX2] = useState("30");
-
+    const [textinput, setTextinput] = useState("1");
     const [collection, setCollection] = useState("0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1");
-
     const [textinputText, setTextinputText] = useState("1");
-    const [xInputText, setXInputText] = useState("198");
-    const [yInputText, setYInputText] = useState("287");
-    const [fontSizeText, setFontSizeText] = useState("15");
-    const [xInputTextX2, setXInputTextX2] = useState("201");
-    const [yInputTextX2, setYInputTextX2] = useState("287");
-    const [fontSizeTextX2, setFontSizeTextX2] = useState("15");
-    const [fontText, setFontText] = useState("Durka");
-    const [fontStyleText, setFontStyleText] = useState("normal");
-
     const [textinputText1, setTextinputText1] = useState("");
-    const [xInputText1, setXInputText1] = useState("177");
-    const [yInputText1, setYInputText1] = useState("310");
-    const [fontSizeText1, setFontSizeText1] = useState("15");
-    const [xInputText1X2, setXInputText1X2] = useState("180");
-    const [yInputText1X2, setYInputText1X2] = useState("313");
-    const [fontSizeText1X2, setFontSizeText1X2] = useState("15");
-    const [fontText1, setFontText1] = useState("Durka");
-    const [fontStyleText1, setFontStyleText1] = useState("normal");
+
 
 
     //user input text vars
@@ -105,20 +97,11 @@ export const ScribbleUpdate = ({
     const textinputUser = (event) => {
         setTextinput(event.target.value);
     };
-    const userFontSize = (event) => {
-        setFontSize(event.target.value);
-    };
     const textinputUserText = (event) => {
         setTextinputText(event.target.value);
     };
-    const userFontSizeText = (event) => {
-        setFontSizeText(event.target.value);
-    };
     const textinputUserText1 = (event) => {
         setTextinputText1(event.target.value);
-    };
-    const userFontSizeText1 = (event) => {
-        setFontSizeText1(event.target.value);
     };
 
     //name font info
@@ -167,6 +150,7 @@ export const ScribbleUpdate = ({
             setTxProcessing(false);
         }
     }
+
 
     /*async function getHasClaimed(tokenURI, id) {
       setTxProcessing(true);
@@ -267,6 +251,9 @@ export const ScribbleUpdate = ({
         getNfts();
     }, [collection]);
 */
+
+
+
     async function getTraits() {
         const options = {
             method: "GET",
@@ -283,6 +270,12 @@ export const ScribbleUpdate = ({
         };
         try {
             response = await axios.request(options);
+            const data = response;
+            /* const {
+                 collectorName: [],
+                 nftList = state.tokenId.slice(0, 4).map(item => item.result).flat()
+             } = data
+             this.setState({ tokenId: nftList, loading: false })*/
             // let setMetaData = JSON.parse(response.data.result[0].metadata);
             // let data = response.data.result;
             //setWalletTraits(data.result.map((nft) => nft.token_id));
@@ -292,10 +285,30 @@ export const ScribbleUpdate = ({
     };
 
     useEffect(() => {
-        getTraits();
-    }, [collection, account, textinputText]);
+        updateMetaData();
+        console.log(textinputText)
+    }, [textinputText]);
 
+    function renderData() {
+        if (this.state.loading) {
+            return <div>Loading...</div>
+        }
+        if (this.state.tokenId.length) {
+            return <div>No Data</div>
+        }
+        return (
+            <div><h1>Testing</h1>
+                {this.state.tokenId.map((item, key) => {
+                    return (
+                        <div key={key}>
+                            <b>{item.name}</b>
+                        </div>
+                    )
+                })}
 
+            </div>
+        )
+    }
 
     function updateCanvasTraits(trait) {
         setCanvasImage((prevImage) => ({
@@ -310,22 +323,22 @@ export const ScribbleUpdate = ({
         setNftSelected(true);
     }
 
-    function createCard(trait) {
+    function createCard(jsonMetaData) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         return (
             <div
-                key={trait.edition}
-                onClick={() => {
-                    updateCanvasTraits(trait);
-                }}
+                key={jsonMetaData.result.token_id}
+            /*onClick={() => {
+                updateCanvasTraits(trait);
+            }}*/
             >
-                {" "}
+                {" "}ownedFilter
                 <Card
-                    nftName={trait.nftName}
-                    traitType={trait.traitType}
-                    traitName={trait.traitName}
-                    image={trait.image}
-                    id={trait.id}
+                    nftName={jsonMetaData.result.name}
+                /*traitType={trait.traitType}
+                traitName={trait.traitName}
+                image={trait.image}
+                id={trait.id}*/
                 />
             </div>
         );
@@ -384,9 +397,7 @@ export const ScribbleUpdate = ({
         }
     };
 
-    useEffect(() => {
-        updateTraitMetaData();
-    }, [chosenTrait]);
+
 
     function updateTraitMetaData() {
         setTombstoneBackground(
@@ -412,7 +423,7 @@ export const ScribbleUpdate = ({
 
 
     // Add feature: Filter owned trait cards
-    const [ownedCards, setOwnedCards] = useState(false);
+    const [ownedCards, setOwnedCards] = useState(true);
     //---------------------------------//
 
 
@@ -461,7 +472,7 @@ export const ScribbleUpdate = ({
                                 <div className="w-full pl-1 pr-3">
 
                                     <div className="container">
-                                        <div className="pl-1 pb-2"><label class="text-white form-label">Choose File</label></div>
+                                        <div className="pl-1 pb-2"><label className="text-white form-label">Choose File</label></div>
                                         <input className="text-white pb-2 pl-1" type="file" onChange={changeHandler} />
                                         <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
        hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={handleSubmission}>Upload Custom Image</button>
@@ -590,8 +601,16 @@ export const ScribbleUpdate = ({
                 {/* Stats div*/}
 
 
+                <renderData />
             </div>
-            {/*} <div className="overflow-y-auto">
+
+
+            {/*<div className='self-end'>
+                    <button className="w-1/3 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
+                            setOwnedCards(!ownedCards)
+                        }}>{!ownedCards ? 'My Traits' : 'All Traits'}</button></div>
+            <div className="overflow-y-auto">
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
                         ? ownedFilter.map(createCard)
