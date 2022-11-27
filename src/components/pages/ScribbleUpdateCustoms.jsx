@@ -75,17 +75,18 @@ export const ScribbleUpdate = ({
     const [imageUrl, setImageUrl] = useState("https://thespot.mypinata.cloud/ipfs/QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH");
 
 
-    async function updateMetaData() {
+    /*async function updateMetaData() {
         setCollectorName(response.data.result[`${currentID}`].normalized_metadata.attributes[0].value);
         setTextinput(response.data.result[`${currentID}`].normalized_metadata.attributes[1].value);
         setCustomColor(response.data.result[`${currentID}`].normalized_metadata.attributes[2].value);
         setCustomNoun(response.data.result[`${currentID}`].normalized_metadata.attributes[3].value);
         setCollectionUsedToClaim(response.data.result[`${currentID}`].normalized_metadata.attributes[4].value);
         setIdClaimedWith(response.data.result[`${currentID}`].normalized_metadata.attributes[5].value);
-        setNftId(response.data.result[`${currentID}`].token_id);
+        //setNftId(response.data.result[`${currentID}`].token_id);
         setImageUrl(response.data.result[`${currentID}`].normalized_metadata.image);
-        console.log(response.data);
-    }
+        setJsonMetaData(response.data.result);
+        console.log(jsonMetaData);
+    }*/
 
 
 
@@ -278,7 +279,7 @@ export const ScribbleUpdate = ({
                 console.log(jsonMetaData.name);
                 // return <p>{jsonMetaData}</p>;
             })*/
-            updateMetaData();
+            //updateMetaData();
 
         } catch (error) {
             console.log(error);
@@ -308,16 +309,16 @@ export const ScribbleUpdate = ({
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         return (
             <div
-                key={jsonMetaData.image}
+                key={jsonMetaData.token_address}
             /*onClick={() => {
                 updateCanvasTraits(trait);
             }}*/
             >
 
                 <Card
-                    nftName={jsonMetaData.attributes[0].value}
-                /*traitType={trait.traitType}
-                traitName={trait.traitName}
+                    nftName={jsonMetaData.token_id}
+                    traitType={jsonMetaData.token_id}
+                    traitName={jsonMetaData.token_id}/*
                 image={trait.image}
                 id={trait.id}*/
                 />
@@ -380,26 +381,27 @@ export const ScribbleUpdate = ({
 
 
 
-    function updateTraitMetaData() {
-        setTombstoneBackground(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[0].value
+    function updateTraitMetaData(nfts) {
+        setCollectorName(
+            nfts.normalized_metadata.attributes[0].value
         );
-        setTomstoneBehind(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[1].value
+        setTextinput(
+            nfts.normalized_metadata.attributes[1].value
         );
-        setTombstoneBase(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[2].value
+        setCustomColor(
+            nfts.normalized_metadata.attributes[2].value
         );
-        setTombstoneFlair(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[3].value
+        setCustomNoun(
+            nfts.normalized_metadata.attributes[3].value
         );
-        setTombstoneTop(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[4].value
+        setCollectionUsedToClaim(
+            nfts.normalized_metadata.attributes[4].value
         );
-        setTombstoneGround(
-            nftombstoneData[`${chosenTrait.TombStoneID - 1}`].attributes[5].value
+        setIdClaimedWith(
+            nfts.normalized_metadata.attributes[5].value
         );
-        setTombstoneId(chosenTrait.TombStoneID);
+        setImageUrl(nfts.normalized_metadata.image);
+
     }
 
 
@@ -412,7 +414,7 @@ export const ScribbleUpdate = ({
     return (
         <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
                 <div
@@ -423,15 +425,11 @@ export const ScribbleUpdate = ({
 
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                        style={{ height: "19rem", width: "18rem" }}
+                        style={{ height: "14rem", width: "18rem" }}
                     >
                         {/* Individual Stats */}
-                        <div className="font-mono text-white list-none flex pb-3 pt-4">
-                            <div
-                                className={`text-spot-yellow font-bold pr-3 pl-2`}
-                            >
-                                Index Number:
-                            </div>
+                        {/*<div className="font-mono text-white list-none flex pb-3 pt-4">
+                            
                             <input
                                 type="number"
                                 className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-12 h-6"
@@ -443,13 +441,17 @@ export const ScribbleUpdate = ({
                         <div className="pr-5 pl-2">
                             <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
        hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={getTraits}>Refresh Token Metadata</button>
-                        </div>
+    </div>*/}
 
 
                         {/* End of Indiv Stats */}
                         {/* Buttons */}
 
-
+                        <div
+                            className={`text-spot-yellow text-lg font-bold pr-3 pl-2`}
+                        >
+                            Upload Image
+                        </div>
                         <div className="pr-2">
                             <div className="w-full flex">
                                 <div className="w-full pl-1 pr-3">
@@ -589,12 +591,36 @@ export const ScribbleUpdate = ({
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
+                <div className="overflow-y-auto">
+                    <div className="">
+                        <div className="p-10 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5 font-mono text-spot-yellow">{jsonMetaData.map((nfts) => {
+                            return (
+                                <div onClick={() => {
+                                    setNftId(nfts.token_id)
+                                    updateTraitMetaData(nfts)
+                                }}>
+                                    <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
+                                        <div className="grid grid-cols-2">
+                                            <img className="h-48 mx-auto pt-4" src={nfts.normalized_metadata.image} alt={nfts.normalized_metadata.attributes[0].value}></img>
+                                            <div className="pt-4">
+                                                <div className="font-bold text-md mb-2">
+                                                    <h1>ID: {nfts.token_id}</h1>
+                                                    <h5 className="text-white">Collector Name: {nfts.normalized_metadata.attributes[0].value}</h5>
+                                                    <h5>Piece Name: {nfts.normalized_metadata.attributes[1].value}</h5>
+                                                    <h5 className="text-white">Color: {nfts.normalized_metadata.attributes[2].value}</h5>
+                                                    <h5>Noun: {nfts.normalized_metadata.attributes[3].value}</h5>
+                                                    <h5 className="text-white">Collection Claimed with: {nfts.normalized_metadata.attributes[4].value}</h5>
+                                                    <h5>ID Claimed with: {nfts.normalized_metadata.attributes[5].value}</h5>
+                                                </div>
+                                            </div></div>
+                                        <div className="px-6 pt-4 pb-2">
+                                        </div>
+                                    </div></div>
 
 
-            </div>
-
-
-            {/*<div className='self-end'>
+                            )
+                        })}</div>
+                        {/*} <div className='self-end'>
                 <button className="w-1/3 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                         setOwnedCards(!ownedCards)
@@ -607,6 +633,9 @@ export const ScribbleUpdate = ({
                 </div>
                     </div>*/}
 
+                    </div></div>
+
+            </div>
         </div>
     );
 };
