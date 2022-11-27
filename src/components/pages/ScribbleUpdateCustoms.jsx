@@ -13,6 +13,7 @@ import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
 import axios from "axios";
 import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
+import { json } from "react-router-dom";
 
 
 export const ScribbleUpdate = ({
@@ -25,16 +26,7 @@ export const ScribbleUpdate = ({
     txProcessing,
     setTxProcessing,
 }) => {
-    const state = {
-        loading: true,
-        tokenId: [],
-        collectorName: [],
-        pieceName: [],
-        color: [],
-        noun: [],
-        collectionUsed: [],
-        idUsed: [],
-    }
+
     const isAuthenticated = Boolean(account);
     const userAddress = account;
     const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
@@ -62,24 +54,22 @@ export const ScribbleUpdate = ({
     const [customNoun, setCustomNoun] = useState("");
     const [metaData, setMetaData] = useState([]);
     const [jsonMetaData, setJsonMetaData] = useState([]);
+    const [displayNfts, setDisplayNfts] = useState([]);
     let response;
 
     const [currentID, setCurrentID] = useState("1");
+    const [nftId, setNftId] = useState("1");
+    const [imageUrl, setImageUrl] = useState("https://thespot.mypinata.cloud/ipfs/QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH")
 
     async function updateMetaData() {
-        getTraits();
-        setCurrentID(textinputText - 1);
-        setMetaData(JSON.parse(response.data.result[`${currentID}`].metadata));
-        setCollectorName(metaData.attributes[0].value);
-        setTextinput(metaData.attributes[1].value);
-        setCustomColor(metaData.attributes[2].value);
-        setCustomNoun(metaData.attributes[3].value);
-        setCollectionUsedToClaim(metaData.attributes[4].value);
-        setIdClaimedWith(metaData.attributes[5].value);
-        setJsonMetaData(response.data);
-        console.log(currentID);
-        console.log(customNoun);
-        console.log(jsonMetaData);
+        setCollectorName(response.data.result[`${currentID}`].normalized_metadata.attributes[0].value);
+        setTextinput(response.data.result[`${currentID}`].normalized_metadata.attributes[1].value);
+        setCustomColor(response.data.result[`${currentID}`].normalized_metadata.attributes[2].value);
+        setCustomNoun(response.data.result[`${currentID}`].normalized_metadata.attributes[3].value);
+        setCollectionUsedToClaim(response.data.result[`${currentID}`].normalized_metadata.attributes[4].value);
+        setIdClaimedWith(response.data.result[`${currentID}`].normalized_metadata.attributes[5].value);
+        setNftId(response.data.result[`${currentID}`].token_id);
+        setImageUrl(response.data.result[`${currentID}`].normalized_metadata.image);
     }
 
 
@@ -251,8 +241,12 @@ export const ScribbleUpdate = ({
         getNfts();
     }, [collection]);
 */
-
-
+    async function testing() {
+        displayNfts.map((nft) => {
+            setJsonMetaData(JSON.parse(nft.metadata));
+            // return <p>{jsonMetaData}</p>;
+        })
+    }
 
     async function getTraits() {
         const options = {
@@ -261,7 +255,7 @@ export const ScribbleUpdate = ({
             params: {
                 chain: "avalanche",
                 format: "decimal",
-                token_addresses: collection,
+                normalizeMetadata: "true",
             },
             headers: {
                 accept: "application/json",
@@ -270,45 +264,32 @@ export const ScribbleUpdate = ({
         };
         try {
             response = await axios.request(options);
-            const data = response;
-            /* const {
-                 collectorName: [],
-                 nftList = state.tokenId.slice(0, 4).map(item => item.result).flat()
-             } = data
-             this.setState({ tokenId: nftList, loading: false })*/
-            // let setMetaData = JSON.parse(response.data.result[0].metadata);
-            // let data = response.data.result;
-            //setWalletTraits(data.result.map((nft) => nft.token_id));
+            setDisplayNfts(response.data.result);
+            setCurrentID(textinputText - 1);
+            /*const awaitingData = await setMetaData(JSON.parse(response.data.result[`${currentID}`].metadata));*/
+
+            /*displayNfts.map((nft) => {
+                setJsonMetaData(JSON.parse(nft.metadata));
+                console.log(jsonMetaData);
+                console.log(jsonMetaData.name);
+                // return <p>{jsonMetaData}</p>;
+            })*/
+            updateMetaData();
+            console.log(response.data.result);
+            console.log(response.data.result[`${currentID}`].normalized_metadata.attributes[2].value);
+            console.log(response.data.result[`${currentID}`].token_id);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        updateMetaData();
+        getTraits();
+
         console.log(textinputText)
     }, [textinputText]);
 
-    function renderData() {
-        if (this.state.loading) {
-            return <div>Loading...</div>
-        }
-        if (this.state.tokenId.length) {
-            return <div>No Data</div>
-        }
-        return (
-            <div><h1>Testing</h1>
-                {this.state.tokenId.map((item, key) => {
-                    return (
-                        <div key={key}>
-                            <b>{item.name}</b>
-                        </div>
-                    )
-                })}
 
-            </div>
-        )
-    }
 
     function updateCanvasTraits(trait) {
         setCanvasImage((prevImage) => ({
@@ -327,14 +308,14 @@ export const ScribbleUpdate = ({
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         return (
             <div
-                key={jsonMetaData.result.token_id}
+                key={jsonMetaData.image}
             /*onClick={() => {
                 updateCanvasTraits(trait);
             }}*/
             >
-                {" "}ownedFilter
+
                 <Card
-                    nftName={jsonMetaData.result.name}
+                    nftName={jsonMetaData.attributes[0].value}
                 /*traitType={trait.traitType}
                 traitName={trait.traitName}
                 image={trait.image}
@@ -437,7 +418,7 @@ export const ScribbleUpdate = ({
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
 
-                    <img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
+                    <img src={imageUrl} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
                         style={{ height: "19rem", width: "18rem" }}
@@ -447,7 +428,7 @@ export const ScribbleUpdate = ({
                             <div
                                 className={`text-spot-yellow font-bold pr-3 pl-2`}
                             >
-                                Scribble Custom ID:
+                                Index Number:
                             </div>
                             <input
                                 type="number"
@@ -459,7 +440,7 @@ export const ScribbleUpdate = ({
                         </div>
                         <div className="pr-5 pl-2">
                             <button className="m-1 w-full rounded-lg py-1 border-2 border-gray-200 text-gray-200
-       hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={updateMetaData}>Refresh Token Metadata</button>
+       hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600" onClick={getTraits}>Refresh Token Metadata</button>
                         </div>
 
 
@@ -496,6 +477,7 @@ export const ScribbleUpdate = ({
                             customNoun={customNoun}
                             collectionClaimedWith={collectionUsedToClaim}
                             idClaimedWith={idClaimedWith}
+                            nftId={nftId}
                             scribbleNote={textinputText1}
                             txProcessing={txProcessing}
                             setTxProcessing={setTxProcessing}
@@ -518,6 +500,12 @@ export const ScribbleUpdate = ({
                         </h1>
 
                         <div className="gap-4 pt-1 pl-2 grid grid-col-4">
+                            <div className="flex">
+                                <div className="col-span-2 text-white pr-6">NFT ID: </div>
+                                <div className="text-spot-yellow font-mono">
+                                    {nftId}
+                                </div>
+                            </div>
                             <div className="flex">
                                 <div className="col-span-2 text-white pr-6">Collector's Name: </div>
                                 <div className="text-spot-yellow font-mono">
@@ -601,15 +589,14 @@ export const ScribbleUpdate = ({
                 {/* Stats div*/}
 
 
-                <renderData />
             </div>
 
 
             {/*<div className='self-end'>
-                    <button className="w-1/3 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                <button className="w-1/3 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
-                            setOwnedCards(!ownedCards)
-                        }}>{!ownedCards ? 'My Traits' : 'All Traits'}</button></div>
+                        setOwnedCards(!ownedCards)
+                    }}>{!ownedCards ? 'My Traits' : 'All Traits'}</button></div>
             <div className="overflow-y-auto">
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
