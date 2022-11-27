@@ -27,6 +27,19 @@ export const ScribbleUpdate = ({
     setTxProcessing,
 }) => {
 
+    //user input text vars
+
+    const textinputUser = (event) => {
+        setTextinput(event.target.value);
+    };
+    const textinputUserText = (event) => {
+        setTextinputText(event.target.value);
+    };
+    const textinputUserText1 = (event) => {
+        setTextinputText1(event.target.value);
+    };
+
+
     const isAuthenticated = Boolean(account);
     const userAddress = account;
     const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
@@ -59,7 +72,8 @@ export const ScribbleUpdate = ({
 
     const [currentID, setCurrentID] = useState("1");
     const [nftId, setNftId] = useState("1");
-    const [imageUrl, setImageUrl] = useState("https://thespot.mypinata.cloud/ipfs/QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH")
+    const [imageUrl, setImageUrl] = useState("https://thespot.mypinata.cloud/ipfs/QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH");
+
 
     async function updateMetaData() {
         setCollectorName(response.data.result[`${currentID}`].normalized_metadata.attributes[0].value);
@@ -70,6 +84,7 @@ export const ScribbleUpdate = ({
         setIdClaimedWith(response.data.result[`${currentID}`].normalized_metadata.attributes[5].value);
         setNftId(response.data.result[`${currentID}`].token_id);
         setImageUrl(response.data.result[`${currentID}`].normalized_metadata.image);
+        console.log(response.data);
     }
 
 
@@ -82,17 +97,6 @@ export const ScribbleUpdate = ({
 
 
 
-    //user input text vars
-
-    const textinputUser = (event) => {
-        setTextinput(event.target.value);
-    };
-    const textinputUserText = (event) => {
-        setTextinputText(event.target.value);
-    };
-    const textinputUserText1 = (event) => {
-        setTextinputText1(event.target.value);
-    };
 
     //name font info
     const collectionOptions = [
@@ -275,9 +279,7 @@ export const ScribbleUpdate = ({
                 // return <p>{jsonMetaData}</p>;
             })*/
             updateMetaData();
-            console.log(response.data.result);
-            console.log(response.data.result[`${currentID}`].normalized_metadata.attributes[2].value);
-            console.log(response.data.result[`${currentID}`].token_id);
+
         } catch (error) {
             console.log(error);
         }
@@ -285,8 +287,6 @@ export const ScribbleUpdate = ({
 
     useEffect(() => {
         getTraits();
-
-        console.log(textinputText)
     }, [textinputText]);
 
 
@@ -345,7 +345,7 @@ export const ScribbleUpdate = ({
     });
 
     const [selectedFile, setSelectedFile] = useState();
-    const [imgURLHash, setImgURLHash] = useState("QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH");
+    const [imgURLHash, setImgURLHash] = useState("");
 
     const changeHandler = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -418,7 +418,9 @@ export const ScribbleUpdate = ({
                 <div
                     className="flex p-1 mb-10 sm:mb-10">
 
+
                     <img src={imageUrl} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
+
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
                         style={{ height: "19rem", width: "18rem" }}
@@ -580,7 +582,7 @@ export const ScribbleUpdate = ({
 
 
                             </div>
-
+                            <div><img src={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} alt="New Image" className="m-0 h-96 pr-6 pt-2 text-white"></img></div>
                         </div>
                     </div>
 

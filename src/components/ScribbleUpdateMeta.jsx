@@ -32,6 +32,7 @@ export default function ScribbleUpdateMetadata({
     scribbleNote,
     collectionClaimedWith,
     idClaimedWith,
+    nftId,
     nftSelected,
     txProcessing,
     setTxProcessing,
@@ -59,7 +60,7 @@ export default function ScribbleUpdateMetadata({
         return response;
     }
 
-    async function setTokenURI(tokenURI, id) {
+    async function setTokenURI(tokenURI, nftId) {
         setTxProcessing(true);
         try {
             const { ethereum } = window;
@@ -71,10 +72,10 @@ export default function ScribbleUpdateMetadata({
                     let options = {
                         value: ethers.utils.parseEther(".1"),
                     };
-                    console.log(id);
+                    console.log(nftId);
                     console.log(tokenURI);
 
-                    let tx = await contract.changeURI(id, tokenURI);
+                    let tx = await contract.changeURI(nftId, tokenURI);
                     console.log(tx.hash);
                     props.setTxProcessing(false);
                     alert(
@@ -131,12 +132,12 @@ export default function ScribbleUpdateMetadata({
                 ],
             };
 
-            let jsonResponse = await uploadToMoralis(`${id}-json.json`, metadata);
+            let jsonResponse = await uploadToMoralis(`${nftId}-json.json`, metadata);
 
             let jsonURL =
                 jsonResponse.data.length > 0 ? jsonResponse.data[0].path : "";
             console.log(jsonURL);
-            await setTokenURI(jsonURL, id);
+            await setTokenURI(jsonURL, nftId);
 
         } catch (error) {
             console.log(error);
@@ -177,7 +178,7 @@ export default function ScribbleUpdateMetadata({
      hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
                         onClick={() => customizeScribbleCard()}
                     >
-                        Update Metadata for Token {id}
+                        Update Metadata for Token {nftId}
                     </button>
                 </div>
             </div>
