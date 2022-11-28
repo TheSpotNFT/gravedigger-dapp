@@ -9,7 +9,7 @@ function Card(props) {
       <img className="w-full" src={props.image}></img>
       <div className="px-6 py-4">
         <div className="font-bold text-l mb-2 pt-6">
-          <div className="text-white text-xl pb-2">Claim with Your</div>
+          <div className="text-white text-xl pb-2">Claim with</div>
           <h4>{props.nftName}</h4>
           <h4>ID: {props.id}</h4>
         </div>

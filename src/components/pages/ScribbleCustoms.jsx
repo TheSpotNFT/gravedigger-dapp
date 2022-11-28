@@ -81,35 +81,6 @@ export const Scribble = ({
         setCatalogNumber(selectedOption.catalog);
     };
 
-    /*async function getHasClaimed(tokenURI, id) {
-      setTxProcessing(true);
-      try {
-        const { ethereum } = window;
-        if (ethereum) {
-          const provider = new ethers.providers.Web3Provider(ethereum);
-          const signer = provider.getSigner();
-          if (ENGRAVER_ABI && ENGRAVER_ADDRESS && signer) {
-            const contract = new Contract(ENGRAVER_ADDRESS, ENGRAVER_ABI, signer);
-            let options = {
-              value: ethers.utils.parseEther(".1"),
-            };
-            console.log(id);
-            console.log(tokenURI);
-  
-            let tx = await contract.engraveTombstone(id, tokenURI);
-            console.log(tx.hash);
-            props.setTxProcessing(false);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setTxProcessing(false);
-      }
-    }
-  */
-
-
     {
         /* For Data retrieval */
     }
@@ -131,33 +102,6 @@ export const Scribble = ({
     //https://api.joepegs.dev/v2/users/{address}/items
     //XyVue40t0uzAZRShwfLhTEFSA8piqCRpVIcc
 
-    /*useEffect(() => {
-        const getNfts = async () => {
-            const options = {
-                method: "GET",
-                url: `https://cors-anywhere.herokuapp.com/https://api.joepegs.dev/v2/users/${account}/items`,
-                params: {
-                    collectionAddresses: [collection],
-                },
-                headers: {
-                    accept: "application/json",
-                    "x-joepegs-api-key": "XyVue40t0uzAZRShwfLhTEFSA8piqCRpVIcc", //process.env.REACT_APP_MORALIS_API_KEY
-                },
-            };
-            try {
-                let response = await axios.request(options);
-                console.log(response);
-                let data = response.data;
-                setWalletTraits(data.result.map((nft) => nft.token_id));
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        getNfts();
-    }, [collection]);
-*/
-
-
     useEffect(() => {
         const getTraits = async () => {
             const options = {
@@ -175,7 +119,6 @@ export const Scribble = ({
             };
             try {
                 let response = await axios.request(options);
-                console.log(response);
                 let data = response.data;
                 setWalletTraits(data.result.map((nft) => nft.token_id));
             } catch (error) {
@@ -409,6 +352,7 @@ export const Scribble = ({
     }
     const [claimed, setClaimed] = useState();
     let hasClaimed;
+
     async function getHasClaimed() {
 
         try {
@@ -423,7 +367,30 @@ export const Scribble = ({
                     };
 
 
-                    hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID);
+                    if (catalogNumber === "1") {
+                        hasClaimed = await contract.hasBeenClaimed7(chosenTrait.ScribbleID); //mind matter
+                    }
+                    if (catalogNumber === "2") {
+                        hasClaimed = await contract.hasBeenClaimed6(chosenTrait.ScribbleID); //overload
+                    }
+                    if (catalogNumber === "3") {
+                        hasClaimed = await contract.hasBeenClaimed8(chosenTrait.ScribbleID); //tales
+                    }
+                    if (catalogNumber === "4") {
+                        hasClaimed = await contract.hasBeenClaimed1(chosenTrait.ScribbleID); //pns
+                    }
+                    if (catalogNumber === "5") {
+                        hasClaimed = await contract.hasBeenClaimed2(chosenTrait.ScribbleID); //abstract
+                    }
+                    if (catalogNumber === "6") {
+                        hasClaimed = await contract.hasBeenClaimed3(chosenTrait.ScribbleID); //unfinished
+                    }
+                    if (catalogNumber === "7") {
+                        hasClaimed = await contract.hasBeenClaimed4(chosenTrait.ScribbleID); //wasteland
+                    }
+                    if (catalogNumber === "8") {
+                        hasClaimed = await contract.hasBeenClaimed5(chosenTrait.ScribbleID); //resonate
+                    }
                     console.log(hasClaimed);
 
                     setClaimed(hasClaimed);
@@ -463,8 +430,8 @@ export const Scribble = ({
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs
                         </h1>
-                        <h3 className="text-center font-mono text-xs text-white pt-1 pb-6 sm:pr-10">
-                            Enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
+                        <h3 className="text-center font-mono text-sm text-white pt-1 pb-6 sm:pr-10">
+                            Choose the NFT you would like to use to claim your Scribble Custom Card. Then enter the info for your custom piece below. Collector name is your handle to be included in the metadata of the final piece which is optional. Piece Name is the name you'd like the custom piece to have and is also optional. Color and Noun are required to mint a custom card, these give Scribble Warlock guidance for the piece.
                         </h3>
 
                         <div className="gap-4 pt-1 pl-2 grid grid-col-1 place-content-center pr-14">
@@ -568,7 +535,7 @@ export const Scribble = ({
                     {/* End of Indiv Stats */}
                     {/* Buttons */}
 
-                    <div className="font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2">
+                    <div className={`text-${claimed === "ALREADY CLAIMED" ? "[red]" : "spot-yellow"} font-mono text-white list-none flex pb-3 text-sm pl-2 pt-2 pr-2`}>
 
                         The chosen NFT has {claimed} a Custom Scribble Card
 
@@ -604,6 +571,6 @@ export const Scribble = ({
                 </div>
             </div>
 
-        </div>
+        </div >
     );
 };
