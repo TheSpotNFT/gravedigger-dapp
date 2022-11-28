@@ -271,6 +271,7 @@ export const ScribbleUpdate = ({
             response = await axios.request(options);
             setDisplayNfts(response.data.result);
             setCurrentID(textinputText - 1);
+            setJsonMetaData(response.data.result);
             /*const awaitingData = await setMetaData(JSON.parse(response.data.result[`${currentID}`].metadata));*/
 
             /*displayNfts.map((nft) => {
@@ -288,7 +289,7 @@ export const ScribbleUpdate = ({
 
     useEffect(() => {
         getTraits();
-    }, [textinputText]);
+    }, []);
 
 
 
@@ -497,6 +498,7 @@ export const ScribbleUpdate = ({
                         >
                             Flip Paused State
                         </button></div>
+
                     </div>
                     <div className="pb-6 md: pl-6">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
