@@ -521,13 +521,7 @@ export const Scribble = ({
 
                             </div>
                         </div>
-                        <div className="sm:pr-16 pt-6"><a href="/scribblecustomcheck"><button
-                            className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
 
-                        >
-                            Check if an NFT has Claimed
-                        </button></a></div>
                     </div>
 
                 </div>
@@ -591,7 +585,10 @@ export const Scribble = ({
                                     defaultValue={{ label: "Mind Matter", value: "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1" }}
                                 />
                             </div>
-                        </div></div>
+                        </div></div><div className="w-full pr-6 pt-10"><button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
+                                setOwnedCards(!ownedCards)
+                            }}>{!ownedCards ? 'My NFTs' : 'View Entire Collection'}</button></div>
 
 
 
