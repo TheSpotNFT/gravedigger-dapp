@@ -137,42 +137,13 @@ export const Scribble = ({
         setNftSelected(true);
     }
 
-    async function getHasClaimed(tokenURI, id) {
-        setTxProcessing(true);
-        try {
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
-                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
-                    let options = {
-                        value: ethers.utils.parseEther(".1"),
-                    };
-                    console.log(id);
-                    console.log(tokenURI);
-
-                    let tx = await contract.changeURI(id, tokenURI);
-                    console.log(tx.hash);
-                    setTxProcessing(false);
-                    alert(
-                        "Customized! Refresh the metadata on Campfire, Kalao or Joepegs!"
-                    );
-                }
-            }
-        } catch (error) {
-            console.log(error);
-        } finally {
-            setTxProcessing(false);
-        }
-    }
 
     function createMindMatterCard(trait) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
         if (collection == "0xC3C831b19B85FdC2D3E07DE348E7111BE1095Ba1") { //Mind Matter
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -189,7 +160,7 @@ export const Scribble = ({
         if (collection == "0x424F2C77341d692496544197Cc39708F214EEfc4") { //Overload
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -206,7 +177,7 @@ export const Scribble = ({
         if (collection == "0x5DF36A4E61800e8cc7e19d6feA2623926C8EF960") {//Tales
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -223,7 +194,7 @@ export const Scribble = ({
         if (collection == "0x8d17f8Ca6EFE4c85981A4C73c5927beEe2Ad1168") {//PNS
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -240,7 +211,7 @@ export const Scribble = ({
         if (collection == "0x8f1e73AA735A33e3E01573665dc7aB66DDFBa4B2") {//Abstract
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -257,7 +228,7 @@ export const Scribble = ({
         if (collection == "0xeCf0d76AF401E400CBb5C4395C76e771b358FE06") {//Unfinished
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -274,7 +245,7 @@ export const Scribble = ({
         if (collection == "0xbc54D075a3b5F10Cc3F1bA69Ee5eDA63d3fB6154") {//Wasteland
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -291,7 +262,7 @@ export const Scribble = ({
         if (collection == "0xF3544a51b156a3A24a754Cad7d48a901dDbD83d2") {//Resonate
             return (
                 <div
-                    key={trait.edition}
+                    key={trait.id}
                     onClick={() => {
                         updateCanvasTraits(trait);
                     }}
@@ -391,7 +362,7 @@ export const Scribble = ({
                     if (catalogNumber === "8") {
                         hasClaimed = await contract.hasBeenClaimed5(chosenTrait.ScribbleID); //resonate
                     }
-                    console.log(hasClaimed);
+
 
                     setClaimed(hasClaimed);
 
