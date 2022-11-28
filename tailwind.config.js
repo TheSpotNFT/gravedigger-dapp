@@ -10,6 +10,7 @@ module.exports = {
       'lg': '1124px',
       'xl': '1640px',
       '2xl': '1890px'
+      
 
     },
     container: {

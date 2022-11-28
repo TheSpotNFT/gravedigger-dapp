@@ -358,26 +358,6 @@ export const ScribbleUpdate = ({
         setNftSelected(true);
     }
 
-    function createCard(jsonMetaData) {
-        //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
-        return (
-            <div
-                key={jsonMetaData.token_address}
-            /*onClick={() => {
-                updateCanvasTraits(trait);
-            }}*/
-            >
-
-                <Card
-                    nftName={jsonMetaData.token_id}
-                    traitType={jsonMetaData.token_id}
-                    traitName={jsonMetaData.token_id}/*
-                image={trait.image}
-                id={trait.id}*/
-                />
-            </div>
-        );
-    }
 
     // For Searching traits
     const searchText = (event) => {
@@ -467,18 +447,18 @@ export const ScribbleUpdate = ({
     return (
         <div className="flex-auto mx-auto w-full">
             {/* Canvas Row*/}
-            <div className="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="grid 2xl:grid-cols-2 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
                 <div
-                    className="flex p-1 mb-10 sm:mb-10">
+                    className="grid grid-cols-3 p-1 mb-10 sm:mb-10">
 
-
-                    <img src={imageUrl} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
-
+                    <div className="w-max">
+                        <img src={imageUrl} alt="logo" className="m-0 h-96 pr-6 pt-2"></img>
+                    </div>
                     <div
                         className="grow border-dashed border-4 border-slate-500 p-3 pt-2 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-                        style={{ height: "14rem", width: "18rem" }}
+                        style={{ height: "15rem", width: "18rem" }}
                     >
                         {/* Individual Stats */}
                         {/*<div className="font-mono text-white list-none flex pb-3 pt-4">
@@ -553,31 +533,31 @@ export const ScribbleUpdate = ({
 
 
                     </div>
-                    <div className="pb-6 md: pl-6">
+                    <div className="pb-6 bg-slate-800">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
                             Scribble Customs Metadata Update
                         </h1>
 
-                        <div className="gap-4 pt-1 pl-2 grid grid-col-4">
+                        <div className="grid grid-cols-1 gap-4 pt-1 pl-4">
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">NFT ID: </div>
+                                <div className=" text-white pr-6">NFT ID: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {nftId}
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Collector's Name: </div>
+                                <div className=" text-white pr-6">Collector's Name: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {collectorName}
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-5">Piece Name: </div>
+                                <div className=" text-white pr-5">Piece Name: </div>
                                 <div className="text-spot-yellow font-mono">
 
                                     <input
                                         type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-6"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-48 h-6"
                                         placeholder="Piece Name"
                                         value={textinput}
                                         onChange={textinputUser.bind(this)}
@@ -585,7 +565,7 @@ export const ScribbleUpdate = ({
                                 </div>
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Color: </div>
+                                <div className=" text-white pr-6">Color: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {customColor}
                                 </div>
@@ -593,7 +573,7 @@ export const ScribbleUpdate = ({
 
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Noun: </div>
+                                <div className=" text-white pr-6">Noun: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {customNoun}
                                 </div>
@@ -601,7 +581,7 @@ export const ScribbleUpdate = ({
 
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Collection Used to Claim: </div>
+                                <div className=" text-white pr-6">Collection Used to Claim: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {collectionUsedToClaim}
                                 </div>
@@ -609,7 +589,7 @@ export const ScribbleUpdate = ({
 
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Id Claimed With: </div>
+                                <div className=" text-white pr-6">Id Claimed With: </div>
                                 <div className="text-spot-yellow font-mono">
                                     {idClaimedWith}
                                 </div>
@@ -617,11 +597,11 @@ export const ScribbleUpdate = ({
 
                             </div>
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">Lore: </div>
+                                <div className=" text-white pr-6">Lore: </div>
                                 <div>
                                     <input
                                         type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-6"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-48 h-6"
                                         placeholder="Scribble Field"
                                         value={textinputText1}
                                         onChange={textinputUserText1.bind(this)}
@@ -632,7 +612,7 @@ export const ScribbleUpdate = ({
                             </div>
 
                             <div className="flex">
-                                <div className="col-span-2 text-white pr-6">ImgUrl: </div>
+                                <div className=" text-white pr-6">ImgUrl: </div>
                                 <div className="text-white">
                                     <a href={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`} target="_blank"> https://ipfs.moralis.io:2053/ipfs/{imgURLHash}</a>
                                 </div>
@@ -646,26 +626,26 @@ export const ScribbleUpdate = ({
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
-                <div className="overflow-y-auto">
-                    <div className="">
-                        <div className="p-10 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5 font-mono text-spot-yellow">{jsonMetaData.map((nfts) => {
+                <div className="">
+                    <div className="flex">
+                        <div className="p-10 grid grid-cols-2 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-3 gap-5 font-mono text-spot-yellow">{jsonMetaData.map((nfts) => {
                             return (
                                 <div onClick={() => {
                                     setNftId(nfts.token_id)
                                     updateTraitMetaData(nfts)
                                 }}>
                                     <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
-                                        <div className="grid grid-cols-2">
+                                        <div className="grid grid-cols-1">
                                             <img className="h-48 mx-auto pt-4" src={nfts.normalized_metadata.image} alt={nfts.normalized_metadata.attributes[0].value}></img>
-                                            <div className="pt-4">
+                                            <div className="pt-4 pr-2 pl-2">
                                                 <div className="font-bold text-md mb-2">
-                                                    <h1>ID: {nfts.token_id}</h1>
+                                                    <div className="bg-slate-600"> <h1>ID: {nfts.token_id}</h1></div>
                                                     <h5 className="text-white">Collector Name: {nfts.normalized_metadata.attributes[0].value}</h5>
-                                                    <h5>Piece Name: {nfts.normalized_metadata.attributes[1].value}</h5>
+                                                    <div className="bg-slate-600"><h5>Piece Name: {nfts.normalized_metadata.attributes[1].value}</h5></div>
                                                     <h5 className="text-white">Color: {nfts.normalized_metadata.attributes[2].value}</h5>
-                                                    <h5>Noun: {nfts.normalized_metadata.attributes[3].value}</h5>
+                                                    <div className="bg-slate-600"><h5>Noun: {nfts.normalized_metadata.attributes[3].value}</h5></div>
                                                     <h5 className="text-white">Collection Claimed with: {nfts.normalized_metadata.attributes[4].value}</h5>
-                                                    <h5>ID Claimed with: {nfts.normalized_metadata.attributes[5].value}</h5>
+                                                    <div className="bg-slate-600"><h5>ID Claimed with: {nfts.normalized_metadata.attributes[5].value}</h5></div>
                                                 </div>
                                             </div></div>
                                         <div className="px-6 pt-4 pb-2">
