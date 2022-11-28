@@ -117,6 +117,47 @@ export const ScribbleUpdate = ({
         setCollection(selectedOption.value);
         setCollectionDescription(selectedOption.label);
     };
+    let pausedState;
+    const [isPaused, setIsPaused] = useState("");
+
+    async function getPausedState() {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (SCRIBBLECLAIM_ABI && SCRIBBLECLAIM_ADDRESS && signer) {
+                    const contract = new Contract(SCRIBBLECLAIM_ADDRESS, SCRIBBLECLAIM_ABI, signer);
+                    let options = {
+                        value: ethers.utils.parseEther(".1"),
+                    };
+
+                    pausedState = await contract.paused();
+                    if (pausedState) {
+                        setIsPaused("Minting is Currently Paused")
+                    }
+                    if (!pausedState) {
+                        setIsPaused("Minting is Currently Live")
+                    }
+                    console.log(pausedState);
+                    console.log(isPaused);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
+
+    useEffect(() => {
+        getPausedState();
+    }, [txProcessing])
+
+
+    const [pauseStateFlipped, setPauseStateFlipped] = useState();
+
+
 
     async function flipPauseState() {
         setTxProcessing(true);
@@ -291,7 +332,18 @@ export const ScribbleUpdate = ({
         getTraits();
     }, []);
 
-
+    function displayPausedState() {
+        if (pausedState) {
+            return (
+                <div>Minting is Currently Paused</div>
+            )
+        }
+        if (!pausedState) {
+            return (
+                <div>Minting is Currently Live</div>
+            )
+        }
+    }
 
     function updateCanvasTraits(trait) {
         setCanvasImage((prevImage) => ({
@@ -496,8 +548,9 @@ export const ScribbleUpdate = ({
 
                             onClick={flipPauseState}
                         >
-                            Flip Paused State
+                            Flip Paused State for Minting: {isPaused}
                         </button></div>
+
 
                     </div>
                     <div className="pb-6 md: pl-6">
