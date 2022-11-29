@@ -95,7 +95,7 @@ export default function ScribbleUpdateMetadata({
 
             const metadata = {
                 name: `SCRIBBLE CARD CUSTOM - ${nftId}`,
-                description: "The official collectable trading cards of SCRIBBLE WARLOCK. /n /nA special subseries of claimable CUSTOMS that can be unlocked through the owning of a piece from one of SCRIBBLE WARLOCK'S listed collections: ABSTRACT, MIND MATTER, PEACHES N STRAWBS, RESONATE, TALES FROM THE SCRIBBLE WARLOCK, UNFINISHED, & WASTELAND. /n /nCUSTOMS claimable at: https://thespot.art/scribble",
+                description: "The official collectable trading cards of SCRIBBLE WARLOCK. \n \nA special subseries of claimable CUSTOMS that can be unlocked through the owning of a piece from one of SCRIBBLE WARLOCK'S listed collections: ABSTRACT, MIND MATTER, PEACHES N STRAWBS, RESONATE, TALES FROM THE SCRIBBLE WARLOCK, UNFINISHED, & WASTELAND. \n \nCUSTOMS claimable at: https://thespot.art/scribble",
                 image: imgURL, //ipfs CID
                 attributes: [
                     {
