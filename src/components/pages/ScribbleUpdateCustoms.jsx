@@ -107,8 +107,7 @@ export const ScribbleUpdate = ({
                     if (!pausedState) {
                         setIsPaused("Minting is Currently Live")
                     }
-                    console.log(pausedState);
-                    console.log(isPaused);
+
                 }
             }
         } catch (error) {

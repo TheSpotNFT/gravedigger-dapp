@@ -72,11 +72,8 @@ export default function ScribbleUpdateMetadata({
                     let options = {
                         value: ethers.utils.parseEther(".1"),
                     };
-                    console.log(nftId);
-                    console.log(tokenURI);
 
                     let tx = await contract.changeURI(nftId, tokenURI);
-                    console.log(tx.hash);
                     props.setTxProcessing(false);
                     alert(
                         "Customized! Refresh the metadata on Campfire, Kalao or Joepegs!"
@@ -97,8 +94,8 @@ export default function ScribbleUpdateMetadata({
                 .getSigner()
 
             const metadata = {
-                name: "Scribble Custom Card",
-                description: "Scribble Custom Card",
+                name: `SCRIBBLE CARD CUSTOM - ${nftId}`,
+                description: "The official collectable trading cards of SCRIBBLE WARLOCK. /n /nA special subseries of claimable CUSTOMS that can be unlocked through the owning of a piece from one of SCRIBBLE WARLOCK'S listed collections: ABSTRACT, MIND MATTER, PEACHES N STRAWBS, RESONATE, TALES FROM THE SCRIBBLE WARLOCK, UNFINISHED, & WASTELAND. /n /nCUSTOMS claimable at: https://thespot.art/scribble",
                 image: imgURL, //ipfs CID
                 attributes: [
                     {
@@ -126,7 +123,7 @@ export default function ScribbleUpdateMetadata({
                         value: idClaimedWith,
                     },
                     {
-                        trait_type: "A Note From Scribble",
+                        trait_type: "Lore",
                         value: scribbleNote,
                     },
                 ],
