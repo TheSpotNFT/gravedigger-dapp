@@ -137,6 +137,35 @@ export const Scribble = ({
         setNftSelected(true);
     }
 
+    const [jsonMetaData, setJsonMetaData] = useState([]);
+
+    let response;
+
+    async function getNfts() {
+        const options = {
+            method: "GET",
+            url: `https://deep-index.moralis.io/api/v2/nft/${collection}`,
+            params: {
+                chain: "avalanche",
+                format: "decimal",
+                normalizeMetadata: "true",
+            },
+            headers: {
+                accept: "application/json",
+                "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+            },
+        };
+        try {
+            response = await axios.request(options);
+            setJsonMetaData(response.data.result);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getNfts();
+    }, [collection]);
 
     function createMindMatterCard(trait) {
         //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
@@ -537,8 +566,8 @@ export const Scribble = ({
             <div className="overflow-y-auto">
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards
-                        ? ownedFilter.map(createMindMatterCard)
-                        : dataSearch.map(createMindMatterCard)}
+                        ? ownedFilter.slice(0, jsonMetaData.length).map(createMindMatterCard)
+                        : dataSearch.slice(0, jsonMetaData.length).map(createMindMatterCard)}
                 </div>
             </div>
 
