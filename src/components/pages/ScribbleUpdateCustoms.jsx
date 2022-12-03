@@ -156,15 +156,6 @@ export const ScribbleUpdate = ({
     const [walletTraits, setWalletTraits] = useState([]);
     const [nftSelected, setNftSelected] = useState(false);
 
-    //https://api.joepegs.dev/v2/users/{address}/items
-    //XyVue40t0uzAZRShwfLhTEFSA8piqCRpVIcc
-
-    async function testing() {
-        displayNfts.map((nft) => {
-            setJsonMetaData(JSON.parse(nft.metadata));
-        })
-    }
-
     async function getTraits() {
         const options = {
             method: "GET",

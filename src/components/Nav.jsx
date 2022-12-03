@@ -19,6 +19,7 @@ export const Nav = ({
     { name: "Unnamed Branding", link: "/unnamed" },
     { name: "Analog", link: "/analog" },
     { name: "Spot Staking", link: "/staking" },
+    { name: "Scribble Custom Cards", link: "/scribble" },
     { name: "Twitter", link: "https://twitter.com/TheSpotnft" },
     { name: "Discord", link: "https://discord.com/invite/4wvC6xTFyB" },
   ];
@@ -26,22 +27,22 @@ export const Nav = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="main-nav pb-36 md:pb-20 lg:pb-20 xl:pb-20 2xl:pb-20">
-      <div className="shadow-md w-full fixed top-0 left-0 pb-4 md:pb-0 bg-spot-yellow">
-        <div className="md:flex items-center justify-between bg-spot-yellow py-0 px-7">
+    <nav className="main-nav pb-20 md:pb-20 lg:pb-15 xl:pb-15 2xl:pb-15">
+      <div className="shadow-md w-full fixed top-0 left-0 pb-0 md:pb-4 sm:pb-4 bg-spot-yellow">
+        <div className="flex items-center justify-between bg-spot-yellow py-0 px-7">
           <div className="desktop-nav">
             <ul
-              className={`md:flex md:items-center font-mono md:pb-0 pb-12 absolute md:static bg-spot-yellow md:z-auto z-[-1] 
-    left-0 w-full md:w-auto md:pl-0 pl-9 transition-all duration-300 ease-in ${open ? "top-20 opacity-90" : "top-[-490px]"
+              className={`overflow-y-visible xl:flex xl:items-center font-mono md:pb-0 sm:pb-0 absolute xl:static bg-spot-yellow xl:z-auto z-[-1] 
+    left-0 w-full xl:w-auto xl:pl-0 pl-0 transition-all duration-300 ease-in ${open ? "top-[65px] opacity-90 z-[1]]" : "top-[-550px]"
                 }`}
             >
-              <img src={logo} alt="logo" className="m-0 w-20"></img>
+              <img src={logo} alt="logo" className="m-0 w-20 sm:hidden md:hidden lg:block"></img>
 
 
               {Links.map((link) => (
                 <li
                   key={link.name}
-                  className="md:ml-8 lg:ml-8 xl:ml-8 xxl:ml-8 text-xl hover:text-gray-400 duration-300 md:my-0 lg:my-0 xl:my-0 xxl:my-0 my-7 pl-2"
+                  className="md:ml-8 lg:ml-8 xl:ml-8 xxl:ml-8 sm:text-base md:text-xl hover:text-gray-400 duration-300 md:my-4 lg:my-4 xl:my-0 xxl:my-0 my-4 pl-2"
                 >
                   <a
                     target={
@@ -59,7 +60,7 @@ export const Nav = ({
           </div>
           <div
             onClick={() => setOpen(!open)}
-            className="text-3xl absolute left-8 top-6 cursor-pointer md:hidden"
+            className="text-3xl absolute left-8 top-6 cursor-pointer xl:hidden"
           >
             <GiHamburgerMenu name={open ? "close" : "menu"} />
           </div>

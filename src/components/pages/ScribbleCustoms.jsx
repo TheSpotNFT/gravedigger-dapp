@@ -418,7 +418,7 @@ export const Scribble = ({
 
     // Main Component Return
     return (
-        <div className="flex-auto mx-auto w-full">
+        <div className="flex-auto mx-auto w-full lg:pt-6">
             {/* Canvas Row*/}
             <div className="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-2 sm:p-5 bg-slate-900">
                 {/* canvas div */}

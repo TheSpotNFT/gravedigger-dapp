@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Card from '../Card';
+import Card from '../GoatdCard';
 import traits from '../../goatdTraits';
 import Mint from '../GoatdMint';
 import axios from 'axios';
 import { GOATD_ADDRESS, GOATD_ABI } from '../Contracts/GoatdContract';
 import { ethers, Contract } from "ethers";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 
 export const Goatd = ({
     props,
@@ -95,7 +96,6 @@ export const Goatd = ({
             };
             try {
                 let response = await axios.request(options);
-                console.log(response);
                 let data = response.data;
                 setWalletTraits(data.result.map((nft) => nft.token_id));
             } catch (error) {
@@ -241,9 +241,8 @@ export const Goatd = ({
     useEffect(() => {
         const handleDNA = async () => {
             if (currentDNA) {
-                console.log(currentDNA);
                 let fetch = await checkDNA(currentDNA);
-                console.log("Fetch: " + fetch);
+                //console.log("Fetch: " + fetch);
                 //let fetchString = fetch.toString();
                 if (fetch) {
                     setTraitFetch(fetch);
@@ -268,24 +267,32 @@ export const Goatd = ({
     // Add feature: Filter owned trait cards
     const [ownedCards, setOwnedCards] = useState(false)
     //---------------------------------//
-
+    //Slider
+    const slideLeft = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft - 800
+    }
+    const slideRight = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft + 800
+    }
 
     // Main Component Return
     return (
-        <div className='container flex-auto mx-auto w-full'>
+        <div className='container flex-auto mx-auto w-full pt-6'>
 
             {/* Canvas Row*/}
-            <div className="xl:sticky top-20 grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="xl:sticky top-30 grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 gap-4 mt-1 md:ml-4 sm:ml-0 sm:p-0 sm:pt-0 md:pt-4 lg:pt-10 xl-pt-10 2xl:pt-10 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
-                <div className="p-1 mb-10 sm:mb-10" ref={div} style={{ height: "20rem", width: "20rem" }}>
+                <div className="col-span-2 p-1 mb-10 sm:mb-2" ref={div} style={{ height: "22rem", width: "22rem" }}>
                     <canvas
                         ref={canvas}
                         width={width}
                         height={height}
-                        className='mt-1 border-1 border-4 border-slate-500 text-center content-center p-5'
+                        className='mt-1 border-1 border-4 border-slate-500 text-center content-center p-5 lg:p-3 xl-p-5 2xl:p-5 md:p-2 sm:p-1'
                     />
-                    <div className="text-center md: pl-10"><h1 className='font-mono text-lg text-yellow-400 pt-1'>Transmorphisizer</h1></div>
+                    <div className="text-center md: pl-10"><h1 className='font-mono text-lg text-yellow-400 pt-1 sm:hidden md:block'>Transmorphisizer</h1></div>
                     <canvas
                         ref={hiddenCanvas}
                         width='900px'
@@ -294,7 +301,8 @@ export const Goatd = ({
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
-                <div className='grow border-dashed border-4 border-slate-500 p-3 m-1 text-left col-span-1 w-96 md:mt-10 lg:mt-1 mt-10 sm:mt-10 text-sm'>
+                <div className='grow border-dashed border-4 border-slate-500 p-3 m-1 text-left col-span-2 w-96 md:mt-2 lg:mt-1 mt-10 sm:mt-10 text-sm md:block sm:hidden lg:block xl:block 2xl:block'
+                    style={{ height: "24rem", width: "22rem" }}>
                     {/* Individual Stats */}
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Background: </div>
@@ -366,7 +374,7 @@ export const Goatd = ({
                     </div> {/* End of btm text lines */}
                 </div>{/* Stats div Ends*/}
                 {/* SearchBox */}
-                <div className="grid grid-rows-1 grid-cols-1 gap-4 pt-10 pl-10 self-end">
+                <div className="grid grid-rows-1 col-span-1 grid-cols-1 gap-4 pt-10 pl-5 self-end sm:hidden md:block">
                     <div className='col-span-1'><input type="text"
                         className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2" placeholder="search trait/ID..."
                         value={filter}
@@ -374,17 +382,114 @@ export const Goatd = ({
                     /></div>
 
                     <div className='self-end'>
-                        <button className="w-1/3 m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+                        <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                                 setOwnedCards(!ownedCards)
                             }}>{!ownedCards ? 'My Traits' : 'All Traits'}</button></div>
                 </div>{/* SearchBox Ends */}
 
             </div>{/* Canvas Row Div Ends*/}
-            <div className='overflow-y-auto'>
+            <div className='flex relative items-center overflow-hidden z-[0]'>
+                <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+                <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                    {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
+                </div>
+                <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
+            {/* <div className='overflow-y-auto'>
                 <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
-                </div></div>
+                </div></div> */}
+
+
+            {/* SearchBox */}
+            <div className="grid grid-rows-1 col-span-1 grid-cols-1 gap-4 pt-0 pl-0 self-end sm:block md:hidden">
+                <div className='col-span-1'><input type="text"
+                    className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2" placeholder="search trait/ID..."
+                    value={filter}
+                    onChange={searchText.bind(this)}
+                /></div>
+
+                <div className='self-end pt-4'>
+                    <button className="w-full pt-1 rounded-lg py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
+                            setOwnedCards(!ownedCards)
+                        }}>{!ownedCards ? 'My Traits' : 'All Traits'}</button></div>
+            </div>{/* SearchBox Ends */}
+
+
+            <div className='grow w-full border-dashed border-4 border-slate-500 p-3 m-1 text-left col-span-2 md:mt-2 lg:mt-1 mt-10 sm:mt-10 text-sm md:hidden sm:block'
+                style={{ height: "24rem" }}>
+                {/* Individual Stats */}
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Background: </div>
+                    {chosenTrait.Background} (ID: {chosenTrait.BackgroundID}) <div className={`${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) || (solidBG.some(ai => chosenTrait.BackgroundID === "")) ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BackgroundID}/`)} > Buy Now!</div>
+                </div>
+
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${walletTraits.includes(`${chosenTrait.BodyID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Body: </div>
+                    {chosenTrait.Body} (ID: {chosenTrait.BodyID})<div className={`${walletTraits.includes(`${chosenTrait.BodyID}`) || chosenTrait.BodyID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BodyID}/`)} > Buy Now!</div>
+                </div>
+
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${walletTraits.includes(`${chosenTrait.HeadID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Head: </div>
+                    {chosenTrait.Head} (ID: {chosenTrait.HeadID})<div className={`${walletTraits.includes(`${chosenTrait.HeadID}`) || chosenTrait.HeadID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadID}/`)} > Buy Now!</div>
+                </div>
+
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${walletTraits.includes(`${chosenTrait.EyesID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Eyes: </div>
+                    {chosenTrait.Eyes} (ID: {chosenTrait.EyesID})<div className={`${walletTraits.includes(`${chosenTrait.EyesID}`) || chosenTrait.EyesID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.EyesID}/`)} > Buy Now!</div>
+                </div>
+
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${walletTraits.includes(`${chosenTrait.MouthID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Mouth: </div>
+                    {chosenTrait.Mouth} (ID: {chosenTrait.MouthID})<div className={`${walletTraits.includes(`${chosenTrait.MouthID}`) || chosenTrait.MouthID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.MouthID}/`)} > Buy Now!</div>
+                </div>
+
+                <div className='font-mono text-white list-none flex pb-3'>
+                    <div className={`text-${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "spot-yellow" : "[red]"} font-bold pr-3`}>Headwear: </div>
+                    {chosenTrait.Headwear} (ID: {chosenTrait.HeadwearID})<div className={`${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadwearID}/`)} > Buy Now!</div>
+                </div>
+                {/* End of Indiv Stats */}
+                {/* Buttons */}
+                <div className="pt-1 pb-1 flex">
+
+                    <Mint
+                        chosenTrait={chosenTrait}
+                        walletTraits={walletTraits}
+                        saveImage={saveImage}
+                        userAddress={userAddress}
+                        canvas={chosenTrait}
+                        savedImage={savedImage}
+                        solidBG={solidBG}
+                        traitsAvailability={traitsAvailability}
+                        txProcessing={txProcessing}
+                        setTxProcessing={setTxProcessing}
+                        ownedCards={ownedCards}
+                        web3Provider={web3Provider}
+                        account={account}
+                    />
+                    <button className="m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
+                            setCheckMyTraits(!checkMyTraits)
+                        }}>My Owned Traits</button>
+
+                </div>
+                {/* End of Buttons */}
+                {/* Two bottom text lines */}
+                <div className='font-mono text-white list-none flex pb-0 pt-3 text-sm'>
+                    <div className='text-spot-yellow font-bold pr-3 text-xl'>* </div>
+                    Traits in your wallet:  {apiLoaded, checkMyTraits && walletTraits.length + ' nos.'} {apiLoaded, checkMyTraits && 'IDs: ' + walletTraits.map(trait => ' ' + trait)}
+                </div>
+                <div className='font-mono text-white list-none flex pb-3 text-sm'>
+                    <div className='text-[red] pr-3 text-xl'>* </div>
+                    Traits not in your wallet.
+                </div>
+                <div className='font-mono text-white list-none flex pb-3 text-sm'><span className={traitsAvailability === '0' ? "text-green-300" : "text-[#fa2121]"}>
+                    {traitsAvailability === '0' && currentDNA.length >= 14 ? 'Trait Combo is Unique!' : null}
+                    {traitsAvailability === '1' && currentDNA.length >= 14 ? "Trait Combo's Been Minted!" : null}</span>
+                </div> {/* End of btm text lines */}
+            </div>
+
         </div>
     )
 }
