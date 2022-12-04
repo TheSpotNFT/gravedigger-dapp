@@ -9,7 +9,8 @@ export default function Learning() {
   <div className="container px-5 py-10 mx-auto flex flex-col">
     <div className="lg:w-4/6 mx-auto">
       <div className="lg:text-left sm:text-center">
-        <h1 className='text-5xl  font-mono text-yellow-400 mt-10 pt-10 pb-10 lg:text-left sm:text-center'>The Spot's Projects: Personalized NFTs (pNFTs) on Avax, we create the canvas for you to finish. </h1>
+        <h1 className='text-5xl  font-mono text-yellow-400 mt-10 pt-10 pb-1 lg:text-left sm:text-center'>The Spot's Projects</h1>
+        <h1 className='text-4xl  font-mono text-yellow-400 mt-1 pt-1 pb-10 lg:text-left sm:text-center'>zNFTs on Avax (x + y) = z.  </h1>
       </div>
       {/* Q1 */}
       <div className="flex flex-col sm:flex-row mt-10">
