@@ -69,10 +69,10 @@ const slideRight = () => {
       <div className="w-full py-4 px-2 flex justify-center text-spot-yellow rounded overflow-hidden shadow-lg bg-slate-900">
       <button
                 className="align-middle text-xl rounded-lg px-4 py-4 w-full border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l sm:text-sm"
                 onClick={onClickUrl("/learning")}
               >
-                The Spot for zNFT's on Avalanche --- Learn More  --- The Educatooooor
+                The Spot for zNFT's on Avalanche -- Learn More  -- The Educatooooor
               </button>
       </div>
 </div>
