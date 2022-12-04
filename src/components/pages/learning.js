@@ -10,8 +10,10 @@ export default function Learning() {
     <div className="lg:w-4/6 mx-auto">
       <div className="lg:text-left sm:text-center">
         <h1 className='text-5xl  font-mono text-yellow-400 mt-10 pt-10 pb-1 lg:text-left sm:text-center'>The Spot's Projects</h1>
-        <h1 className='text-4xl  font-mono text-yellow-400 mt-1 pt-1 pb-10 lg:text-left sm:text-center'>zNFTs on Avax (x + y) = z.  </h1>
+        <h1 className='text-4xl  font-mono text-yellow-400 mt-1 pt-1 pb-4 lg:text-left sm:text-center'>zNFTs on Avax (x + y) = z.  </h1>
       </div>
+      <div className='text-yellow-400 lg:text-left sm:text-center font-mono text-xl pb-6'><div>zNFT's combine multiple elements to create your NFT. </div>
+      <div>x: The NFT as developed by The Spot.</div><div> y: The customizable layer, influenced by you.</div> <div>z: The Finalized NFT</div></div>
       {/* Q1 */}
       <div className="flex flex-col sm:flex-row mt-10">
         <div className="sm:w-1/3 text-center sm:pr-8 sm:py-8">

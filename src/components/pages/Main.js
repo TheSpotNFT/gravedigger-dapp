@@ -15,7 +15,7 @@ import goatd4 from "../../assets/BODY-WU.png";
 import goatd5 from "../../assets/HEADWEAR-WUHAT.png";
 import Card from "../../components/MainCard";
 import Card2 from "../../components/NotActiveCard";
-
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
 const Main = ({
   account,
@@ -45,8 +45,18 @@ const observer = new IntersectionObserver(entries => {
     alert("The Evolution is Coming Soon...");
   }
  
+//Slider
+const slideLeft = () => {
+  var slider = document.getElementById('slider')
+  slider.scrollLeft = slider.scrollLeft - 800
+}
+const slideRight = () => {
+  var slider = document.getElementById('slider')
+  slider.scrollLeft = slider.scrollLeft + 800
+}
+
   return (
-    <div>
+    <div className="container flex-auto mx-auto w-full">
       {/*<div>
       <div className="relative">
       <div className="absolute right-1/3 left-1/3"><img className="items-center" src={goatd4} alt=""></img></div>
@@ -62,60 +72,63 @@ const observer = new IntersectionObserver(entries => {
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l"
                 onClick={onClickUrl("/learning")}
               >
-                The Spot for pNFT's on Avalanche --- Learn More  --- The Educatooooor
+                The Spot for zNFT's on Avalanche --- Learn More  --- The Educatooooor
               </button>
       </div>
 </div>
-    <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-10 font-mono text-spot-yellow bg-slate-900">
-      <Card 
+<div className='flex relative items-center overflow-hidden z-[0]'>
+        <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+        <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+          
+      <div><Card 
       image={thespot}
       alt="The Spot"
       title="MINTING COMPLETE"
       link="https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8"
       button="Buy on Secondary"
-      />
-       <Card 
+      /></div>
+       <div><Card 
       image={goatdmain}
       alt="GoatD: Customizable pfp"
       title="GoatD: Customizable pfp"
       link="/goatd"
       button="Enter the Transmorphisizer"
-      />
-       <Card 
+      /></div>
+       <div><Card 
       image={scribbleCardGraphic}
       alt="Scribble Warlock Customs"
       title="Scribble Warlock Customs"
       link="/scribble"
       button="Enter Customs"
-      />
-      <Card 
+      /></div>
+      <div><Card 
       image={cemetery}
       alt="The Cemetery"
       title="The Cemetery"
       link="/gravedigger"
       button="Enter The Cemetery"
-      />
-       <Card 
+      /></div>
+       <div><Card 
       image={analog}
-      alt="Analog: 1/1 Customizable NFTs"
-      title="Analog: 1/1 Customizable NFTs"
+      alt="Analog: 1/1 dNFTs"
+      title="Analog: 1/1 dNFTs"
       link="/analog"
       button="Enter Analog"
-      /> 
-       <Card 
+      /> </div>
+       <div><Card 
       image={apechain}
       alt="Spot Staking"
       title="Spot Staking"
       link="/staking"
       button="Enter Staking"
-      />
-       <Card 
+      /></div>
+       <div><Card 
       image={unnamednft}
       alt="Unnamed Branding"
       title="Unnamed Branding"
       link="/unnamed"
       button="Enter The Brandoooor"
-      />
+      /></div>
       {/*<Card 
       image={fragments}
       alt="Fragments"
@@ -123,14 +136,15 @@ const observer = new IntersectionObserver(entries => {
       link="/expand"
       button="Enter Fragments"
 />  */}
-       <Card2 
+       <div><Card2 
       image={evolve}
       alt="Evolve"
       title="Evolve"
       link="The Evolution is Coming Soon..."
       button="Enter Evolve"
-      />      
-     
+      />  </div>  </div>  
+     <div className="pl-10"><MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+</div>
     </div>
 
     </div>
