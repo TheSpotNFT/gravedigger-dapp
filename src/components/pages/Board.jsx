@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Select from "react-select";
-import Card from "../Card";
+import Card from "../TombStoneCard";
 import traits from "../../tombstoneTraits";
 import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
 import Authenticate from "../Authenticate";
@@ -15,6 +15,7 @@ import MintCollection from "../../components/MintCollection";
 import sendNFT from "../../components/sendNFTombstoned";
 import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
 import SendNFTombstoned from "../../components/sendNFTombstoned";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
 export const Board = ({
   account,
@@ -32,6 +33,16 @@ export const Board = ({
   const [filter, setFilter] = useState("");
   const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
   const nfTombstoneMetaData = nftombstoneData;
+
+  //Slider
+  const slideLeft = () => {
+    var slider = document.getElementById('slidernav')
+    slider.scrollLeft = slider.scrollLeft - 800
+  }
+  const slideRight = () => {
+    var slider = document.getElementById('slidernav')
+    slider.scrollLeft = slider.scrollLeft + 800
+  }
 
   //for text on canvas
   const [textinput, setTextinput] = useState("Gravedigger");
@@ -308,7 +319,7 @@ export const Board = ({
       };
       try {
         let response = await axios.request(options);
-        console.log(response);
+
         let data = response.data;
         setWalletTraits(data.result.map((nft) => nft.token_id));
       } catch (error) {
@@ -560,7 +571,7 @@ export const Board = ({
         {/* Stats div*/}
         <div
           className="grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
-          style={{ height: "31rem", width: "22rem" }}
+          style={{ height: "27rem", width: "22rem" }}
         >
           {/* Individual Stats */}
           <div className="font-mono text-white list-none flex pb-3">
@@ -608,18 +619,7 @@ export const Board = ({
             <div className="text-[red] pr-2 text-xl">* </div>
             TombStone not in your wallet.
           </div>
-          <div className="flex pr-2">
-            {" "}
-            <button
-              className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
-    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
-              onClick={() => {
-                setOwnedCards(!ownedCards);
-              }}
-            >
-              {!ownedCards ? "My TombStones" : "View All TombStones"}
-            </button>
-          </div>
+
 
           {/* <div className="flex pr-2"> <button className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={activateTombstone}>Activate Tombstone {chosenTrait.TombStoneID}</button></div>
@@ -643,6 +643,17 @@ export const Board = ({
               setTxProcessing={setTxProcessing}
               chosenTrait={chosenTrait}
             /></div>
+          <div className="flex pr-2 pt-6">
+            <button
+              className="w-full m-2 rounded-lg px-4 py-2 border-2 border-gray-200 text-gray-200
+    hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
+              onClick={() => {
+                setOwnedCards(!ownedCards);
+              }}
+            >
+              {!ownedCards ? "My TombStones" : "View All TombStones"}
+            </button>
+          </div>
         </div>
 
 
@@ -857,13 +868,13 @@ export const Board = ({
         </div>
       </div>
       {/* Canvas Row Div Ends*/}
-      <div className="overflow-y-auto">
-        <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
-          {ownedCards
-            ? ownedFilter.map(createCard)
-            : dataSearch.map(createCard)}
+      <div className='flex relative items-center overflow-hidden z-[0]'>
+        <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+        <div id='slidernav' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+          {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
         </div>
-      </div>
+        <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
+
       <div className="blade text-slate-900">T</div>
       <div className="bombing text-slate-900">H</div>
       <div className="devil text-slate-900">E</div>

@@ -14,6 +14,7 @@ import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "./Contracts/EngraverContract";
 import { Contract, ethers } from "ethers";
 
 export default function SendNFTombstoned(props) {
+
   const [textinput, setTextinput] = useState("");
 
   const textinputUser = (event) => {
@@ -113,10 +114,9 @@ export default function SendNFTombstoned(props) {
           let options = {
             value: ethers.utils.parseEther("0.25"),
           };
-          console.log(props.id)
+          //console.log(props.id)
           let engraved = await contract.hasBeenEngraved(props.id);
-          setHasBeen = engraved.isNumber();
-          console.log(engraved);
+          setHasBeen(engraved);
 
         } else {
           console.log("error with contract abi, address, or signer");
@@ -125,15 +125,14 @@ export default function SendNFTombstoned(props) {
       }
 
     } catch (error) {
-      console.log("Error on mint");
+
       console.log(error);
     } finally {
-      props.setTxProcessing(false);
+
     }
   }
-  useEffect(() => { checkEngraved() }, [props.chosenTrait])
-  console.log(hasBeen);
-  console.log(props.id);
+  useEffect(() => { checkEngraved(props) }, [props.id])
+
 
   async function sendNFT(uriFinal) {
     props.setTxProcessing(true);

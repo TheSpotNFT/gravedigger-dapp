@@ -267,14 +267,15 @@ export const Goatd = ({
     // Add feature: Filter owned trait cards
     const [ownedCards, setOwnedCards] = useState(false)
     //---------------------------------//
+
     //Slider
     const slideLeft = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft - 800
+        slider.scrollLeft = slider.scrollLeft - 500
     }
     const slideRight = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft + 800
+        slider.scrollLeft = slider.scrollLeft + 500
     }
 
     // Main Component Return
