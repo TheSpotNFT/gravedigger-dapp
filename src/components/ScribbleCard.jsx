@@ -5,7 +5,7 @@ function Card(props) {
   return (
 
 
-    <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover:text-bold hover:scale-105 hover:bg-slate-500 duration-300">
+    <div className="rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300 md:w-[200px] sm:w-[150px]">
       <img className="w-full" src={props.image}></img>
       <div className="px-6 py-4">
         <div className="font-bold text-l mb-2 pt-6">

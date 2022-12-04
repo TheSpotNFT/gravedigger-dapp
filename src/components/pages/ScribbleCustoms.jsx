@@ -10,6 +10,7 @@ import image1 from "../../assets/scribble/CARD_PLACEHOLDER.jpg"
 import DisplayCards from "../ScribbleCard1";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { ethers, Contract } from "ethers";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 
 export const Scribble = ({
     account,
@@ -60,6 +61,16 @@ export const Scribble = ({
     const textinputUserText2 = (event) => {
         setTextinputText2(event.target.value);
     };
+
+    //Slider
+    const slideLeft = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft - 800
+    }
+    const slideRight = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft + 800
+    }
 
     //name font info
     const collectionOptions = [
@@ -418,13 +429,13 @@ export const Scribble = ({
 
     // Main Component Return
     return (
-        <div className="flex-auto mx-auto w-full lg:pt-6">
+        <div className="container flex-auto mx-auto w-full lg:pt-6">
             {/* Canvas Row*/}
             <div className="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 sm:grid-cols-1 gap-4 ml-2 sm:p-5 bg-slate-900">
                 {/* canvas div */}
                 <div className="flex flex-cols place-content-center"><img src={image1} alt="logo" className="m-0 h-96"></img></div>
                 <div
-                    className="flex flex-cols w-auto col-span-1 p-1 mb-10 sm:mb-10">
+                    className="flex flex-cols w-auto col-span-1 p-1 mb-10 sm:mb-1">
 
                     <div className="pb-6 pl-4">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
@@ -495,7 +506,7 @@ export const Scribble = ({
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div
-                    className="border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm"
+                    className="border-dashed border-4 border-slate-500 p-3 pt-4 pl-5 m-1 text-left col-span-1 w-80 md:mt-10 lg:mt-2 mt-0 sm:mt-0 sm:mb-14 text-sm"
                     style={{ height: "18rem", width: "22rem" }}
                 >
                     {/* Individual Stats */}
@@ -563,12 +574,13 @@ export const Scribble = ({
             </div>
 
             {/* Canvas Row Div Ends*/}
-            <div className="overflow-y-auto">
-                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+            <div className='flex relative items-center overflow-hidden z-[0]'>
+                <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+                <div id='slider' className="p-1 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {ownedCards
                         ? ownedFilter.slice(0, jsonMetaData.length).map(createMindMatterCard)
                         : dataSearch.slice(0, jsonMetaData.length).map(createMindMatterCard)}
-                </div>
+                </div> <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
             </div>
 
         </div >

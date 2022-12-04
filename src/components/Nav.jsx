@@ -14,6 +14,7 @@ export const Nav = ({
 
   let Links = [
     { name: "Home", link: "/" },
+    { name: "Goatd", link: "/goatd" },
     { name: "NFTombstones", link: "/gravedigger" },
     { name: "View Engraved NFTombstones", link: "https://joepegs.com/collections/0xe3525413c2a15daec57c92234361934f510356b8" },
     { name: "Unnamed Branding", link: "/unnamed" },
