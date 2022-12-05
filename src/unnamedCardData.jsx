@@ -3052,434 +3052,15 @@ import image3051 from './assets/unnamedImages/3051.png'
 import image3052 from './assets/unnamedImages/3052.png'
 import image3053 from './assets/unnamedImages/3053.png'
 import image3054 from './assets/unnamedImages/3054.png'
+import image3055 from './assets/unnamedImages/3055.png'
+import image3056 from './assets/unnamedImages/3056.png'
+import image3057 from './assets/unnamedImages/3057.png'
+import image3058 from './assets/unnamedImages/3058.png'
+import image3059 from './assets/unnamedImages/3059.png'
+import image3060 from './assets/unnamedImages/3060.png'
+import image3061 from './assets/unnamedImages/3061.png'
 
 const unnamedCards = [
-    {
-        id: 3001,
-        image: image3001,
-        brand: 'The Spot',
-        nftName: 'The Spot',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3002,
-        image: image3002,
-        brand: 'The Spot',
-        nftName: 'The Spot',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3003,
-        image: image3003,
-        brand: 'Campfire',
-        nftName: 'Campfire',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3004,
-        image: image3004,
-        brand: 'Campfire',
-        nftName: 'Campfire',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3005,
-        image: image3005,
-        brand: 'Cuddlefish',
-        nftName: 'Cuddlefish',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3006,
-        image: image3006,
-        brand: 'Cuddlefish',
-        nftName: 'Cuddlefish',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3007,
-        image: image3007,
-        brand: 'Monkeez',
-        nftName: 'Monkeez',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3008,
-        image: image3008,
-        brand: 'Monkeez',
-        nftName: 'Monkeez',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3009,
-        image: image3009,
-        brand: 'Monkeez',
-        nftName: 'Monkeez',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3010,
-        image: image3010,
-        brand: 'Monkeez',
-        nftName: 'Monkeez',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3011,
-        image: image3011,
-        brand: 'Mambonauts',
-        nftName: 'Mambonauts',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3012,
-        image: image3012,
-        brand: 'Mambonauts',
-        nftName: 'Mambonauts',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3013,
-        image: image3013,
-        brand: 'Smol Run',
-        nftName: 'Smol Run',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3014,
-        image: image3014,
-        brand: 'Smol Run',
-        nftName: 'Smol Run',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3015,
-        image: image3015,
-        brand: 'Avax Whales',
-        nftName: 'Avax Whale',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3016,
-        image: image3016,
-        brand: 'Avax Whales',
-        nftName: 'Avax Whales',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3017,
-        image: image3017,
-        brand: 'Avax Apes',
-        nftName: 'Avax Apes',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3018,
-        image: image3018,
-        brand: 'Avax Apes',
-        nftName: 'Avax Apes',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3019,
-        image: image3019,
-        brand: 'AvaSharks',
-        nftName: 'AvaSharks',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3020,
-        image: image3020,
-        brand: 'AvaSharks',
-        nftName: 'AvaSharks',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3021,
-        image: image3021,
-        brand: 'Rillaz',
-        nftName: 'Rillaz',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3022,
-        image: image3022,
-        brand: 'Rillaz',
-        nftName: 'Rillaz',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3023,
-        image: image3023,
-        brand: 'Garbage Man Gang',
-        nftName: 'Garbage Man Gang',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3024,
-        image: image3024,
-        brand: 'Garbage Man Gang',
-        nftName: 'Garbage Man Gang',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3025,
-        image: image3025,
-        brand: 'Them',
-        nftName: 'Them',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3026,
-        image: image3026,
-        brand: 'Them',
-        nftName: 'Them',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3027,
-        image: image3027,
-        brand: 'SCRIBBLE WARLOCK',
-        nftName: 'SCRIBBLE WARLOCK',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3028,
-        image: image3028,
-        brand: 'SCRIBBLE WARLOCK',
-        nftName: 'SCRIBBLE WARLOCK',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3029,
-        image: image3029,
-        brand: 'Metapep',
-        nftName: 'Metapep',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3030,
-        image: image3030,
-        brand: 'Metapep',
-        nftName: 'Metapep',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3031,
-        image: image3031,
-        brand: 'Neko Friends',
-        nftName: 'Neko Friends',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3032,
-        image: image3032,
-        brand: 'Neko Friends',
-        nftName: 'Neko Friends',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3033,
-        image: image3033,
-        brand: 'Neko Friends',
-        nftName: 'Neko Friends',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3034,
-        image: image3034,
-        brand: 'Neko Friends',
-        nftName: 'Neko Friends',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3036,
-        image: image3036,
-        brand: 'MONKEEZ 475',
-        nftName: 'MONKEEZ 475',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3037,
-        image: image3037,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3038,
-        image: image3038,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3039,
-        image: image3039,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3040,
-        image: image3040,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3041,
-        image: image3041,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3042,
-        image: image3042,
-        brand: 'Hamburgers4all',
-        nftName: 'Hamburgers4all',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3043,
-        image: image3043,
-        brand: 'Line Monkeys',
-        nftName: 'Line Monkeys',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3044,
-        image: image3044,
-        brand: 'Line Monkeys',
-        nftName: 'Line Monkeys',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3045,
-        image: image3045,
-        brand: 'Tacos',
-        nftName: 'Tacos',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3046,
-        image: image3046,
-        brand: 'Goatd',
-        nftName: 'Goatd',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3047,
-        image: image3047,
-        brand: '$bCASH',
-        nftName: '$bCASH',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3048,
-        image: image3048,
-        brand: 'AVAXolotls',
-        nftName: 'AVAXolotls',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3049,
-        image: image3049,
-        brand: 'HODL Co.',
-        nftName: '$bCASH',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3050,
-        image: image3050,
-        brand: 'Beeg Rock',
-        nftName: 'Beeg Rock',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3051,
-        image: image3051,
-        brand: 'Peons',
-        nftName: 'Peons',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3052,
-        image: image3052,
-        brand: 'Happy Sun',
-        nftName: 'Happy Sun',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3053,
-        image: image3053,
-        brand: 'Doodleverse',
-        nftName: 'Doodleverse',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3054,
-        image: image3054,
-        brand: 'Moo!',
-        nftName: 'Moo!',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-
-
 
     { id: 1, image: image1, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
     { id: 2, image: image2, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
@@ -6481,6 +6062,485 @@ const unnamedCards = [
     { id: 2998, image: image2998, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
     { id: 2999, image: image2999, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
     { id: 3000, image: image3000, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
-
+    {
+        id: 3055,
+        image: image3055,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3056,
+        image: image3056,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3057,
+        image: image3057,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3058,
+        image: image3058,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3059,
+        image: image3059,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3060,
+        image: image3060,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3061,
+        image: image3061,
+        brand: 'Holidays 2022 - Gengar',
+        nftName: 'Holidays 2022 - Gengar',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3001,
+        image: image3001,
+        brand: 'The Spot',
+        nftName: 'The Spot',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3002,
+        image: image3002,
+        brand: 'The Spot',
+        nftName: 'The Spot',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3003,
+        image: image3003,
+        brand: 'Campfire',
+        nftName: 'Campfire',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3004,
+        image: image3004,
+        brand: 'Campfire',
+        nftName: 'Campfire',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3005,
+        image: image3005,
+        brand: 'Cuddlefish',
+        nftName: 'Cuddlefish',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3006,
+        image: image3006,
+        brand: 'Cuddlefish',
+        nftName: 'Cuddlefish',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3007,
+        image: image3007,
+        brand: 'Monkeez',
+        nftName: 'Monkeez',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3008,
+        image: image3008,
+        brand: 'Monkeez',
+        nftName: 'Monkeez',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3009,
+        image: image3009,
+        brand: 'Monkeez',
+        nftName: 'Monkeez',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3010,
+        image: image3010,
+        brand: 'Monkeez',
+        nftName: 'Monkeez',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3011,
+        image: image3011,
+        brand: 'Mambonauts',
+        nftName: 'Mambonauts',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3012,
+        image: image3012,
+        brand: 'Mambonauts',
+        nftName: 'Mambonauts',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3013,
+        image: image3013,
+        brand: 'Smol Run',
+        nftName: 'Smol Run',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3014,
+        image: image3014,
+        brand: 'Smol Run',
+        nftName: 'Smol Run',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3015,
+        image: image3015,
+        brand: 'Avax Whales',
+        nftName: 'Avax Whale',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3016,
+        image: image3016,
+        brand: 'Avax Whales',
+        nftName: 'Avax Whales',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3017,
+        image: image3017,
+        brand: 'Avax Apes',
+        nftName: 'Avax Apes',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3018,
+        image: image3018,
+        brand: 'Avax Apes',
+        nftName: 'Avax Apes',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3019,
+        image: image3019,
+        brand: 'AvaSharks',
+        nftName: 'AvaSharks',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3020,
+        image: image3020,
+        brand: 'AvaSharks',
+        nftName: 'AvaSharks',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3021,
+        image: image3021,
+        brand: 'Rillaz',
+        nftName: 'Rillaz',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3022,
+        image: image3022,
+        brand: 'Rillaz',
+        nftName: 'Rillaz',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3023,
+        image: image3023,
+        brand: 'Garbage Man Gang',
+        nftName: 'Garbage Man Gang',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3024,
+        image: image3024,
+        brand: 'Garbage Man Gang',
+        nftName: 'Garbage Man Gang',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3025,
+        image: image3025,
+        brand: 'Them',
+        nftName: 'Them',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3026,
+        image: image3026,
+        brand: 'Them',
+        nftName: 'Them',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3027,
+        image: image3027,
+        brand: 'SCRIBBLE WARLOCK',
+        nftName: 'SCRIBBLE WARLOCK',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3028,
+        image: image3028,
+        brand: 'SCRIBBLE WARLOCK',
+        nftName: 'SCRIBBLE WARLOCK',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3029,
+        image: image3029,
+        brand: 'Metapep',
+        nftName: 'Metapep',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3030,
+        image: image3030,
+        brand: 'Metapep',
+        nftName: 'Metapep',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3031,
+        image: image3031,
+        brand: 'Neko Friends',
+        nftName: 'Neko Friends',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3032,
+        image: image3032,
+        brand: 'Neko Friends',
+        nftName: 'Neko Friends',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3033,
+        image: image3033,
+        brand: 'Neko Friends',
+        nftName: 'Neko Friends',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3034,
+        image: image3034,
+        brand: 'Neko Friends',
+        nftName: 'Neko Friends',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3036,
+        image: image3036,
+        brand: 'MONKEEZ 475',
+        nftName: 'MONKEEZ 475',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3037,
+        image: image3037,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3038,
+        image: image3038,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3039,
+        image: image3039,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3040,
+        image: image3040,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3041,
+        image: image3041,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3042,
+        image: image3042,
+        brand: 'Hamburgers4all',
+        nftName: 'Hamburgers4all',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3043,
+        image: image3043,
+        brand: 'Line Monkeys',
+        nftName: 'Line Monkeys',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3044,
+        image: image3044,
+        brand: 'Line Monkeys',
+        nftName: 'Line Monkeys',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3045,
+        image: image3045,
+        brand: 'Tacos',
+        nftName: 'Tacos',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3046,
+        image: image3046,
+        brand: 'Goatd',
+        nftName: 'Goatd',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3047,
+        image: image3047,
+        brand: '$bCASH',
+        nftName: '$bCASH',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3048,
+        image: image3048,
+        brand: 'AVAXolotls',
+        nftName: 'AVAXolotls',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3049,
+        image: image3049,
+        brand: 'HODL Co.',
+        nftName: '$bCASH',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3050,
+        image: image3050,
+        brand: 'Beeg Rock',
+        nftName: 'Beeg Rock',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3051,
+        image: image3051,
+        brand: 'Peons',
+        nftName: 'Peons',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3052,
+        image: image3052,
+        brand: 'Happy Sun',
+        nftName: 'Happy Sun',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3053,
+        image: image3053,
+        brand: 'Doodleverse',
+        nftName: 'Doodleverse',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3054,
+        image: image3054,
+        brand: 'Moo!',
+        nftName: 'Moo!',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
 ]
 export default unnamedCards;

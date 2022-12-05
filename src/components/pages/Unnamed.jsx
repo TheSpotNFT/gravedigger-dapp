@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Card from '../Card';
+import Card from '../UnnamedCard';
 import unnamedCards from '../../unnamedCardData';//changed from traits
 import unnamedData from '../Contracts/UnnamedMetaData'
 import Authenticate from '../Authenticate';
@@ -10,6 +10,7 @@ import UnnamedMint from '../UnnamedMint';
 import axios from "axios";
 import { UNNAMED_ABI, UNNAMED_ADDRESS } from '../Contracts/UnnamednftContract';
 import { UNNAMEDBRANDING_ABI, UNNAMEDBRANDING_ADDRESS } from '../Contracts/UnnamedBrandedContract';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 
 export const Unnamed = ({
     account,
@@ -36,6 +37,16 @@ export const Unnamed = ({
             }
         });
     }, []);
+
+    //Slider
+    const slideLeft = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft - 500
+    }
+    const slideRight = () => {
+        var slider = document.getElementById('slider')
+        slider.scrollLeft = slider.scrollLeft + 500
+    }
 
     const scrollToTop = () => {
         window.scrollTo({
@@ -200,12 +211,10 @@ export const Unnamed = ({
         )
     }
 
-    /* For Searching traits
+    // For Searching traits
     const searchText = (event) => {
         setFilter(event.target.value);
     }
-    */
-
     let dataSearch = unnamedCards.filter(item => {
         return Object.keys(item).some(key => item[key].toString().toLowerCase().includes(filter.toString().toLowerCase())
         )
@@ -294,7 +303,7 @@ export const Unnamed = ({
         <div className='container flex-auto mx-auto w-full'>
 
             {/* Canvas Row*/}
-            <div className="lg:sticky top-20 grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="lg:sticky top-20 grid 2xl:grid-cols-3 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-5 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
                 <div className="p-1 mb-10 sm:mb-10" ref={div} style={{ height: "23rem", width: "23rem" }}>
@@ -379,34 +388,38 @@ export const Unnamed = ({
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                             setOwnedCards(!ownedCards)
                         }}>{!ownedCards ? 'My UnnamedNFTs' : 'View All UnnamedNFTs'}</button></div>
+
+
                     {/*<div className='font-mono text-white list-none flex pb-3 text-sm'><span className={traitsAvailability === '0' ? "text-green-300" : "text-[#fa2121]"}>
                             {traitsAvailability === '0' && currentDNA.length >= 14 ? 'Trait Combo is Unique!' : null}
                             {traitsAvailability === '1' && currentDNA.length >= 14 ? "Trait Combo's Been Minted!" : null}</span>
                         </div>*/} {/* End of btm text lines */}
                 </div>{/* Stats div Ends*/}
-                {/* SearchBox */}
-                {/*}<div className="gap-4 pt-4 pl-2">
+                {/* SearchBox
+                <div className="gap-4 pt-4 pl-2">
 
 
 
-                           <div className='col-span-1'><input type="text"
-                            className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2" placeholder="search trait/ID..."
-                            value={filter}
-                            onChange={searchText.bind(this)}
-                        /></div>
-                    
+                    <div className='col-span-1'><input type="text"
+                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2" placeholder="search trait/ID..."
+                        value={filter}
+                        onChange={searchText.bind(this)}
+                    /></div>
 
 
-                    </div>*/}{/* SearchBox Ends */}
+
+                </div>SearchBox Ends */}
 
 
 
 
             </div>{/* Canvas Row Div Ends*/}
-            <div className='overflow-y-auto'>
-                <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-6 gap-5 font-mono text-spot-yellow">
+            <div className='flex relative items-center overflow-hidden z-[0]'>
+                <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
+                <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
-                </div></div>
+                </div>
+                <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
             <div>
                 {showButton && (
                     <button onClick={scrollToTop} className="back-to-top">
