@@ -576,7 +576,7 @@ export const Scribble = ({
             {/* Canvas Row Div Ends*/}
             <div className='flex relative items-center overflow-visible z-[0]'>
                 <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
-                <div id='slider' className="p-1 pt-4 pb-4 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                <div id='slider' className="p-1 pt-4 pb-4 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
                     {ownedCards
                         ? ownedFilter.slice(0, jsonMetaData.length).map(createMindMatterCard)
                         : dataSearch.slice(0, jsonMetaData.length).map(createMindMatterCard)}

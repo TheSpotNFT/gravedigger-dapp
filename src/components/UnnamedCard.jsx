@@ -4,7 +4,7 @@ function Card(props) {
   return (
 
 
-    <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300 w-[200px]">
+    <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300 w-[200px] snap-start">
       <img className="w-full" src={props.image} alt={props.nftName}></img>
       <div className="px-0 py-4">
         <div className="font-bold text-xs mb-2">

@@ -271,11 +271,11 @@ export const Goatd = ({
     //Slider
     const slideLeft = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft - 500
+        slider.scrollLeft = slider.scrollLeft - 900
     }
     const slideRight = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft + 500
+        slider.scrollLeft = slider.scrollLeft + 900
     }
 
     // Main Component Return
@@ -392,7 +392,7 @@ export const Goatd = ({
             </div>{/* Canvas Row Div Ends*/}
             <div className='flex relative items-center overflow-hidden z-[0]'>
                 <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
-                <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
                 </div>
                 <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>

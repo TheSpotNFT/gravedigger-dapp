@@ -41,11 +41,11 @@ export const Unnamed = ({
     //Slider
     const slideLeft = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft - 500
+        slider.scrollLeft = slider.scrollLeft - 900
     }
     const slideRight = () => {
         var slider = document.getElementById('slider')
-        slider.scrollLeft = slider.scrollLeft + 500
+        slider.scrollLeft = slider.scrollLeft + 900
     }
 
     const scrollToTop = () => {
@@ -303,7 +303,7 @@ export const Unnamed = ({
         <div className='container flex-auto mx-auto w-full'>
 
             {/* Canvas Row*/}
-            <div className="lg:sticky top-20 grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-5 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+            <div className="top-20 grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-1 sm:grid-cols-1 gap-4 mt-5 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
                 <div className="p-1 mb-10 sm:mb-10 lg:col-start-2" ref={div} style={{ height: "23rem", width: "23rem" }}>
@@ -416,18 +416,11 @@ export const Unnamed = ({
             </div>{/* Canvas Row Div Ends*/}
             <div className='flex relative items-center overflow-hidden z-[0]'>
                 <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
-                <div id='slider' className="pt-10 pb-1 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                <div id='slider' className="pt-10 pb-1 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
                 </div>
                 <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
-            <div>
 
-                {showButton && (
-                    <button onClick={scrollToTop} className="back-to-top">
-                        &#94;
-                    </button>
-                )}
-            </div>
             <div className='lg:hidden md:block sm:block lg:col-start-4 grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "26rem", width: "23rem" }}>
                 {/* Individual Stats */}
                 <div className='font-mono text-white list-none flex'>
