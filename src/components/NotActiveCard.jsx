@@ -30,7 +30,7 @@ function Card2(props) {
           <div className="flex flex-col gap-4 px-1 py-4 place-contents-center">
             <button
               className="align-middle rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-l flex justify-center"
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-sm md:text-l flex justify-center"
               onClick={alertClick}
             >
               {props.button}
