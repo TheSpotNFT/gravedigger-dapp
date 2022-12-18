@@ -10,7 +10,7 @@ import Footer from "./components/Footer";
 import Main from "./components/pages/Main";
 import AnalogCollection from "./components/pages/AnalogCollection"
 import SpotEcosystem from "./components/pages/SpotEcosystem";
-import Ded from "./components/pages/Ded";
+import {Ded} from "./components/pages/Ded";
 import {Goatd} from "./components/pages/Goatd";
 import Staking from "./components/pages/Staking";
 import { Unnamed } from "./components/pages/Unnamed";
