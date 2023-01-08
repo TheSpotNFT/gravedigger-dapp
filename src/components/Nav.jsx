@@ -28,12 +28,12 @@ export const Nav = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="main-nav pb-20 md:pb-20 lg:pb-15 xl:pb-15 2xl:pb-15">
+    <nav className="main-nav pb-20 md:pb-20 lg:pb-15 xl:pb-15 2xl:pb-15 z-10 relative">
       <div className="shadow-md w-full fixed top-0 left-0 pb-0 md:pb-4 sm:pb-4 bg-spot-yellow">
         <div className="flex items-center justify-between bg-spot-yellow py-0 px-7">
           <div className="desktop-nav">
             <ul
-              className={`overflow-y-visible xl:flex xl:items-center font-mono md:pb-0 sm:pb-0 absolute xl:static bg-spot-yellow xl:z-auto z-[-1] 
+              className={`overflow-y-visible xl:flex xl:items-center font-mono md:pb-0 sm:pb-0 absolute xl:static bg-spot-yellow xl:z-auto z-[10] 
     left-0 w-full xl:w-auto xl:pl-0 pl-0 transition-all duration-300 ease-in ${open ? "top-[65px] opacity-90 z-[1]]" : "top-[-550px]"
                 }`}
             >
