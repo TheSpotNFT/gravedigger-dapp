@@ -3052,13 +3052,7 @@ import image3051 from './assets/unnamedImages/3051.png'
 import image3052 from './assets/unnamedImages/3052.png'
 import image3053 from './assets/unnamedImages/3053.png'
 import image3054 from './assets/unnamedImages/3054.png'
-import image3055 from './assets/unnamedImages/3055.png'
-import image3056 from './assets/unnamedImages/3056.png'
-import image3057 from './assets/unnamedImages/3057.png'
-import image3058 from './assets/unnamedImages/3058.png'
-import image3059 from './assets/unnamedImages/3059.png'
-import image3060 from './assets/unnamedImages/3060.png'
-import image3061 from './assets/unnamedImages/3061.png'
+
 
 const unnamedCards = [
 
@@ -6062,62 +6056,7 @@ const unnamedCards = [
     { id: 2998, image: image2998, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
     { id: 2999, image: image2999, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
     { id: 3000, image: image3000, nftName: 'UnnamedNFT', traitType: 'UnnamedNFT', },
-    {
-        id: 3055,
-        image: image3055,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3056,
-        image: image3056,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3057,
-        image: image3057,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3058,
-        image: image3058,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3059,
-        image: image3059,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3060,
-        image: image3060,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
-    {
-        id: 3061,
-        image: image3061,
-        brand: 'Holidays 2022 - Gengar',
-        nftName: 'Holidays 2022 - Gengar',
-        traitType: 'Branding',
-        rarity: 'Common'
-    },
+
     {
         id: 3001,
         image: image3001,
