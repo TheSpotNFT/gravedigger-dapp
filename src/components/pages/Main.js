@@ -6,6 +6,7 @@ import apechain from "../../assets/apechain.png";
 import evolve from "../../assets/1.png";
 import cemetery from "../../assets/Cemetery.PNG";
 import unnamednft from "../../assets/logounnamed.png";
+import spotbot from "../../assets/812.png";
 import fragments from "../../assets/question.png";
 import scribbleCardGraphic from "../../assets/scribble/scribbleMainYellow.png";
 import goatd1 from "../../assets/BASEHEAD-Grey.png";
@@ -79,7 +80,13 @@ const slideRight = () => {
 <div className='flex relative items-center overflow-hidden z-[0]'>
 <div className="pr-10"><MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
         <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
-          
+        <div><Card 
+      image={spotbot}
+      alt="The SPOT bot"
+      title="MINTING OPEN"
+      link="https://underground.tech"
+      button="Mint"
+      /></div>
       <div><Card 
       image={thespot}
       alt="The Spot"
