@@ -83,9 +83,9 @@ const slideRight = () => {
         <div><Card 
       image={spotbot}
       alt="The SPOT bot"
-      title="MINTING OPEN"
+      title="SPOT BOT"
       link="https://underground.tech"
-      button="Mint"
+      button="Production Paused"
       /></div>
       <div><Card 
       image={thespot}
