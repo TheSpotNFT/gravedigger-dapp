@@ -85,7 +85,7 @@ const slideRight = () => {
       alt="The SPOT bot"
       title="SPOT BOT"
       link="https://underground.tech"
-      button="Production Resumed"
+      button="Production Paused"
       /></div>
       <div><Card 
       image={thespot}
