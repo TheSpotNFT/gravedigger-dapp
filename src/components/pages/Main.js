@@ -251,7 +251,7 @@ const slideRight = () => {
  <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">NFTombstone</div>
  <div><img src={nftombstone4} alt="NFTombstone" className=""></img></div>
 
- <div className="font-mono text-l px-4 py-2 text-white">Mint your tombstone, engrave your tombstone, send ded nfts to your tombstone (soon). Even send engraved tombstones to your froneds or foes as souldbound tokens to live in their wallet forever.</div>
+ <div className="font-mono text-l px-4 py-2 text-white">Mint your tombstone, engrave your tombstone, send ded nfts to your tombstone (soon). Even send engraved tombstones to your friends or foes as souldbound tokens to live in their wallet forever.</div>
  <div className="py-2">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
@@ -304,7 +304,7 @@ const slideRight = () => {
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/goatd")}
+          onClick={onClickUrl("/scribble")}
         >
           Launch Scribble Customs
         </button>
