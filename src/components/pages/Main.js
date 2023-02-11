@@ -210,10 +210,109 @@ const slideRight = () => {
           </div></div></div>
      
   </div>
-
+{/*GOATD */}
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
- {/*<div><img src={goatdmain} alt="Goatd" className=""></img></div>*/}
+ <div className="font-mono text-3xl px-4 py-4 text-white">Goatd</div>
+ <div><img src={goatdmain} alt="Goatd" className=""></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">Greatest of all Time Degens. Collect your ERC-1155 traits and combine them to create your pfp. Stake your SPOT for free traits or buy from secondary. Either way you choose your pfp traits. If you mint a combination, that combo can not be minted again.</div>
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/goatd")}
+        >
+          Launch Goatd
+        </button> </div>
+        <div className="py-2"> <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/staking")}
+        >
+          Launch Staking
+        </button></div>
+        <div className="py-2"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
+              onClick={onClickUrl("https://joepegs.com/collections/avalanche/spot-trait-drops")}
+            >
+              Browse Traits
+            </button></div>
+            <div className="py-2"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
+              onClick={onClickUrl("https://campfire.exchange/collections/0x9455aa2af62b529e49fbfe9d10d67990c0140afc")}
+            >
+              View Collection 
+            </button></div>
+
+        {/*NFTombstones */}
+ 
+ <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">NFTombstone</div>
+ <div><img src={nftombstone4} alt="NFTombstone" className=""></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">Mint your tombstone, engrave your tombstone, send ded nfts to your tombstone (soon). Even send engraved tombstones to your froneds or foes as souldbound tokens to live in their wallet forever.</div>
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/gravedigger")}
+        >
+          Launch Gravedigger
+        </button>
+        </div>
+
+{/* Unnamed Branding */}
+
+ <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Unnamed Branding</div>
+ <div><img src={unnamednft} alt="Unnamed" className=""></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">Slap your favourite project's branding on your unnamedNFT. Let's gooooo!!!!</div>
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/unnamed")}
+        >
+          Launch Brandoooor
+        </button>
+        </div>
+
+{/*Analog */}
+
+ <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Analog</div>
+ <div><img src={analog1} alt="Goatd" className=""></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">IRL artowork with a twist. dNFTs that you can alter to the variation of your choosing. Keep it orig or choose a variation? Up to you, you just need to own a genesis collection SPOT nft in order to alter the analog piece. Check it!</div>
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/analog")}
+        >
+          Launch Analog
+        </button>
+        </div>
+
+{/*Scribble */}
+ 
+ <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Scrible Customs</div>
+ <div><img src={cc3} alt="Scribble" className=""></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">Own a SCRIBBLE WARLOCK piece? Claim your custom card today. Enter in your prompts and SCRIBBLE will gift you a dope custom card.</div>
+ <div className="py-2 pb-8">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/goatd")}
+        >
+          Launch Scribble Customs
+        </button>
+        </div>
+
+
       </div>
+
 
 
       {/* DESKTOP LAYOUT */}
@@ -341,8 +440,8 @@ const slideRight = () => {
       {/*Spot Bots */}
     <div className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
     <div className="text-white pr-10">
-      <h1 className="text-5xl pt-4 font-mono">The Spot Bot</h1>
-      <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-16 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
+      <h1 className="text-5xl pt-2 font-mono">The Spot Bot</h1>
+      <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
       <div className="px-96 pb-8"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
@@ -469,11 +568,38 @@ const slideRight = () => {
     </div>
   </div>
 
+
+<div className="h-screen bg-unnamedbg bg-contain bg-no-repeat bg-center bg-fixed snap-start">
+
+</div>
+  <div className="h-screen">
+      {/*Unnamed */}
+    <div className="h-full snap-start snap-always pt-24">
+    <div className="text-white pr-10">
+      
+      <div className="grid grid-cols-2">
+        
+      <div className="xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={unnamednft} alt="Unnamed" className="p-5 m-0 lg:w-4/5 2xl:w-3/5 block"></img></div>
+      <div className="text-xl 2xl:text-2xl lg:pt-4 xl:pt-12 2xl:pt-16 pl-12 font-mono"><h1 className="text-5xl pb-12 font-mono">UnnamedNFT</h1>Brand your unnamedNFT with the most popular brands on avalanche. From Cuddlefish to Beeg Rock and Happy Sun and Doodleverse, there is sure to be a brand that fits on your unnamedNFT. Watch for limited released graphics for the unnamedNFTs like our past Scribble Warlock graphics and zombie Monkeez graphic. 
+      <div className="lg:px-24 xl:px-48 pt-24"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
+              onClick={onClickUrl("/unnamed")}
+            >
+              Launch Brandoor
+            </button></div>
+            </div>
+      
+            </div> </div>
+      
+
+
+    </div>
+  </div>
+
   <div className="h-screen bg-analog bg-contain bg-no-repeat bg-center bg-fixed snap-start">
 
 </div>
-
-
 <div className="h-screen">
       {/* Analog */}
     <div className="h-full mx-auto snap-start snap-always pt-36 grid lg:grid-cols-2 grid-cols-1 pl-48">

@@ -28,6 +28,7 @@ module.exports = {
         'analog' : "url('./assets/analog/41-1.png')",
         'nftombstonebg' : "url('./assets/nftombstone.png')",
         'spotmobilebg' : "url('./assets/spotmobile.png')",
+        'unnamedbg' : "url('./assets/unnamedImages/11.png')",
       }
   },
   },
