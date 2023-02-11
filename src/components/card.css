@@ -1,0 +1,46 @@
+.card {
+  /* Sizing */
+  height: 75%;
+  width: 100%;
+
+  transform-style: preserve-3d;
+
+  /* Content Alignment */
+  position: relative;
+
+  /* Styling */
+  padding-top: 2.5rem;
+
+  user-select: none;
+  cursor: pointer;
+}
+
+.card-front,
+.card-back {
+  /* Sizing */
+  height: 100%;
+  width: 100%;
+
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+
+  /* Alignment */
+  position: absolute;
+
+  /* Content Alignment */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Content Styling */
+
+}
+
+.card-front {
+  transform: rotateY(0deg);
+}
+
+.card-back {
+
+  transform: rotateY(180deg);
+}

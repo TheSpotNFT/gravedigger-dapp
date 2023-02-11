@@ -92,14 +92,14 @@ function App() {
     <div className="App bg-slate-900">
       <Router>
         <div className="bg-slate-900 w-full h-100">
-          <Nav
+          {/*<Nav
             account={account}
             web3Modal={web3Modal}
             loadWeb3Modal={loadWeb3Modal}
             web3Provider={web3Provider}
             setWeb3Provider={setWeb3Provider}
             logoutOfWeb3Modal={logoutOfWeb3Modal}
-          />
+  />*/}
           <div className="flex justify-center items-center gap-2">
             <Routes>
               <Route
@@ -225,10 +225,6 @@ function App() {
               <Route path="/learning" exact element={<Learning />}/>
             </Routes>
           </div>
-        </div>
-
-        <div className="footer">
-          <Footer />
         </div>
       </Router>
     </div>

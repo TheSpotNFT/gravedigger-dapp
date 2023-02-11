@@ -19,7 +19,16 @@ module.exports = {
     extend: {
       colors: {
       'spot-yellow': '#fff600',
-    }
+    },
+      backgroundImage: {
+        'spotbg': "url('./assets/Background_trans.png')",
+        'botbg' : "url('./assets/812.png')",
+        'botbg2' : "url('./assets/spotbot/11.png')",
+        'goatdmacho' : "url('./assets/goatdmacho.png')",
+        'analog' : "url('./assets/analog/41-1.png')",
+        'nftombstonebg' : "url('./assets/nftombstone.png')",
+        'spotmobilebg' : "url('./assets/spotmobile.png')",
+      }
   },
   },
   plugins: [require('tailwind-scrollbar-hide')],

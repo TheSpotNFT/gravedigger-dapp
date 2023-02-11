@@ -24,6 +24,15 @@
   color: white;
 }
 
+.scroll-area {
+  scroll-snap-align: start;
+}
+
+.scroll-container {
+  scroll-snap-align: y mandatory;
+  overflow: auto;
+}
+
 .App-link {
   color: #61dafb;
 }
@@ -32,6 +41,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

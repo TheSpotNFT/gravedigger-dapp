@@ -61,7 +61,7 @@ export const Nav = ({
           </div>
           <div
             onClick={() => setOpen(!open)}
-            className="text-3xl absolute left-8 top-6 cursor-pointer xl:hidden"
+            className="text-3xl absolute left-8 top-6 cursor-pointer"
           >
             <GiHamburgerMenu name={open ? "close" : "menu"} />
           </div>
