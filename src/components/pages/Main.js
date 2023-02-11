@@ -239,7 +239,7 @@ const slideRight = () => {
         </button>
         </div>
         {/*GOATD */}
- <div className="font-mono text-3xl px-4 py-4 text-white">Goatd</div>
+ <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Goatd</div>
  <div><img src={goatdmain} alt="Goatd" className=""></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">Greatest of all Time Degens. Collect your ERC-1155 traits and combine them to create your pfp. Stake your SPOT for free traits or buy from secondary. Either way you choose your pfp traits. If you mint a combination, that combo can not be minted again.</div>
