@@ -3,7 +3,7 @@ import LogoutButton from "../Logout";
 import thespot from "../../assets/thespotmaster.png";
 import goatdmain from "../../assets/goatdmain.png";
 import goatddevil from "../../assets/goatddevil.png";
-import analog from "../../assets/analogtitle.png";
+import analogimage from "../../assets/analog/41-1.png";
 import apechain from "../../assets/apechain.png";
 import evolve from "../../assets/1.png";
 import cemetery from "../../assets/Cemetery.PNG";
@@ -308,7 +308,7 @@ const slideRight = () => {
 {/*Analog */}
 
  <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Analog</div>
- <div><img src={analog1} alt="Goatd" className=""></img></div>
+ <div><img src={analogimage} alt="Analog" className=""></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">IRL artowork with a twist. dNFTs that you can alter to the variation of your choosing. Keep it orig or choose a variation? Up to you, you just need to own a genesis collection SPOT nft in order to alter the analog piece. Check it!</div>
  <div className="py-2">
