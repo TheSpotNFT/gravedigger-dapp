@@ -456,7 +456,7 @@ const slideRight = () => {
       {/*Spot Explainer */}
     <div className="grid grid-cols-2 h-screen pt-24 lg:pr-10 2xl:pr-24">
     <div className="xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-3/5 block"></img></div>
-    <div className="text-white pt-10">
+    <div className="text-white pt-10 font-mono">
       <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
       <div className="lg:text-lg xl:text-xl 2xl:text-3xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Come chill with us down at The Spot, where we are developing dNFTs on avalanche. Over the past 12 months we have developed multiple dNFT and customizable NFT projects. These include our first release, Goatd (Greatest of all Time Degens) and our latest release The Spot Bot. We are focusing on dNFTs and have helped artists release their projects on the avalanche blockchain implementing upgradeable and changeable NFTs. From our Analog collection which is focused on bringing irl artists to avalanche and incorporating a variation selection to NFTombstones where you can engrave your tombstone with a personal message. </div>
        <div className="px-48"><button
