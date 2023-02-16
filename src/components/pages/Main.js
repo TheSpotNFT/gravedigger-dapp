@@ -646,11 +646,11 @@ const slideRight = () => {
       pieces and commit a variation once you own the piece. Get a Spot NFT at
       <href
         style={{ cursor: "pointer" }}
-        onClick={onClickUrl("https://thespot.art")}
+        onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
         className="text-spot-yellow"
       >
         {" "}
-        thespot.art
+        Campfire.exchange
       </href>{" "}
       and your Analog piece on{" "}
       <href
