@@ -114,7 +114,7 @@ const slideRight = () => {
     <div> 
       
       {/* DESKTOP LAYOUT */}
-    <div className="snap-container flex-auto mx-auto px-12 hidden lg:block scroll-smooth">
+    <div className="snap-container flex-auto mx-auto px-12 scroll-smooth">
     
       <div className="pt-6 px-12 bg-slate-900">
         <div className="fixed"><div className="pb-2"><LogoutButton
