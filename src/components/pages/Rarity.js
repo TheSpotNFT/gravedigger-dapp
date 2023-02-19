@@ -229,7 +229,7 @@ const slideRight = () => {
           </div></div></div>
      
   </div>
-  <div className="text-4xl text-white font-mono pt-8 pb-8">The Spot Bot Rarity Listing (Basic)</div>
+  <div className="text-4xl text-white font-mono pt-36 lg:pt-8 pb-8">The Spot Bot Rarity Listing (Basic)</div>
   <div className="text-2xl text-white font-mono pt-8 pb-8">More advanced rarity tool coming soon...</div>
   <div className="text-white font-mono text-xl">
       {rarityData.map((item) => (
