@@ -47,6 +47,7 @@ import spotmobile from "../../assets/spotmobile.png";
 import FlippableCard from "../../components/flippable-card";
 import "../../index.css";
 import Footer from "../Footer";
+import rarityData from '../../spotBotRarity.json';
 
 const Main = ({
   account,
@@ -485,6 +486,13 @@ const slideRight = () => {
             >
               Enter the Production Plant
             </button></div>
+            <div className="px-96 pb-8"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
+              onClick={onClickUrl("/rarity")}
+            >
+              Rarity Listing
+            </button></div>
             </div>
       <div className="flex pr-16">
       
@@ -495,6 +503,8 @@ const slideRight = () => {
       <div><img src={spotbot10} alt="Spot Bot" className="p-5 m-0"></img></div>
     
      </div>
+
+    
 
     </div>
   </div>
