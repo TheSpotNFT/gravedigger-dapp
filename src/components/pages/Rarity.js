@@ -45,6 +45,12 @@ export const Rarity = ({
     function exploreClick(){
       setExplore(!explore);
     }
+
+    function toggleNfts(){
+      setNftsToDisplay(!nftsToDisplay);
+    }
+
+    const [nftsToDisplay, setNftsToDisplay] = useState(true);
     const [explore, setExplore] = useState(false);
     const [filter, setFilter] = useState("");
     const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
@@ -92,6 +98,7 @@ export const Rarity = ({
     const [walletTraits, setWalletTraits] = useState([]);
     const [nftSelected, setNftSelected] = useState(false);
     const userAddress = account;
+
     async function getTraits() {
         const options = {
             method: "GET",
@@ -110,8 +117,6 @@ export const Rarity = ({
         };
         try {
             response = await axios.request(options);
-            setDisplayNfts(response.data.result);
-            setCurrentID(textinputText - 1);
             setJsonMetaData(response.data.result);
           
           
@@ -122,9 +127,33 @@ export const Rarity = ({
 
     useEffect(() => {
         getTraits();
-    }, [account]);
+    }, [account, nftsToDisplay]);
     
-    
+     async function getNfts() {
+        const options = {
+            method: "GET",
+            url: `https://deep-index.moralis.io/api/v2/nft/0x20Ef794f891C050D27bEC63F50B202cce97D7224`,
+            params: {
+                chain: "avalanche",
+                format: "decimal",
+                normalizeMetadata: "true",
+            },
+            headers: {
+                accept: "application/json",
+                "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+            },
+        };
+        try {
+            response = await axios.request(options);
+            setDisplayNfts(response.data.result);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        getNfts();
+    }, [account, nftsToDisplay]);
    
 
     // For Searching traits
@@ -273,16 +302,24 @@ export const Rarity = ({
             <div className="gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 <div className="text-white font-mono text-4xl py-8">Spot Bot Rarity</div>
-<div className="text-white font-mono text-2xl py-8">Your Bots</div>
+<div className="text-white font-mono text-2xl py-4">{nftsToDisplay ? 'Your Bots' : 'All Bots Minted'}</div>
+
 <div className="text-white font-mono text-xl py-2">(Trait Type: Value: Count in Collection)</div>
 
-               
+<div className="flex pt-4 align-middle justify-center">
+          <button
+          className="align-middle w-1/2 rounded-lg sm:px-4 md:px-4 lg:px-4 xl:px-4 px-4 py-4 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-40
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={toggleNfts}
+        >
+          {nftsToDisplay ? "Show All Bots Minted" : "Show Your Bots Only"}
+        </button></div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div className="">
                     <div className="flex">
                     <div className="p-10 flex flex-wrap gap-5 font-mono text-spot-yellow">
-  {jsonMetaData.map((nfts) => {
+  {nftsToDisplay ? jsonMetaData.map((nfts) => {
     if (!nfts || !nfts.normalized_metadata || !nfts.normalized_metadata.attributes || !nfts.normalized_metadata.attributes[0] || !nfts.normalized_metadata.attributes[1] || !nfts.normalized_metadata.attributes[2] || !nfts.normalized_metadata.attributes[3] || !nfts.normalized_metadata.attributes[4] || !nfts.normalized_metadata.attributes[5]) {
       return null;
     }
@@ -316,7 +353,45 @@ export const Rarity = ({
         </div>
       </div>
     );
-  })}
+  }
+  ) : 
+  displayNfts.map((nfts) => {
+    if (!nfts || !nfts.normalized_metadata || !nfts.normalized_metadata.attributes || !nfts.normalized_metadata.attributes[0] || !nfts.normalized_metadata.attributes[1] || !nfts.normalized_metadata.attributes[2] || !nfts.normalized_metadata.attributes[3] || !nfts.normalized_metadata.attributes[4] || !nfts.normalized_metadata.attributes[5]) {
+      return null;
+    }
+    const collectorName = nfts.normalized_metadata.attributes[0].value;
+    if (!collectorName) {
+      return null;
+    }
+    return (
+      <div key={nfts.token_id} onClick={() => {
+        setNftId(nfts.token_id)
+      }}>
+        <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
+          <div className="grid grid-cols-1">
+            <img className="h-48 mx-auto pt-4" src={nfts.normalized_metadata.image} alt=""></img>
+            <div className="pt-4 pr-2 pl-2">
+              <div className="font-bold text-sm mb-2">
+                <div className="bg-slate-600">
+                  <h1>ID: {nfts.token_id}</h1>
+                </div>
+                <h5 className="text-white">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
+                <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
+                <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
+                <h5 className="text-white">Necklace: {nfts.normalized_metadata.attributes[3].value} ({getCount('Necklace', `${nfts.normalized_metadata.attributes[3].value}`)})</h5>
+                <h5 className="text-white">Shirt: {nfts.normalized_metadata.attributes[4].value} ({getCount('Shirt', `${nfts.normalized_metadata.attributes[4].value}`)})</h5>
+                <h5 className="text-white">Headwear: {nfts.normalized_metadata.attributes[5].value} ({getCount('Headwear', `${nfts.normalized_metadata.attributes[5].value}`)})</h5>
+              </div>
+            </div>
+          </div>
+          <div className="px-6 pt-4 pb-2">
+          </div>
+        </div>
+      </div>
+    );
+  }
+  )
+}
 </div>
 
                     </div></div>
