@@ -144,13 +144,14 @@ const slideRight = () => {
         </button>
         </div>
         <div className="py-2">
+          <a href="#spotbotmobile">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://underground.tech")}
+          
         >
           Spot Bot
-        </button>
+        </button></a>
         </div>
         <div className="py-2">
         <button
@@ -226,7 +227,7 @@ const slideRight = () => {
 
    {/*Spot Bot */}
  
-   <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Spot Bot</div>
+   <div id="spotbotmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Spot Bot</div>
  <div><img src={spotbot4} alt="Spot Bot" className=""></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">The Spot Bots are taking over. 3k bots need to be produced in order to fire up the Sacrificial Power Obtaining Technology and then the remaining 2k bots will be produced by sacrificing other NFTs to the collective. Our gamefi offering, phase 2 will launch once 3k bots are minted, with phase 3 activating once all 5k are produced.</div>
@@ -374,13 +375,14 @@ const slideRight = () => {
         </button>
         </div>
         <div className="py-2">
+          <a href="#spotbot">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://underground.tech")}
+        
         >
           Spot Bot
-        </button>
+        </button></a>
         </div>
         <div className="py-2">
         <button
@@ -475,7 +477,7 @@ const slideRight = () => {
 </div>
   <div className="snap-item scroll-smooth">
       {/*Spot Bots */}
-    <div className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
+    <div id="spotbot" className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
     <div className="text-white pr-10">
       <h1 className="text-5xl pt-2 font-mono">The Spot Bot</h1>
       <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
