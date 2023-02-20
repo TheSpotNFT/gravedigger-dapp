@@ -19,7 +19,7 @@ import { web3ModalSetup } from "./helpers/Web3Modal";
 import { ethers } from "ethers";
 import { Scribble } from "./components/pages/ScribbleCustoms";
 import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
-import Rarity from "./components/pages/Rarity";
+import { Rarity } from "./components/pages/Rarity";
 
 
 

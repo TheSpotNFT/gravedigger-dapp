@@ -1,122 +1,176 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import Select from "react-select";
+import Card from "../Card";
+import traits from "../../traits";
+import nftombstoneData from "../../contracts/nftombstoneMetadata.json";
+import Authenticate from "../Authenticate";
+import spotNFTAbi from "../../contracts/spotNFTAbi.json";
+import spotTraitsAbi from "../../contracts/spotTraitsAbi.json";
+import SetApproval from "../SetApproval";
+import ScribbleUpdateMetadata from "../ScribbleUpdateMeta";
+import "../../Board.css";
+import nfTombstoneABI from "../../contracts/nfTombstoneABI.json";
+import axios from "axios";
+import { ethers, Contract } from "ethers";
+import { SPOTBOT_ABI, SPOTBOT_ADDRESS } from "../Contracts/SpotBotContract";
+import { json } from "react-router-dom";
+import spotBotRarity from "../../spotBotRarity.json";
 import LogoutButton from "../Logout";
-import thespot from "../../assets/thespotmaster.png";
-import goatdmain from "../../assets/goatdmain.png";
-import goatddevil from "../../assets/goatddevil.png";
-import analogimage from "../../assets/analog/41-1.png";
-import apechain from "../../assets/apechain.png";
-import evolve from "../../assets/1.png";
-import cemetery from "../../assets/Cemetery.PNG";
-import unnamednft from "../../assets/logounnamed.png";
-import spotbot from "../../assets/812.png";
-import fragments from "../../assets/question.png";
-import scribbleCardGraphic from "../../assets/scribble/CARD_PLACEHOLDER.jpg";
-import goatd1 from "../../assets/BASEHEAD-Grey.png";
-import goatd2 from "../../assets/MOUTH-GOLDTOOTH.png";
-import goatd3 from "../../assets/EYES-WU.png";
-import goatd4 from "../../assets/BODY-WU.png";
-import goatd5 from "../../assets/HEADWEAR-WUHAT.png";
-import Card from "../MainCard";
-import Card2 from "../NotActiveCard";
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import spotbot1 from "../../assets/spotbot/1.png";
-import spotbot2 from "../../assets/spotbot/2.png";
-import spotbot3 from "../../assets/spotbot/3.png";
-import spotbot4 from "../../assets/spotbot/4.png";
-import spotbot5 from "../../assets/spotbot/5.png";
-import spotbot6 from "../../assets/spotbot/6.png";
-import spotbot7 from "../../assets/spotbot/7.png";
-import spotbot8 from "../../assets/spotbot/8.png";
-import spotbot9 from "../../assets/spotbot/9.png";
-import spotbot10 from "../../assets/spotbot/10.png";
-import spotbot11 from "../../assets/spotbot/11.png";
-import nftombstone1 from "../../assets/tombstone1.png";
-import nftombstone2 from "../../assets/tombstone2.png";
-import nftombstone3 from "../../assets/tombstone3.png";
-import nftombstone4 from "../../assets/tombstone4.png";
-import cc1 from "../../assets/scribble/CC1.png";
-import cc2 from "../../assets/scribble/CC2.png";
-import cc3 from "../../assets/scribble/CC3.png";
-import cc4 from "../../assets/scribble/CC4.png";
-import analogmain from "../../assets/analog.png";
-import analog1 from "../../assets/analog/7-b.png";
-import analog2 from "../../assets/analog/2.png";
-import analog3 from "../../assets/analog/41.png";
-import analog4 from "../../assets/anananoir.png";
-import spotmobile from "../../assets/spotmobile.png";
-import FlippableCard from "../flippable-card";
-import "../../index.css";
-import Footer from "../Footer";
-import rarityData from '../../spotBotRarity.json';
 
-const Rarity = ({
-  account,
-  web3Modal,
-  loadWeb3Modal,
-  web3Provider,
-  setWeb3Provider,
-  logoutOfWeb3Modal,
-  txProcessing,
-  setTxProcessing,
+
+
+
+export const Rarity = ({
+    account,
+    web3Modal,
+    loadWeb3Modal,
+    web3Provider,
+    setWeb3Provider,
+    logoutOfWeb3Modal,
+    txProcessing,
+    setTxProcessing,
 }) => {
-  const [spotsMinted, setSpotsMinted] = useState([]);
-  const [isLoading, setIsLoading] = useState(false)
-  const onClickUrl = (url) => {
-    return () => openInNewTab(url);
-  };
-  const openInNewTab = (url) => {
-    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
-    if (newWindow) newWindow.opener = null;
-  };
 
-const observer = new IntersectionObserver(entries => {
+    //user input text vars
 
-})
-const [explore, setExplore] = useState(false);
-const [background, setBackground] = useState(false);
+    const textinputUser = (event) => {
+        setTextinput(event.target.value);
+    };
+    const textinputUserText = (event) => {
+        setTextinputText(event.target.value);
+    };
+    const textinputUserText1 = (event) => {
+        setTextinputText1(event.target.value);
+    };
+    function exploreClick(){
+      setExplore(!explore);
+    }
+    const [explore, setExplore] = useState(false);
+    const [filter, setFilter] = useState("");
+    const [savedImage, setSavedImage] = useState("empty image"); //Saving image for sending to IPFS. This part isn't active yet!
+    const onClickUrl = (url) => {
+      return () => openInNewTab(url);
+    };
+    const openInNewTab = (url) => {
+      const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+      if (newWindow) newWindow.opener = null;
+    };
 
-function exploreClick(){
-  setExplore(!explore);
-}
+    //Metadata
+    const [collectorName, setCollectorName] = useState("");
+    const [collectionUsedToClaim, setCollectionUsedToClaim] = useState("");
+    const [idClaimedWith, setIdClaimedWith] = useState("");
+    const [customColor, setCustomColor] = useState("");
+    const [customNoun, setCustomNoun] = useState("");
+    const [jsonMetaData, setJsonMetaData] = useState([]);
+    const [displayNfts, setDisplayNfts] = useState([]);
+    let response;
 
-  function alertClick() {
-    alert("The Evolution is Coming Soon...");
-  }
- 
-//Scrolling Listener
+    const [currentID, setCurrentID] = useState("1");
+    const [nftId, setNftId] = useState("1");
+    const [imageUrl, setImageUrl] = useState("https://thespot.mypinata.cloud/ipfs/QmYnmKqh8ahh1hVY5z4o5c5RJG34BC6fHKyuQnRiYQPpHH");
+
+    //for text on canvas
+    const [textinput, setTextinput] = useState("1");
+    const [collection, setCollection] = useState("0x20Ef794f891C050D27bEC63F50B202cce97D7224");
+    const [textinputText, setTextinputText] = useState("1");
+    const [textinputText1, setTextinputText1] = useState("");
+
+    const [pauseStateFlipped, setPauseStateFlipped] = useState();
 
 
+    //name font info
+    const collectionOptions = [
+        { value: "0x20Ef794f891C050D27bEC63F50B202cce97D7224", label: "Spot Bot" },
 
-const changeBackground = () => {
-  if(window.scrollY >= 300) {
-    setBackground(true);
-  } else {
-    setBackground(false);
-  }
-  
- // console.log(window.scrollY);
-   //console.log(background);
-}
+    ];
+    const [collectionDescription, setCollectionDescription] = useState("Spot Bot")
 
-window.addEventListener('scroll', changeBackground);
+    {
+        /* For retrieval of traits */
+    }
+    const [walletTraits, setWalletTraits] = useState([]);
+    const [nftSelected, setNftSelected] = useState(false);
+    const userAddress = account;
+    async function getTraits() {
+        const options = {
+            method: "GET",
+            url: `https://deep-index.moralis.io/api/v2/${account}/nft`,
+                params: {
+                    chain: "avalanche",
+                    format: "decimal",
+                    token_addresses: "0x20Ef794f891C050D27bEC63F50B202cce97D7224",
+                    normalizeMetadata: "true",
+                },
+            
+            headers: {
+                accept: "application/json",
+                "X-API-Key": "dHttwdzMWC7XigAxZtqBpTet7Lih3MqBRzUAIjXne0TIhJzXG4wrpdDUmXPPQFXo", //process.env.REACT_APP_MORALIS_API_KEY
+            },
+        };
+        try {
+            response = await axios.request(options);
+            setDisplayNfts(response.data.result);
+            setCurrentID(textinputText - 1);
+            setJsonMetaData(response.data.result);
+            console.log(account);
+          
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-//Slider
-const slideLeft = () => {
-  var slider = document.getElementById('slider')
-  slider.scrollLeft = slider.scrollLeft - 800
-}
-const slideRight = () => {
-  var slider = document.getElementById('slider')
-  slider.scrollLeft = slider.scrollLeft + 800
-}
-
-  return (
-    <div> 
-      
-      {/* DESKTOP LAYOUT */}
-    <div className="snap-container flex-auto mx-auto px-12 scroll-smooth">
+    useEffect(() => {
+        getTraits();
+    }, [account]);
+    console.log(jsonMetaData);
     
-      <div className="pt-6 px-12 bg-slate-900">
+   
+
+    // For Searching traits
+    const searchText = (event) => {
+        setFilter(event.target.value);
+    };
+
+    let dataSearch = traits.filter((item) => {
+        return Object.keys(item).some((key) =>
+            item[key]
+                .toString()
+                .toLowerCase()
+                .includes(filter.toString().toLowerCase())
+        );
+    });
+    let ownedFilter = traits.filter((item) => {
+        if (walletTraits.includes(item.id.toString())) {
+            return item;
+        }
+    });
+
+
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+      fetch('../../spotBotRarity.json')
+        .then(response => response.json())
+        .then(jsonData => setData(jsonData))
+        .catch(error => console.log('Error fetching data from JSON file', error));
+    }, []);
+    
+    const getCount = (attributeValue, value) => {
+      const item = spotBotRarity.find(item => item.attributeValue === attributeValue && item.value === value);
+      return item ? item.count : null;
+    };
+
+
+    // Add feature: Filter owned trait cards
+    const [ownedCards, setOwnedCards] = useState(true);
+    //---------------------------------//
+
+
+    // Main Component Return
+    return (
+        <div className="container mx-auto w-full">
+          <div className="pt-6 px-12 bg-slate-900">
         <div className="fixed"><div className="pb-2"><LogoutButton
             account={account}
             web3Modal={web3Modal}
@@ -135,15 +189,6 @@ const slideRight = () => {
         </button></div>
         <div className={`${explore ? 'absolute left-0 top-22 w-full opacity-100' : 'absolute -left-60 top-22 w-full opacity-0'} transition-all duration-500`}>
         <div className="py-2 pt-4">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/")}
-        >
-          Home
-        </button>
-        </div>
-        <div className="py-2">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -229,26 +274,68 @@ const slideRight = () => {
           </div></div></div>
      
   </div>
-  <div className="text-4xl text-white font-mono pt-36 lg:pt-8 pb-8">The Spot Bot Rarity Listing (Basic)</div>
-  <div className="text-2xl text-white font-mono pt-8 pb-8">More advanced rarity tool coming soon...</div>
-  <div className="text-white font-mono text-xl">
-      {rarityData.map((item) => (
+            {/* Canvas Row*/}
+            <div className="gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
+                {/* canvas div */}
+<div className="text-white font-mono text-4xl py-8">Spot Bot Rarity</div>
+<div className="text-white font-mono text-2xl py-8">Your Bots</div>
+<div className="text-white font-mono text-xl py-2">(Trait Type: Value: Count in Collection)</div>
+
+               
+                {/* canvas div ends */}
+                {/* Stats div*/}
+                <div className="">
+                    <div className="flex">
+                    <div className="p-10 flex flex-wrap gap-5 font-mono text-spot-yellow">
+  {jsonMetaData.map((nfts) => {
+    if (!nfts || !nfts.normalized_metadata || !nfts.normalized_metadata.attributes || !nfts.normalized_metadata.attributes[0] || !nfts.normalized_metadata.attributes[1] || !nfts.normalized_metadata.attributes[2] || !nfts.normalized_metadata.attributes[3] || !nfts.normalized_metadata.attributes[4] || !nfts.normalized_metadata.attributes[5]) {
+      return null;
+    }
+    const collectorName = nfts.normalized_metadata.attributes[0].value;
+    if (!collectorName) {
+      return null;
+    }
+    return (
+      <div key={nfts.token_id} onClick={() => {
+        setNftId(nfts.token_id)
+      }}>
+        <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
+          <div className="grid grid-cols-1">
+            <img className="h-48 mx-auto pt-4" src={nfts.normalized_metadata.image} alt=""></img>
+            <div className="pt-4 pr-2 pl-2">
+              <div className="font-bold text-sm mb-2">
+                <div className="bg-slate-600">
+                  <h1>ID: {nfts.token_id}</h1>
+                </div>
+                <h5 className="text-white">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
+                <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
+                <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
+                <h5 className="text-white">Necklace: {nfts.normalized_metadata.attributes[3].value} ({getCount('Necklace', `${nfts.normalized_metadata.attributes[3].value}`)})</h5>
+                <h5 className="text-white">Shirt: {nfts.normalized_metadata.attributes[4].value} ({getCount('Shirt', `${nfts.normalized_metadata.attributes[4].value}`)})</h5>
+                <h5 className="text-white">Headwear: {nfts.normalized_metadata.attributes[5].value} ({getCount('Headwear', `${nfts.normalized_metadata.attributes[5].value}`)})</h5>
+              </div>
+            </div>
+          </div>
+          <div className="px-6 pt-4 pb-2">
+          </div>
+        </div>
+      </div>
+    );
+  })}
+</div>
+
+                    </div></div>
+                    <div className="text-white font-mono text-xl">
+                      <div className="text-4xl pb-8">Trait Rarities</div>
+                      <div className="text-2xl pb-8">Trait Type: Value: Count in Collection</div>
+      {spotBotRarity.map((item) => (
         <div key={`${item.attributeValue}-${item.value}`}>
           <div>{`${item.attributeValue}: ${item.value}: `} 
           {item.count}</div>
         </div>
       ))}
     </div>
-  <div className="footer">
-          <Footer />
+            </div>
         </div>
-  </div>
-
- 
-  </div>
-
-
-  );
+    );
 };
-
-export default Rarity;
