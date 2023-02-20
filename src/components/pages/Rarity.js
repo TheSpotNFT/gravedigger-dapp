@@ -113,7 +113,7 @@ export const Rarity = ({
             setDisplayNfts(response.data.result);
             setCurrentID(textinputText - 1);
             setJsonMetaData(response.data.result);
-            console.log(account);
+          
           
         } catch (error) {
             console.log(error);
@@ -123,7 +123,7 @@ export const Rarity = ({
     useEffect(() => {
         getTraits();
     }, [account]);
-    console.log(jsonMetaData);
+    
     
    
 
@@ -149,12 +149,7 @@ export const Rarity = ({
 
     const [data, setData] = useState(null);
 
-    useEffect(() => {
-      fetch('../../spotBotRarity.json')
-        .then(response => response.json())
-        .then(jsonData => setData(jsonData))
-        .catch(error => console.log('Error fetching data from JSON file', error));
-    }, []);
+   
     
     const getCount = (attributeValue, value) => {
       const item = spotBotRarity.find(item => item.attributeValue === attributeValue && item.value === value);
