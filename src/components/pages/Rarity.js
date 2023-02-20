@@ -339,7 +339,7 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
-                <h5 className="text-white">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
+                <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
                 <h5 className="text-white">Necklace: {nfts.normalized_metadata.attributes[3].value} ({getCount('Necklace', `${nfts.normalized_metadata.attributes[3].value}`)})</h5>
@@ -375,7 +375,7 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
-                <h5 className="text-white">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
+                <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
                 <h5 className="text-white">Necklace: {nfts.normalized_metadata.attributes[3].value} ({getCount('Necklace', `${nfts.normalized_metadata.attributes[3].value}`)})</h5>
