@@ -1,6 +1,9 @@
-import React from "react";
+import { React, useEffect } from "react";
+import ReactGA from 'react-ga';
 import collection from "../../StakingCollections";
 import Card from "../../components/StakingCards";
+
+ReactGA.initialize('G-YJ9C2P37P6');
 
 export const StakingCards = ({account,
   web3Modal,
@@ -34,7 +37,9 @@ const renderCard = (collection, index) => {
     />
   );
 };
-
+useEffect(() => {
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}, []);
 
   return (
     <div className="px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">

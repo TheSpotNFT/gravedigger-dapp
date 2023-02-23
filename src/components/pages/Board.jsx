@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactGA from 'react-ga';
 import Select from "react-select";
 import Card from "../TombStoneCard";
 import traits from "../../tombstoneTraits";
@@ -17,6 +18,8 @@ import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
 import SendNFTombstoned from "../../components/sendNFTombstoned";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
+ReactGA.initialize('G-YJ9C2P37P6');
+
 export const Board = ({
   account,
   web3Modal,
@@ -27,6 +30,10 @@ export const Board = ({
   txProcessing,
   setTxProcessing,
 }) => {
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   const isAuthenticated = Boolean(account);
   const nfTombstoneContract = "0xe3525413c2a15daec57C92234361934f510356b8"; //change to mainnet address
   const spotNFTContract = "0x9455aa2aF62B529E49fBFE9D10d67990C0140AFC";

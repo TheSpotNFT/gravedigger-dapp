@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { Nav } from "./components/Nav";
 import { Board } from "./components/pages/Board";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Roadmap from "./components/pages/roadmap";
 import Team from "./components/pages/team";
 import Learning from "./components/pages/learning";
@@ -23,10 +23,15 @@ import { Rarity } from "./components/pages/Rarity";
 import ReactGA from 'react-ga';
 
 
+ReactGA.initialize('G-YJ9C2P37P6');
 
 function App() {
   // minifridge edits
   // using web3Modal to handle login and account logic
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+  
   const [account, setAccount] = useState("");
   const [txProcessing, setTxProcessing] = useState(false);
   const [web3Provider, setWeb3Provider] = useState(null);

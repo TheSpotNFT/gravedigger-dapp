@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactGA from 'react-ga';
 import LogoutButton from "../Logout";
 import goatdmain from "../../assets/goatdmain.png";
 import goatddevil from "../../assets/goatddevil.png";
@@ -34,7 +35,8 @@ import "../../index.css";
 import Footer from "../Footer";
 import VibesMint from "../../components/vibesMints";
 import VibesMintMobile from "../vibesMintsMobile";
-import logPageView from '../../GoogleAnalytics';
+
+ReactGA.initialize('G-YJ9C2P37P6');
 
 
 const Main = ({
@@ -48,7 +50,10 @@ const Main = ({
   setTxProcessing,
 }) => {
 
-  
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   const [spotsMinted, setSpotsMinted] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const onClickUrl = (url) => {
@@ -538,7 +543,7 @@ const slideRight = () => {
 
     </div>
   </div>
-  <div className="h-screen bg-botbg bg-contain bg-no-repeat bg-center bg-fixed snap-start scroll-smooth">
+  <div className="h-screen bg-botbg3 bg-contain bg-no-repeat bg-center bg-fixed snap-start scroll-smooth">
 
 </div>
   <div className="snap-item scroll-smooth">

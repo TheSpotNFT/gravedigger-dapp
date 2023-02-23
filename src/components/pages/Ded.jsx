@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactGA from 'react-ga';
 import Select from "react-select";
 import Card from "../Card";
 import traits from "../../traits";
@@ -15,6 +16,7 @@ import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { json } from "react-router-dom";
 
+ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Ded = ({
     account,
@@ -27,6 +29,9 @@ export const Ded = ({
     setTxProcessing,
 }) => {
 
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }, []);
     //user input text vars
 
     const textinputUser = (event) => {

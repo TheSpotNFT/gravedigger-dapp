@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactGA from 'react-ga';
 import Select from "react-select";
 import Card from "../ScribbleCard";
 import traits from "../../traits";
@@ -12,6 +13,8 @@ import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleC
 import { ethers, Contract } from "ethers";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 
+ReactGA.initialize('G-YJ9C2P37P6');
+
 export const Scribble = ({
     account,
     web3Modal,
@@ -22,6 +25,10 @@ export const Scribble = ({
     txProcessing,
     setTxProcessing,
 }) => {
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }, []);
+
     const isAuthenticated = Boolean(account);
     const userAddress = account;
     const [filter, setFilter] = useState("");

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactGA from 'react-ga';
 import Card from '../UnnamedCard';
 import unnamedCards from '../../unnamedCardData';//changed from traits
 import unnamedData from '../Contracts/UnnamedMetaData'
@@ -12,6 +13,8 @@ import { UNNAMED_ABI, UNNAMED_ADDRESS } from '../Contracts/UnnamednftContract';
 import { UNNAMEDBRANDING_ABI, UNNAMEDBRANDING_ADDRESS } from '../Contracts/UnnamedBrandedContract';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 
+ReactGA.initialize('G-YJ9C2P37P6');
+
 export const Unnamed = ({
     account,
     web3Modal,
@@ -22,6 +25,11 @@ export const Unnamed = ({
     txProcessing,
     setTxProcessing,
 }) => {
+
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }, []);
+
     const isAuthenticated = Boolean(account);
     const unnamedNFTContract = "0x6bdad2a83a8e70f459786a96a0a9159574685c0e";
     const spotNFTContract = '0x0C6945E825fc3c80F0a1eA1d3E24d6854F7460d8';

@@ -24,6 +24,7 @@ module.exports = {
         'spotbg': "url('./assets/Background_trans.png')",
         'botbg' : "url('./assets/812.png')",
         'botbg2' : "url('./assets/spotbot/4.png')",
+        'botbg3' : "url('./assets/spotbot/8.png')",
         'goatdmacho' : "url('./assets/goatdmacho.png')",
         'analog' : "url('./assets/analog/41-1.png')",
         'nftombstonebg' : "url('./assets/nftombstone.png')",

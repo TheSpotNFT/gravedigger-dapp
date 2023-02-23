@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactGA from 'react-ga';
 import Card from '../GoatdCard';
 import traits from '../../goatdTraits';
 import Mint from '../GoatdMint';
@@ -6,6 +7,8 @@ import axios from 'axios';
 import { GOATD_ADDRESS, GOATD_ABI } from '../Contracts/GoatdContract';
 import { ethers, Contract } from "ethers";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+
+ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Goatd = ({
     props,
@@ -18,6 +21,11 @@ export const Goatd = ({
     txProcessing,
     setTxProcessing,
 }) => {
+
+
+    useEffect(() => {
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }, []);
 
     const userAddress = account
     const spotTraitsContract = "0x9521807ADF320D1CDF87AFDf875Bf438d1D92d87";

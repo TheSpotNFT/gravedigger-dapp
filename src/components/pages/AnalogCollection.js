@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Card from "../AnalogCards";
 import analogNfts from "../../AnalogNfts";
 
+
 const renderCard = (analogNfts, index) => {
   return (
     <Card
@@ -16,6 +17,7 @@ const renderCard = (analogNfts, index) => {
     />
   );
 };
+
 
 const AnalogCollection = () => {
   const [filterButton, setFilterButton] = useState(1);

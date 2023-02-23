@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import ReactGA from 'react-ga';
 import Select from "react-select";
 import Card from "../Card";
 import traits from "../../traits";
@@ -17,7 +18,7 @@ import { json } from "react-router-dom";
 import spotBotRarity from "../../spotBotRarity.json";
 import LogoutButton from "../Logout";
 
-
+ReactGA.initialize('G-YJ9C2P37P6');
 
 
 export const Rarity = ({
@@ -30,7 +31,10 @@ export const Rarity = ({
     txProcessing,
     setTxProcessing,
 }) => {
-
+  
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
     //user input text vars
 
     const textinputUser = (event) => {
