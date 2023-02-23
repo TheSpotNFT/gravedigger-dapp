@@ -60,7 +60,7 @@ export default function VibesMintMobile(props) {
   useEffect(() => {
     getUsername();
   }, [textinput])
-  console.log(addressLookup);
+
 
   async function gud() {
     props.setTxProcessing(true);
