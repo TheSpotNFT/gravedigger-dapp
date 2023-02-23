@@ -21,19 +21,12 @@ import { Scribble } from "./components/pages/ScribbleCustoms";
 import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
 import { Rarity } from "./components/pages/Rarity";
 import ReactGA from 'react-ga';
-import { useLocation } from 'react-router-dom';
 
-ReactGA.initialize('G-YJ9C2P37P6');
+
 
 function App() {
   // minifridge edits
   // using web3Modal to handle login and account logic
-  const location = useLocation();
-
-  useEffect(() => {
-    ReactGA.pageview(location.pathname + location.search);
-  }, [location]);
-  
   const [account, setAccount] = useState("");
   const [txProcessing, setTxProcessing] = useState(false);
   const [web3Provider, setWeb3Provider] = useState(null);
