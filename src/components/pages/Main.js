@@ -1,24 +1,9 @@
 import React, { useState, useEffect } from "react";
 import LogoutButton from "../Logout";
-import thespot from "../../assets/thespotmaster.png";
 import goatdmain from "../../assets/goatdmain.png";
 import goatddevil from "../../assets/goatddevil.png";
 import analogimage from "../../assets/analog/41-1.png";
-import apechain from "../../assets/apechain.png";
-import evolve from "../../assets/1.png";
-import cemetery from "../../assets/Cemetery.PNG";
 import unnamednft from "../../assets/logounnamed.png";
-import spotbot from "../../assets/812.png";
-import fragments from "../../assets/question.png";
-import scribbleCardGraphic from "../../assets/scribble/CARD_PLACEHOLDER.jpg";
-import goatd1 from "../../assets/BASEHEAD-Grey.png";
-import goatd2 from "../../assets/MOUTH-GOLDTOOTH.png";
-import goatd3 from "../../assets/EYES-WU.png";
-import goatd4 from "../../assets/BODY-WU.png";
-import goatd5 from "../../assets/HEADWEAR-WUHAT.png";
-import Card from "../../components/MainCard";
-import Card2 from "../../components/NotActiveCard";
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import spotbot1 from "../../assets/spotbot/1.png";
 import spotbot2 from "../../assets/spotbot/2.png";
 import spotbot3 from "../../assets/spotbot/3.png";
@@ -47,7 +32,10 @@ import spotmobile from "../../assets/spotmobile.png";
 import FlippableCard from "../../components/flippable-card";
 import "../../index.css";
 import Footer from "../Footer";
-import rarityData from '../../spotBotRarity.json';
+import VibesMint from "../../components/vibesMints";
+import VibesMintMobile from "../vibesMintsMobile";
+import logPageView from '../../GoogleAnalytics';
+
 
 const Main = ({
   account,
@@ -59,6 +47,8 @@ const Main = ({
   txProcessing,
   setTxProcessing,
 }) => {
+
+  
   const [spotsMinted, setSpotsMinted] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
   const onClickUrl = (url) => {
@@ -154,6 +144,16 @@ const slideRight = () => {
         </button></a>
         </div>
         <div className="py-2">
+          <a href="#vibesmobile">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
+          
+        >
+          Vibes
+        </button></a>
+        </div>
+        <div className="py-2">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -239,6 +239,17 @@ const slideRight = () => {
         >
           Mint Spot Bot
         </button>
+        </div>
+       
+
+   {/*Vibes */}
+ 
+   <div id="vibesmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Vibes (soon)</div>
+ {/*<div><img src={spotbot4} alt="Spot Bot" className=""></img></div>*/}
+
+ <div className="font-mono text-l px-4 py-2 text-white">Send gudVibes. Send badVibes. But mostly send gudVibes. Sending gudVibes to someone allows them to claim dNFTs and the more gudVibes they hold the more their dNFT evolves. They also receive 50% of the mint fee. badVibes work against gudVibes and 50% of the badVibes minting fees go to a random gudVibes receiver. Mint is 0.2 avax per gudVibe. </div>
+ <div className="py-2">
+        <VibesMintMobile/>
         </div>
         {/*GOATD */}
  <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Goatd</div>
@@ -375,6 +386,16 @@ const slideRight = () => {
         </button>
         </div>
         <div className="py-2">
+          <a href="#vibes">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+        
+        >
+          Vibes
+        </button></a>
+        </div>
+        <div className="py-2">
           <a href="#spotbot">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
@@ -461,14 +482,21 @@ const slideRight = () => {
     <div className="xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-3/5 block"></img></div>
     <div className="text-white pt-10 font-mono">
       <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
-      <div className="lg:text-lg xl:text-xl 2xl:text-3xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Come chill with us down at The Spot, where we are developing dNFTs on avalanche. Over the past 12 months we have developed multiple dNFT and customizable NFT projects. These include our first release, Goatd (Greatest of all Time Degens) and our latest release The Spot Bot. We are focusing on dNFTs and have helped artists release their projects on the avalanche blockchain implementing upgradeable and changeable NFTs. From our Analog collection which is focused on bringing irl artists to avalanche and incorporating a variation selection to NFTombstones where you can engrave your tombstone with a personal message. </div>
+      <div className="lg:text-lg xl:text-xl 2xl:text-3xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Come chill with us down at The Spot, where we are developing dNFTs on avalanche. Over the past 12 months we have developed multiple dNFT and customizable NFT projects. These include our first release, Goatd (Greatest of all Time Degens) and our latest release The Spot Bot. We are focusing on dNFTs and have helped artists release their projects on the avalanche blockchain implementing upgradeable and changeable NFTs. From our Analog collection which is focused on bringing irl artists to avalanche and incorporating a variation selection to NFTombstones where you can engrave your tombstone with a personal message. Check out our latest releases The Spot Bot and Vibes.</div>
        <div className="px-48"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
               onClick={onClickUrl("/goatd")}
             >
               Launch Goatd
-            </button></div></div>
+            </button></div>
+            <div className="px-48 pt-4"><a href="#vibes"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              
+            >
+              Vibes
+            </button></a></div></div>
      
     </div>
   </div>
@@ -505,6 +533,25 @@ const slideRight = () => {
       <div><img src={spotbot10} alt="Spot Bot" className="p-5 m-0"></img></div>
     
      </div>
+
+    
+
+    </div>
+  </div>
+  <div className="h-screen bg-botbg bg-contain bg-no-repeat bg-center bg-fixed snap-start scroll-smooth">
+
+</div>
+  <div className="snap-item scroll-smooth">
+      {/* Vibes */}
+    <div id="vibes" className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
+    <div className="text-white pr-10">
+      <h1 className="text-5xl pt-8 font-mono">Vibes (soon)</h1>
+      <div className="text-xl font-mono pt-16 px-48 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">gudVibes? badVibes? You choose. Send gudVibes or badVibes to anyone. 0.2 avax mint fee. Enter an address to send gud or bad vibes to and send away. If you send someone gudVibes, 50% of the minting fee also goes to them. If you send someone badVibes then 50% of the minting fee gets sent to a random gudVibes receiver. What good are gudVibes? Well they are gud for starters but they will also be used to claim NFTs that will showcase how many gudVibes you've been sent. Sure you can sell your gudVibes, but you wouldn't, right?! Right?!! Okay okay, so wtf is up with badVibes? If you get sent badVibes the weight of your gudVibes will be deminished. WTF?! Yeah, I know, right? Ok ok so say you get sent a total of 100 gudVibes but some nob sent you 40 badVibes, your 100 gudVibes now only equal 60 gudVibes. What do gudVibes do for me? Good question. The more gudVibes you own the more vibes NFTs you can claim and the more gudVibes you hold the more legendary the vibe NFT you claimed will be. They will be dNFTs that change depending how many gudVibes you hold. So do gud, get gudVibes and LFG!!!</div>
+      
+            </div>
+      <div></div>
+      <div></div>
+      <div className="flex justify-center pt-8"><VibesMint/></div>
 
     
 
