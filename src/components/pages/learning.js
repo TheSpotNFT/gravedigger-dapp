@@ -1,10 +1,11 @@
 import React from 'react'
 
+
 export default function Learning() {
   return (
     <div className='text-white h-full'>
     {/* Tailblocks Theme */}
-    
+
     <section className="text-gray-400 body-font  font-mono">
   <div className="container px-5 py-10 mx-auto flex flex-col">
     <div className="lg:w-4/6 mx-auto">

@@ -3,7 +3,7 @@ import "./App.css";
 import { Nav } from "./components/Nav";
 import { Board } from "./components/pages/Board";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-import Roadmap from "./components/pages/roadmap";
+import Ecosystem from "./components/pages/roadmap";
 import Team from "./components/pages/team";
 import Learning from "./components/pages/learning";
 import Footer from "./components/Footer";
@@ -241,9 +241,9 @@ function App() {
             logoutOfWeb3Modal={logoutOfWeb3Modal}
             txProcessing={txProcessing}
             setTxProcessing={setTxProcessing}/>} />
-              <Route path="/roadmap" exact element={<Roadmap />} />
+              <Route path="/ecosystem" exact element={<Ecosystem />} />
               <Route path="/team" exact element={<Team />} />
-              <Route path="/ecosystem" exact element={<SpotEcosystem />} />
+       
               <Route path="/ded" exact element={<Ded account={account} />} />
               <Route path="/learning" exact element={<Learning />}/>
             </Routes>
