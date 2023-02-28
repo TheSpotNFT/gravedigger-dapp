@@ -60,7 +60,7 @@ const Main = ({
     return () => openInNewTab(url);
   };
   const openInNewTab = (url) => {
-    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    const newWindow = window.open(url, "_self", "noopener,noreferrer");
     if (newWindow) newWindow.opener = null;
   };
 
@@ -130,6 +130,15 @@ const slideRight = () => {
         </button></div>
         <div className={`${explore ? 'absolute left-0 top-22 w-full opacity-100' : 'absolute -left-60 top-22 w-full opacity-0'} transition-all duration-500`}>
         <div className="py-2 pt-4">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl('/ecosystem')}
+        >
+          Eco-System
+        </button>
+        </div>
+        <div className="py-2">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -234,7 +243,13 @@ const slideRight = () => {
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
 
    {/*Spot Bot */}
- 
+   <div className="pt-4"><a href="/ecosystem"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              
+            >
+              Eco-system Overview
+            </button></a></div>
    <div id="spotbotmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Spot Bot</div>
  <div><img src={spotbot4} alt="Spot Bot" className=""></img></div>
 
@@ -387,6 +402,15 @@ const slideRight = () => {
         <div className="py-2 pt-4">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl('/ecosystem')}
+        >
+          Eco-System
+        </button>
+        </div>
+        <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
           onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
         >
@@ -491,6 +515,14 @@ const slideRight = () => {
     <div className="text-white pt-10 font-mono">
       <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
       <div className="lg:text-lg xl:text-xl 2xl:text-3xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Come chill with us down at The Spot, where we are developing dNFTs on avalanche. Over the past 12 months we have developed multiple dNFT and customizable NFT projects. These include our first release, Goatd (Greatest of all Time Degens) and our latest release The Spot Bot. We are focusing on dNFTs and have helped artists release their projects on the avalanche blockchain implementing upgradeable and changeable NFTs. From our Analog collection which is focused on bringing irl artists to avalanche and incorporating a variation selection to NFTombstones where you can engrave your tombstone with a personal message. Check out our latest releases The Spot Bot and Vibes.</div>
+       
+      <div className="px-48 pt-4 pb-4"><a href="/ecosystem"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              
+            >
+              Eco-system Overview
+            </button></a></div>
        <div className="px-48"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
@@ -498,6 +530,7 @@ const slideRight = () => {
             >
               Launch Goatd
             </button></div>
+           
             <div className="px-48 pt-4"><a href="#vibes"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
