@@ -162,7 +162,7 @@ export default function Ecosystem() {
           </div>
         </div>
       </section>
-
+      <div className='flex w-full pb-8 pt-8'><div className="px-4"><img src={spot} alt="Spot NFT" className='w-96 rounded-lg' /></div><div className="px-4"><img src={tombstone} alt="Tombstone dNFT" className='w-96 rounded-lg' /></div><div className="px-4"><img src={goatd} alt="Goatd cNFT" className='w-96 rounded-lg' /></div><div className="px-4"><img src={spotbot} alt="Spot Bot NFT" className='w-96 rounded-lg' /></div></div>
     </div>
   )
 }
