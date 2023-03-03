@@ -203,6 +203,8 @@ export default function VibesMint(props) {
                 placeholder="amount"
                 value={numberinput}
                 onChange={numberinputUser.bind(this)}
+                min={0}
+                max={100}
               />{" "}
             </div>
 
