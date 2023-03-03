@@ -222,7 +222,7 @@ hover:bg-red-500 hover:text-gray-900 duration-300 font-mono font-bold text-sm"
                 Send badVibes
               </button></div>
           </div>
-          <div className="text-white font-mono pt-2 text-xs">Address: Address: {addressLookup.startsWith("0x") ? addressLookup : ""}</div>
+          <div className="text-white font-mono pt-2 text-xs">Address: {addressLookup.startsWith("0x") ? addressLookup : ""}</div>
         </div>
 
 
