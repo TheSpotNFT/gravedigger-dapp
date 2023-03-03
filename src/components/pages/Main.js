@@ -35,6 +35,8 @@ import "../../index.css";
 import Footer from "../Footer";
 import VibesMint from "../../components/vibesMints";
 import VibesMintMobile from "../vibesMintsMobile";
+import gud from "../../assets/gud.png"
+import bad from "../../assets/bad.png"
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -271,6 +273,7 @@ const slideRight = () => {
  {/*<div><img src={spotbot4} alt="Spot Bot" className=""></img></div>*/}
 
  <div className="font-mono text-l px-4 py-2 text-white">Send gudVibes. Send badVibes. But mostly send gudVibes. Sending gudVibes to someone allows them to claim dNFTs and the more gudVibes they hold the more their dNFT evolves. They also receive 50% of the mint fee. badVibes work against gudVibes and 50% of the badVibes minting fees go to a random gudVibes receiver. Mint is 0.2 avax per gudVibe. </div>
+ <div><img src={gud} alt="gudVibes NFT" className=""></img></div>
  <div className="py-2">
         <VibesMintMobile/>
         </div>
@@ -584,17 +587,26 @@ const slideRight = () => {
 </div>
   <div className="snap-item scroll-smooth">
       {/* Vibes */}
-    <div id="vibes" className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
+    <div id="vibes" className="h-full lg:pt-8 xl:pt-12 overflow-hidden">
     <div className="text-white pr-10">
       <h1 className="text-5xl pt-8 font-mono">Vibes</h1>
       <div className="grid grid-cols-1">
-      <div></div>
-      <div className="text-xl font-mono pt-16 px-48 lg:pb-8 xl:pb-8 lg:text-base xl:text-base 2xl:text-base col-span-2">gudVibes? badVibes? You choose. Send gudVibes or badVibes to anyone. 0.2 avax mint fee. Enter an address to send gud or bad vibes to and send away. If you send someone gudVibes, 50% of the minting fee also goes to them. If you send someone badVibes then 50% of the minting fee gets sent to a random gudVibes receiver. What good are gudVibes? Well they are gud for starters but they will also be used to claim NFTs that will showcase how many gudVibes you've been sent. Sure you can sell your gudVibes, but you wouldn't, right?! Right?!! Okay okay, so wtf is up with badVibes? If you get sent badVibes the weight of your gudVibes will be deminished. WTF?! Yeah, I know, right? Ok ok so say you get sent a total of 100 gudVibes but some nob sent you 40 badVibes, your 100 gudVibes now only equal 60 gudVibes. What do gudVibes do for me? Good question. The more gudVibes you own the more vibes NFTs you can claim and the more gudVibes you hold the more legendary the vibe NFT you claimed will be. They will be dNFTs that change depending how many gudVibes you hold. So do gud, get gudVibes and LFG!!!</div>
+     
+      <div className="text-xl font-mono pt-8 px-48 lg:pb-8 xl:pb-8 lg:text-base xl:text-base 2xl:text-base col-span-2">gudVibes? badVibes? You choose. Send gudVibes or badVibes to anyone. 0.2 avax mint fee. Enter an address to send gud or bad vibes to and send away. If you send someone gudVibes, 50% of the minting fee also goes to them. If you send someone badVibes then 50% of the minting fee gets sent to a random gudVibes receiver. What good are gudVibes? Well they are gud for starters but they will also be used to claim NFTs that will showcase how many gudVibes you've been sent. Sure you can sell your gudVibes, but you wouldn't, right?! Right?!! Okay okay, so wtf is up with badVibes? If you get sent badVibes the weight of your gudVibes will be deminished. WTF?! Yeah, I know, right? Ok ok so say you get sent a total of 100 gudVibes but some nob sent you 40 badVibes, your 100 gudVibes now only equal 60 gudVibes. What do gudVibes do for me? Good question. The more gudVibes you own the more vibes NFTs you can claim and the more gudVibes you hold the more legendary the vibe NFT you claimed will be. They will be dNFTs that change depending how many gudVibes you hold. So do gud, get gudVibes and LFG!!!</div>
       
       </div>
             </div>
+        <div className="grid grid-cols-8">
+          <div></div>
+          <div></div>
+          
+      <div className="text-white font-mono"><img src={gud} alt="gudVibes NFT" className="col-span-2"/><p>gudVibes</p></div>
+      <div></div>
+          <div></div>
+      <div className="text-white font-mono"><img src={bad} alt="badVibes NFT" className="col-span-5"/><p>badVibes</p></div>
       <div></div>
       <div></div>
+      </div>
       <div className="flex justify-center pt-8"><VibesMint/></div>
 
     
