@@ -20,6 +20,7 @@ import { ethers } from "ethers";
 import { Scribble } from "./components/pages/ScribbleCustoms";
 import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
 import { Rarity } from "./components/pages/Rarity";
+import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 
 
@@ -179,6 +180,22 @@ function App() {
                 exact
                 element={
                   <Unnamed
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+               <Route
+                path="/plots"
+                exact
+                element={
+                  <Plots
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}

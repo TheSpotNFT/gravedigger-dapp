@@ -1,8 +1,9 @@
-import React from 'react'
+import { React, useEffect } from 'react'
 import spot from "../../assets/TheSpot.png"
 import tombstone from "../../assets/tombstone1.png"
 import goatd from "../../assets/goatdmacho.png"
 import spotbot from "../../assets/spotbot/7.png"
+import ReactGA from 'react-ga';
 
 const onClickUrl = (url) => {
   return () => openInNewTab(url);
@@ -12,8 +13,15 @@ const openInNewTab = (url) => {
   if (newWindow) newWindow.opener = null;
 };
 
+ReactGA.initialize('G-YJ9C2P37P6');
 
 export default function Ecosystem() {
+
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  }, []);
+
   return (
     <div className='text-white h-full'>
       {/* Tailblocks Theme */}

@@ -71,6 +71,7 @@ export default function VibesMint(props) {
     }
     if (textinput.startsWith("0x")) {
       setAddressLookup(textinput);
+
     }
 
 
@@ -81,7 +82,7 @@ export default function VibesMint(props) {
 
 
   async function gud() {
-    props.setTxProcessing(true);
+
     try {
       const { ethereum } = window;
       if (ethereum) {
@@ -99,9 +100,9 @@ export default function VibesMint(props) {
             value: ethers.utils.parseEther(`${numberinput * 0.2}`),
           };
 
-          let tx = await contract.mint(addressLookup, 1, numberinput);
+          let tx = await contract.mint(addressLookup, 1, numberinput, options);
           console.log(tx.hash);
-          props.setTxProcessing(false);
+
           alert(
             "gudVibes Sent Successfully! Gud for you ser!"
           );
@@ -113,12 +114,12 @@ export default function VibesMint(props) {
       console.log("Error on mint");
       console.log(error);
     } finally {
-      props.setTxProcessing(false);
+
     }
   }
 
   async function bad() {
-    props.setTxProcessing(true);
+
     try {
       const { ethereum } = window;
       if (ethereum) {
@@ -136,9 +137,9 @@ export default function VibesMint(props) {
             value: ethers.utils.parseEther(`${numberinput * 0.2}`),
           };
 
-          let tx = await contract.mint(addressLookup, 2, numberinput);
+          let tx = await contract.mint(addressLookup, 2, numberinput, options);
           console.log(tx.hash);
-          props.setTxProcessing(false);
+
           alert(
             "badVibes Sent Successfully! You Evil!"
           );
@@ -150,7 +151,7 @@ export default function VibesMint(props) {
       console.log("Error on mint");
       console.log(error);
     } finally {
-      props.setTxProcessing(false);
+
     }
   }
 
@@ -210,7 +211,7 @@ export default function VibesMint(props) {
               className="m-1 w-1/2 rounded-lg px-1 py-1 border-4 border-spot-yellow text-spot-yellow
      hover:bg-green-500 hover:text-gray-900 duration-300 font-mono font-bold text-sm"
               disabled={props.txProcesssing}
-              onClick={alertClick}
+              onClick={gud}
             >
               Send gudVibes
             </button>
@@ -218,7 +219,7 @@ export default function VibesMint(props) {
               className="m-1 w-1/2 rounded-lg px-1 py-1 border-4 border-spot-yellow text-spot-yellow
 hover:bg-red-500 hover:text-gray-900 duration-300 font-mono font-bold text-sm"
               disabled={props.txProcesssing}
-              onClick={alertClick}
+              onClick={bad}
             >
               Send badVibes
             </button>
