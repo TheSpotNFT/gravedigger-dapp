@@ -315,32 +315,32 @@ export const Goatd = ({
                     {/* Individual Stats */}
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Background: </div>
-                        {chosenTrait.Background} (ID: {chosenTrait.BackgroundID}) <div className={`${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) || (solidBG.some(ai => chosenTrait.BackgroundID === "")) ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BackgroundID}/`)} > Buy Now!</div>
+                        {chosenTrait.Background} (ID: {chosenTrait.BackgroundID}) <div className={`${(walletTraits.includes(`${chosenTrait.BackgroundID}`)) || (solidBG.some(ai => chosenTrait.BackgroundID === ai)) || (solidBG.some(ai => chosenTrait.BackgroundID === "")) ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BackgroundID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.BodyID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Body: </div>
-                        {chosenTrait.Body} (ID: {chosenTrait.BodyID})<div className={`${walletTraits.includes(`${chosenTrait.BodyID}`) || chosenTrait.BodyID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BodyID}/`)} > Buy Now!</div>
+                        {chosenTrait.Body} (ID: {chosenTrait.BodyID})<div className={`${walletTraits.includes(`${chosenTrait.BodyID}`) || chosenTrait.BodyID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.BodyID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.HeadID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Head: </div>
-                        {chosenTrait.Head} (ID: {chosenTrait.HeadID})<div className={`${walletTraits.includes(`${chosenTrait.HeadID}`) || chosenTrait.HeadID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadID}/`)} > Buy Now!</div>
+                        {chosenTrait.Head} (ID: {chosenTrait.HeadID})<div className={`${walletTraits.includes(`${chosenTrait.HeadID}`) || chosenTrait.HeadID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.EyesID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Eyes: </div>
-                        {chosenTrait.Eyes} (ID: {chosenTrait.EyesID})<div className={`${walletTraits.includes(`${chosenTrait.EyesID}`) || chosenTrait.EyesID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.EyesID}/`)} > Buy Now!</div>
+                        {chosenTrait.Eyes} (ID: {chosenTrait.EyesID})<div className={`${walletTraits.includes(`${chosenTrait.EyesID}`) || chosenTrait.EyesID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.EyesID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.MouthID}`) ? "spot-yellow" : "[red]"} font-bold pr-3`}>Mouth: </div>
-                        {chosenTrait.Mouth} (ID: {chosenTrait.MouthID})<div className={`${walletTraits.includes(`${chosenTrait.MouthID}`) || chosenTrait.MouthID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.MouthID}/`)} > Buy Now!</div>
+                        {chosenTrait.Mouth} (ID: {chosenTrait.MouthID})<div className={`${walletTraits.includes(`${chosenTrait.MouthID}`) || chosenTrait.MouthID === "" ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.MouthID}/`)} > Buy Now!</div>
                     </div>
 
                     <div className='font-mono text-white list-none flex pb-3'>
                         <div className={`text-${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "spot-yellow" : "[red]"} font-bold pr-3`}>Headwear: </div>
-                        {chosenTrait.Headwear} (ID: {chosenTrait.HeadwearID})<div className={`${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadwearID}/`)} > Buy Now!</div>
+                        {chosenTrait.Headwear} (ID: {chosenTrait.HeadwearID})<div className={`${walletTraits.includes(`${chosenTrait.HeadwearID}`) || chosenTrait.HeadwearID === '599' ? "hidden" : "pl-2 cursor-pointer text-[red] font-bold"}`} onClick={onClickUrl(`https://joepegs.com/item/avalanche/0x9521807adf320d1cdf87afdf875bf438d1d92d87/${chosenTrait.HeadwearID}/`)} > Buy Now!</div>
                     </div>
                     {/* End of Indiv Stats */}
                     {/* Buttons */}
