@@ -3054,6 +3054,7 @@ import image3053 from './assets/unnamedImages/3053.png'
 import image3054 from './assets/unnamedImages/3054.png'
 import image3062 from './assets/unnamedImages/3062.png'
 import image3063 from './assets/unnamedImages/3063.png'
+import image3064 from './assets/unnamedImages/3064.png'
 
 
 const unnamedCards = [
@@ -6498,6 +6499,14 @@ const unnamedCards = [
         nftName: 'DYSC',
         traitType: 'Branding',
         rarity: 'Common'
+    },
+    {
+        id: 3064,
+        image: image3064,
+        brand: 'Monkeez',
+        nftName: 'Monkeez',
+        traitType: 'Branding',
+        rarity: 'Epic'
     },
 ]
 export default unnamedCards;
