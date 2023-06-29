@@ -3052,6 +3052,8 @@ import image3051 from './assets/unnamedImages/3051.png'
 import image3052 from './assets/unnamedImages/3052.png'
 import image3053 from './assets/unnamedImages/3053.png'
 import image3054 from './assets/unnamedImages/3054.png'
+import image3062 from './assets/unnamedImages/3062.png'
+import image3063 from './assets/unnamedImages/3063.png'
 
 
 const unnamedCards = [
@@ -6478,6 +6480,22 @@ const unnamedCards = [
         image: image3054,
         brand: 'Moo!',
         nftName: 'Moo!',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3062,
+        image: image3062,
+        brand: 'DYSC',
+        nftName: 'DYSC',
+        traitType: 'Branding',
+        rarity: 'Common'
+    },
+    {
+        id: 3063,
+        image: image3063,
+        brand: 'DYSC',
+        nftName: 'DYSC',
         traitType: 'Branding',
         rarity: 'Common'
     },
