@@ -14,7 +14,7 @@ import axios from "axios";
 import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { json } from "react-router-dom";
-
+import fallbackimage from "../../assets/thespotmaster.png"
 
 export const ScribbleUpdate = ({
     account,
@@ -159,9 +159,9 @@ export const ScribbleUpdate = ({
     async function getTraits() {
         const options = {
             method: "GET",
-            url: `https://deep-index.moralis.io/api/v2/nft/0x4b819687607f0772a1fa81ff550758B4024cD531`,
+            url: `https://deep-index.moralis.io/api/v2.2/nft/0x4b819687607f0772a1fa81ff550758B4024cD531`,
             params: {
-                chain: "avalanche",
+                chain: "0xa86a",
                 format: "decimal",
                 normalizeMetadata: "true",
             },
@@ -175,6 +175,8 @@ export const ScribbleUpdate = ({
             setDisplayNfts(response.data.result);
             setCurrentID(textinputText - 1);
             setJsonMetaData(response.data.result);
+            console.log(response);
+
         } catch (error) {
             console.log(error);
         }
@@ -452,16 +454,23 @@ export const ScribbleUpdate = ({
                                 }}>
                                     <div className="hover:z-0 rounded overflow-hidden shadow-lg bg-slate-700 hover: hover:scale-105 hover:bg-slate-500 duration-300">
                                         <div className="grid grid-cols-1">
-                                            <img className="h-48 mx-auto pt-4" src={nfts.normalized_metadata.image} alt={nfts.normalized_metadata.attributes[0].value}></img>
+                                            <img
+                                                className="h-48 mx-auto pt-4"
+                                                src={nfts.normalized_metadata.image}
+                                                alt={nfts.normalized_metadata.attributes[0]?.value || 'Image not found'}
+                                                onError={(e) => {
+                                                    e.target.src = fallbackimage; // Replace with your fallback image URL
+                                                }}
+                                            ></img>
                                             <div className="pt-4 pr-2 pl-2">
                                                 <div className="font-bold text-md mb-2">
-                                                    <div className="bg-slate-600"> <h1>ID: {nfts.token_id}</h1></div>
-                                                    <h5 className="text-white">Collector Name: {nfts.normalized_metadata.attributes[0].value}</h5>
-                                                    <div className="bg-slate-600"><h5>Piece Name: {nfts.normalized_metadata.attributes[1].value}</h5></div>
-                                                    <h5 className="text-white">Color: {nfts.normalized_metadata.attributes[2].value}</h5>
-                                                    <div className="bg-slate-600"><h5>Noun: {nfts.normalized_metadata.attributes[3].value}</h5></div>
-                                                    <h5 className="text-white">Collection Claimed with: {nfts.normalized_metadata.attributes[4].value}</h5>
-                                                    <div className="bg-slate-600"><h5>ID Claimed with: {nfts.normalized_metadata.attributes[5].value}</h5></div>
+                                                    <div className="bg-slate-600"><h1>ID: {nfts.token_id || 'N/A'}</h1></div>
+                                                    <h5 className="text-white">Collector Name: {nfts.normalized_metadata.attributes[0]?.value || 'N/A'}</h5>
+                                                    <div className="bg-slate-600"><h5>Piece Name: {nfts.normalized_metadata.attributes[1]?.value || 'N/A'}</h5></div>
+                                                    <h5 className="text-white">Color: {nfts.normalized_metadata.attributes[2]?.value || 'N/A'}</h5>
+                                                    <div className="bg-slate-600"><h5>Noun: {nfts.normalized_metadata.attributes[3]?.value || 'N/A'}</h5></div>
+                                                    <h5 className="text-white">Collection Claimed with: {nfts.normalized_metadata.attributes[4]?.value || 'N/A'}</h5>
+                                                    <div className="bg-slate-600"><h5>ID Claimed with: {nfts.normalized_metadata.attributes[5]?.value || 'N/A'}</h5></div>
                                                 </div>
                                             </div></div>
                                         <div className="px-6 pt-4 pb-2">
@@ -472,6 +481,7 @@ export const ScribbleUpdate = ({
                             )
                         })}</div>
                     </div></div>
+
 
             </div>
         </div>
