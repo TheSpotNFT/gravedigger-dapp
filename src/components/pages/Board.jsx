@@ -30,6 +30,7 @@ export const Board = ({
   txProcessing,
   setTxProcessing,
 }) => {
+  
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
