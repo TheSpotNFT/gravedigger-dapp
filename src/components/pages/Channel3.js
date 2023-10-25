@@ -77,16 +77,6 @@ const Channel3 = ({account,
   }, []);
 
   useEffect(() => {
-    const firebaseConfig = {
-      apiKey: "AIzaSyAA5-Qa5UJ3b0S6pAs3E7OCaG-TwR5Vvig",
-      authDomain: "thehub-8af08.firebaseapp.com",
-      projectId: "thehub-8af08",
-      databaseURL: "https://thehub-8af08-default-rtdb.firebaseio.com/",
-      storageBucket: "thehub-8af08.appspot.com",
-      messagingSenderId: "429824717981",
-      appId: "1:429824717981:web:0b9587dfd24b273b38d074",
-      measurementId: "G-6Q459P9J5Z"
-    };
 
     const fetchData = async () => {
       const app = initializeApp(firebaseConfig);
@@ -147,7 +137,7 @@ const Channel3 = ({account,
           console.log(`User's Address: ${user.address}`);
           console.log(`User's name: ${user.username}`);
           const hasSharesBalance = result;
-          if (hasSharesBalance == 1) {
+          if (hasSharesBalance === 1) {
             // Enable the button or take any other actions as needed
             handleUserClick(user);
           } else {
