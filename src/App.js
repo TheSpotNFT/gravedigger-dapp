@@ -22,6 +22,7 @@ import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
 import { Rarity } from "./components/pages/Rarity";
 import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
+import Channel3 from "./components/pages/Channel3";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -115,6 +116,22 @@ function App() {
                 exact
                 element={
                   <Main
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/channel3"
+                exact
+                element={
+                  <Channel3
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
