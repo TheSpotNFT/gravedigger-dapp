@@ -5,7 +5,7 @@ import Player from '@vimeo/player';
 import LogoutButton from "../Logout";
 import { SA_ADDRESS, SA_ABI } from '../Contracts/StarsArena';
 import { ethers, Contract } from "ethers";
-
+//Build fail?
 const Channel3 = ({account,
     web3Modal,
     loadWeb3Modal,
