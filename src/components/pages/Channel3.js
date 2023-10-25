@@ -21,8 +21,8 @@ const Channel3 = ({account,
   const playerRefs = useRef([]);
 
   const handleUserClick = (user) => {
-    setSelectedUser(user.username);
-    console.log(user.username);
+    setSelectedUser(user);
+    console.log(selectedUser);
   };
   const onClickUrl = (url) => {
     return () => openInNewTab(url);
@@ -58,14 +58,14 @@ const Channel3 = ({account,
     const usersRef = ref(database, 'users');
 
     // Listen for changes in the "users" node
-    console.log(selectedUser);
+    //console.log(selectedUser);
     const unsubscribe = onValue(usersRef, (snapshot) => {
       const usersData = snapshot.val();
       if (usersData) {
         // Convert the user data into an array
         const usersArray = Object.values(usersData);
         setUsers(usersArray);
-        console.log(usersArray);
+        //console.log(usersArray);
 
       }
     });
@@ -77,6 +77,16 @@ const Channel3 = ({account,
   }, []);
 
   useEffect(() => {
+    const firebaseConfig = {
+      apiKey: "AIzaSyAA5-Qa5UJ3b0S6pAs3E7OCaG-TwR5Vvig",
+      authDomain: "thehub-8af08.firebaseapp.com",
+      projectId: "thehub-8af08",
+      databaseURL: "https://thehub-8af08-default-rtdb.firebaseio.com/",
+      storageBucket: "thehub-8af08.appspot.com",
+      messagingSenderId: "429824717981",
+      appId: "1:429824717981:web:0b9587dfd24b273b38d074",
+      measurementId: "G-6Q459P9J5Z"
+    };
 
     const fetchData = async () => {
       const app = initializeApp(firebaseConfig);
@@ -95,7 +105,7 @@ const Channel3 = ({account,
          
 
           videoUrls.forEach((videoUrl, index) => {
-            console.log(`Video ${index + 1}: ${videoUrl}`);
+            //console.log(`Video ${index + 1}: ${videoUrl}`);
           });
 
           // Initialize the Vimeo players for each video
@@ -132,16 +142,17 @@ const Channel3 = ({account,
           const result = await contract.sharesBalance(account, user.address);
   
           // 'result' is either true or false, you can use it as needed
-          console.log(`sharesBalance result for address ${user.address}: ${result}`);
-          console.log(`Your Wallet Address: ${account}`);
-          console.log(`User's Address: ${user.address}`);
-          console.log(`User's name: ${user.username}`);
+          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
+          //console.log(`Your Wallet Address: ${account}`);
+          //console.log(`User's Address: ${user.address}`);
+          //console.log(`User's name: ${user.username}`);
           const hasSharesBalance = result;
-          if (hasSharesBalance === 1) {
+          if (result == 1) {
             // Enable the button or take any other actions as needed
-            handleUserClick(user);
+            setSelectedUser(user.username);
+            //console.log(selectedUser);
           } else {
-            // Disable the button or handle this case as needed
+            setSelectedUser('You do not own ' + user.username + "'s ticket to");
           }
         }
       }
