@@ -135,7 +135,7 @@ const Channel3 = ({account,
   
           // Call the sharesBalance function
           const result = await contract.sharesBalance(account, user.address);
-          console.log(result);
+          //console.log(result);
   
           // 'result' is either true or false, you can use it as needed
           //console.log(`sharesBalance result for address ${user.address}: ${result}`);
@@ -146,10 +146,10 @@ const Channel3 = ({account,
           if (hasSharesBalance == true) {
             // Enable the button or take any other actions as needed
             setSelectedUser(user.username);
-            console.log(selectedUser);
-            console.log(hasSharesBalance);
-            console.log(user.address);
-            console.log(account);
+            //console.log(selectedUser);
+            //console.log(hasSharesBalance);
+            //console.log(user.address);
+            //console.log(account);
           } else {
             setSelectedUser('You do not have access to ' + user.username);
           }
