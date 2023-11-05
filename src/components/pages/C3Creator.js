@@ -191,7 +191,7 @@ const Channel3 = ({account,
               setSelectedUser("User not found");
             }
           } else {
-            setSelectedUser("You do not own The Spot's ticket");
+            setSelectedUser("You do not own The Spot's ticket or You are not setup as a creator");
           }
         }
       }
