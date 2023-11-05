@@ -311,15 +311,27 @@ const Channel3 = ({account,
       )}
     </div>
 
-    <div className='w-1/5 pr-2 pl-2'>
-        <h2 className='text-white text-bold pb-4 pt-6'>Creators</h2>
+    <div className='w-1/5 pr-2 pl-2 pt-8'>
+    <button
+                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+                  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+                  onClick={onClickUrl("/creator")}
+                >
+                  Creator Portal
+                </button>
+        <h2 className='text-white font-bold text-2xl pb-4 pt-6'><button
+                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-white text-white bg-slate-900 bg-opacity-60
+                  font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center cursur-default"
+              
+                >Creators</button></h2>
         <div className='pb-2'>
           <ul>
+        
             {users.map((user, index) => (
               <li className='py-2' key={index}>
                 <button
                   className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-                  hover-bg-spot-yellow hover-text-black duration-300 hover-border-white font-mono sm-text-xs md-text-m 2xl-text-l flex justify-center"
+                  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
                   onClick={() => checkSharesBalance(user)}
                 >
                   {user.username}
