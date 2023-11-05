@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, get } from 'firebase/database';
+import { getDatabase, ref, onValue, get, orderByChild, equalTo, push, set } from 'firebase/database';
 import Player from '@vimeo/player';
 import LogoutButton from "../Logout";
 import { SA_ADDRESS, SA_ABI } from '../Contracts/StarsArena';
@@ -19,6 +19,7 @@ const Channel3 = ({account,
   const [currentUser, setCurrentUser] = useState(null);
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
+  console.log("account", account);
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -35,6 +36,71 @@ const Channel3 = ({account,
   function exploreClick(){
     setExplore(!explore);
   }
+
+  const [formData, setFormData] = useState({
+    address: '',
+    username: '',
+    url: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+  
+
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Clear the error for this field when the user types something
+  setFormErrors({
+    ...formErrors,
+    [name]: ""
+  });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleFormSubmit = async (e, selectedUser, account) => {
+    e.preventDefault();
+  
+    // Initialize Firebase app and get a reference to the database
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+  
+    // Create a reference to the "videos" node under the selected user
+    const videosRef = ref(database, `users/${selectedUser}/videos`);
+  
+    // Create a new video object
+    const newVideo = {
+      address: account,
+      username: selectedUser,
+      url: formData.url, // Use the URL from the form
+      
+    };
+    console.log(account, selectedUser, formData.url);
+    try {
+      // Push the new video object to the database
+      const newVideoRef = push(videosRef); // Create a new reference using push
+      await set(newVideoRef, newVideo); // Use set to save the new video data
+  
+      // Success message or any other action you want to take
+      console.log('Video added to the database successfully');
+  
+      // Reset the form fields
+      setFormData({
+        url: '', // Reset the URL field
+      });
+    } catch (error) {
+      // Handle the error if there's an issue with pushing data to the database
+      console.error('Error adding video to the database:', error);
+    }
+  };
+  
 
   // Initialize Firebase with your config
   const firebaseConfig = {
@@ -77,52 +143,23 @@ const Channel3 = ({account,
   }, []);
 
   useEffect(() => {
- 
-    const fetchData = async () => {
 
-      playerRefs.current.forEach((player) => player.destroy());
-      playerRefs.current = [];
+    const fetchData = async () => {
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
       setCurrentUser(selectedUser);
-      const userRef = ref(database, `users/${selectedUser}/videos`); // Update the path
+      console.log(selectedUser);
+     
       
-      try {
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-          const videosData = snapshot.val();
-          const videoDataArray = Object.values(videosData);
-          const videoUrls = videoDataArray.map((videoData) => videoData.url);
     
-          setUserVideos(videoUrls);
-         
-
-          videoUrls.forEach((videoUrl, index) => {
-            //console.log(`Video ${index + 1}: ${videoUrl}`);
-          });
-
-          // Initialize the Vimeo players for each video
-          playerRefs.current = videoUrls.map((videoUrl, index) => {
-            const options = {
-              url: videoUrl, // Assuming the URL is the Vimeo video URL
-              width: 640,
-            };
-            return new Player(`vimeo-player-${index}`, options);
-          });
-        } else {
-          console.log('No data found for the provided userId:', currentUser);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
     };
 
-    if (selectedUser) {
-      fetchData();
-    }
+    fetchData();
   }, [selectedUser]);
 
-  const checkSharesBalance = async (user) => {
+  const checkSharesBalance = async (account) => {
+    console.log("Account:", account);
+
     try {
       const { ethereum } = window;
   
@@ -134,24 +171,27 @@ const Channel3 = ({account,
           const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.sharesBalance(account, user.address);
-          console.log(result);
+          const result = await contract.sharesBalance(account, "0x3aa3a263061c8395362b0098372d33c8f78072ed");
   
           // 'result' is either true or false, you can use it as needed
-          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
+          //console.log(`sharesBalance result for address ${account}: ${result}`);
           //console.log(`Your Wallet Address: ${account}`);
-          //console.log(`User's Address: ${user.address}`);
-          //console.log(`User's name: ${user.username}`);
-          const hasSharesBalance = result.eq(1);
-          if (hasSharesBalance == true) {
-            // Enable the button or take any other actions as needed
-            setSelectedUser(user.username);
-            console.log(selectedUser);
-            console.log(hasSharesBalance);
-            console.log(user.address);
-            console.log(account);
+  
+          const hasSharesBalance = result;
+          if (result == 1) {
+            // Find the user with a matching address in the 'users' array
+            const matchingUser = users.find(user => user.address === account);
+  
+            if (matchingUser) {
+              // Set 'selectedUser' to the username of the matching user
+              setSelectedUser(matchingUser.username);
+              console.log(selectedUser);
+              console.log(account);
+            } else {
+              setSelectedUser("User not found");
+            }
           } else {
-            setSelectedUser('You do not have access to ' + user.username);
+            setSelectedUser("You do not own The Spot's ticket");
           }
         }
       }
@@ -159,7 +199,7 @@ const Channel3 = ({account,
       console.error("Error checking sharesBalance:", error);
     }
   };
-  
+
 
   return (
 <div className='flex w-full pt-4 px-8'>
@@ -291,44 +331,50 @@ const Channel3 = ({account,
 
   <div className='w-3/5 flex-grow flex flex-col items-center'>
     
-  {currentUser ? (
-  <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
-) : <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>}
+ {/* Form Input Section */}
+ <div className='pb-8 pt-6'>
+  {currentUser === null ? (
+    <p className='text-xl text-white font-bold'>Select your creator wallet to upload video URL</p>
+  ) : (
+    <p className='text-xl text-white font-bold'>
+      Add video to {currentUser}'s Channel3
+    </p>
+  )}
+</div>
+ <form onSubmit={(e) => handleFormSubmit(e, selectedUser, account)}>
+  <div>
+    <input
+      type="text"
+      name="url"
+      value={formData.url}
+      onChange={handleInputChange}
+      placeholder="Video URL"
+    />
+  </div>
+  <div className='pt-6'>
+    <button className='pt-6align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center' type="submit">Add Video</button>
+  </div>
+</form>
 
-    {userVideos.length > 0 ? (
-  <div className='grid-cols-1 mx-auto'>
-    {userVideos.map((videoUrl, index) => (
-      <div key={index}>
-       
-        <p className='pb-4'></p>
-        <div id={`vimeo-player-${index}`}></div>
         
-      </div>
-    ))}
-        </div>
-      ) : (
-        <p className='text-white'>Select a creator to view their content</p>
-      )}
     </div>
 
-    <div className='w-1/5 pr-2 pl-2'>
-        <h2 className='text-white text-bold pb-4 pt-6'>Creators</h2>
-        <div className='pb-2'>
-          <ul>
-            {users.map((user, index) => (
-              <li className='py-2' key={index}>
-                <button
-                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-                  hover-bg-spot-yellow hover-text-black duration-300 hover-border-white font-mono sm-text-xs md-text-m 2xl-text-l flex justify-center"
-                  onClick={() => checkSharesBalance(user)}
-                >
-                  {user.username}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+<div className='w-1/5 pr-10'>
+      <h2 className='text-white text-bold pb-4 pt-6'>Select your Creator Wallet</h2>
+      <div className='pb-2'>
+      <ul>
+            <li className='py-2'>
+              <button
+                className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover-bg-spot-yellow hover-text-black duration-300 hover-border-white font-mono sm-text-xs md-text-l 2xl-text-xl flex justify-center"
+                onClick={() => checkSharesBalance(account)}
+              >
+                {currentUser} {account.substring(0, 5) + "..." + account.substring(account.length - 4)}
+              </button>
+            </li>
+          </ul></div>
+</div>
 
       
 

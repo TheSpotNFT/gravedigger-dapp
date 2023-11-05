@@ -23,6 +23,7 @@ import { Rarity } from "./components/pages/Rarity";
 import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 import Channel3 from "./components/pages/Channel3";
+import Creator from "./components/pages/C3Creator";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -132,6 +133,22 @@ function App() {
                 exact
                 element={
                   <Channel3
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+                 <Route
+                path="/creator"
+                exact
+                element={
+                  <Creator
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
