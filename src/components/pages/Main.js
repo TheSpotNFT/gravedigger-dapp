@@ -37,6 +37,7 @@ import VibesMint from "../../components/vibesMints";
 import VibesMintMobile from "../vibesMintsMobile";
 import gud from "../../assets/gud.png"
 import bad from "../../assets/bad.png"
+import MobileMenu from "../MobileMenu";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -111,6 +112,8 @@ const slideRight = () => {
     <div> 
       {/* MOBILE LAYOUT */}
       <div className="snap-container flex-auto mx-auto px-12 block lg:hidden scroll-smooth scrollbar-hide ">
+
+
 
        
       <div className="pt-0 px-0 bg-slate-900">
@@ -249,7 +252,7 @@ const slideRight = () => {
           </div></div></div>
      
   </div>
-        
+       
 
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
 

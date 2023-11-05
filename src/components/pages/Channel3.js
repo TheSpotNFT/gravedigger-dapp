@@ -142,7 +142,7 @@ const Channel3 = ({account,
           //console.log(`Your Wallet Address: ${account}`);
           //console.log(`User's Address: ${user.address}`);
           //console.log(`User's name: ${user.username}`);
-          const hasSharesBalance = result.eq(1);
+          const hasSharesBalance = result.gte(1);
           if (hasSharesBalance == true) {
             // Enable the button or take any other actions as needed
             setSelectedUser(user.username);
