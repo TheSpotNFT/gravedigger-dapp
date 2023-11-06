@@ -105,7 +105,7 @@ const Channel3 = ({account,
           playerRefs.current = videoUrls.map((videoUrl, index) => {
             const options = {
               url: videoUrl, // Assuming the URL is the Vimeo video URL
-              width: 640,
+              //width: 860,
             };
             return new Player(`vimeo-player-${index}`, options);
           });
@@ -289,16 +289,16 @@ const Channel3 = ({account,
      
   </div>
 <div className='md:flex pt-6 md:pt-0 w-full'>
-  <div className='w-full md:w-3/5 items-center pt-40 md:pt-0'>
+  <div className='w-full md:w-full items-center pt-40 md:pt-0'>
     
   {currentUser ? (
   <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
 ) : <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>}
 
     {userVideos.length > 0 ? (
-  <div className='grid-cols-1 mx-auto'>
+  <div className='grid-cols-1 mx-auto border-4 border-white'>
     {userVideos.map((videoUrl, index) => (
-      <div key={index}>
+      <div key={index} className='mx-auto w-full border-4 border-white'>
        
         <p className='pb-4'></p>
         <div id={`vimeo-player-${index}`}></div>
@@ -321,7 +321,7 @@ const Channel3 = ({account,
                 </button>
         <h2 className='text-white font-bold text-2xl pb-4 pt-6'><button
                   className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-white text-white bg-slate-900 bg-opacity-60
-                  font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center cursur-default"
+                  font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center cursor-default"
               
                 >Creators</button></h2>
         <div className='pb-2'>

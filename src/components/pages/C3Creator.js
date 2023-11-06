@@ -216,20 +216,15 @@ const Channel3 = ({account,
           //console.log(`Your Wallet Address: ${account}`);
   
           const hasSharesBalance = result;
-          if (result == 1) {
+          if (result >= 1) {
             // Find the user with a matching address in the 'users' array
-            const matchingUser = users.find(user => user.address === account);
-  
-            if (matchingUser) {
-              // Set 'selectedUser' to the username of the matching user
-              setSelectedUser(matchingUser.username);
-              console.log(selectedUser);
-              console.log(account);
-            } else {
-              setSelectedUser("User not found");
-            }
+            setSelectedUser(username);
+            console.log(selectedUser);
+            console.log(account);
+
+           
           } else {
-            setSelectedUser("You do not own The Spot's ticket or You are not setup as a creator");
+            setSelectedUser("You do not own The Spot's ticket");
           }
         }
       }
