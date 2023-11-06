@@ -391,7 +391,7 @@ const Channel3 = ({account,
         <div className='pr-2 pb-4 flex'><div className='pr-2'>Username:</div>
         <input className='text-black w-32 pl-2' type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
       </div></label><div className='pt-6 pb-8'>
-      <button className='align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60' type="submit">Upload User Data</button>
+      <button className='align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60' type="submit">Link Username to Wallet</button>
    </div> </form>)}
 
  <div className='pb-8 pt-12'>
