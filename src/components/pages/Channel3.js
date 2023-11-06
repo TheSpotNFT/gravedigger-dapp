@@ -296,9 +296,9 @@ const Channel3 = ({account,
 ) : <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>}
 
     {userVideos.length > 0 ? (
-  <div className='grid-cols-1 mx-auto border-4 border-white'>
+  <div className='grid-cols-1 mx-auto'>
     {userVideos.map((videoUrl, index) => (
-      <div key={index} className='mx-auto w-full border-4 border-white'>
+      <div key={index} className='mx-auto w-full'>
        
         <p className='pb-4'></p>
         <div id={`vimeo-player-${index}`}></div>
