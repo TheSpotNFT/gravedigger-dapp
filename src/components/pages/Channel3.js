@@ -201,7 +201,7 @@ const Channel3 = ({account,
         </button>
         </div>
         <div className="py-2">
-          <a href="#vibes">
+          <a href="/#vibes">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -211,7 +211,7 @@ const Channel3 = ({account,
         </button></a>
         </div>
         <div className="py-2">
-          <a href="#spotbot">
+          <a href="/#spotbot">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -288,8 +288,8 @@ const Channel3 = ({account,
           </div></div></div>
      
   </div>
-
-  <div className='w-3/5 flex-grow flex flex-col items-center'>
+<div className='md:flex pt-6 md:pt-0 w-full'>
+  <div className='w-full md:w-3/5 items-center pt-40 md:pt-0'>
     
   {currentUser ? (
   <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
@@ -311,7 +311,7 @@ const Channel3 = ({account,
       )}
     </div>
 
-    <div className='w-1/5 pr-2 pl-2 pt-8'>
+    <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
     <button
                   className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
                   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -341,7 +341,7 @@ const Channel3 = ({account,
           </ul>
         </div>
       </div>
-
+      </div>
       
 
 

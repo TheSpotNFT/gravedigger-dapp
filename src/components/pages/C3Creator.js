@@ -45,6 +45,42 @@ const Channel3 = ({account,
 
   const [formErrors, setFormErrors] = useState({});
   
+  const [username, setUsername] = useState('');
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handleUsernameSubmit = async (e) => {
+    e.preventDefault();
+
+    // Initialize Firebase app and get a reference to the database
+    const app = initializeApp(firebaseConfig); // Replace with your Firebase configuration
+    const database = getDatabase(app);
+
+    // Create a reference to the user's data using the username as the key
+    const userRef = ref(database, `users/${username}`);
+
+    // Create a new user data object
+    const userData = {
+      address: account,
+      username: username,
+    };
+
+    try {
+      // Push the user data to the database
+      await set(userRef, userData);
+
+      // Success message or any other action you want to take
+      console.log('User data uploaded to the database successfully');
+
+      // Clear the form fields
+      setUsername('');
+    } catch (error) {
+      // Handle the error if there's an issue with pushing data to the database
+      console.error('Error uploading user data to the database:', error);
+    }
+  };
 
 
   const handleFormChange = (e) => {
@@ -64,6 +100,8 @@ const Channel3 = ({account,
       [name]: value,
     });
   };
+
+
 
   const handleFormSubmit = async (e, selectedUser, account) => {
     e.preventDefault();
@@ -250,7 +288,7 @@ const Channel3 = ({account,
         </button>
         </div>
         <div className="py-2">
-          <a href="#vibes">
+          <a href="/#vibes">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -260,7 +298,7 @@ const Channel3 = ({account,
         </button></a>
         </div>
         <div className="py-2">
-          <a href="#spotbot">
+          <a href="/#spotbot">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -338,12 +376,25 @@ const Channel3 = ({account,
      
   </div>
 
-  <div className='w-3/5 flex-grow flex flex-col items-center'>
-    
+  <div className='pt-40 md:pt-0 w-3/5 flex-grow flex flex-col items-center'>
+    <div className='text-white font-bold text-4xl pt-12 pb-24'>Channel3 Creator Portal</div>
  {/* Form Input Section */}
- <div className='pb-8 pt-6'>
+ {currentUser === null && (
+ <p className='text-xl text-white font-bold pt-8 pb-6'>Add the username to associate with your connected wallet address <div className='text-spot-yellow'>{account}</div> <div className='px-12'>Ensure this is your StarsArena wallet address. For more info check out The Spot on Channel3 to find out more about the platform.</div></p>
+ 
+ )}
+  {currentUser === null && (
+ <form className='text-white' onSubmit={handleUsernameSubmit}>
+      <label>
+        <div className='pr-2 pb-4 flex'><div className='pr-2'>Username:</div>
+        <input className='text-black w-32 pl-2' type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
+      </div></label><div className='pt-6 pb-8'>
+      <button className='align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60' type="submit">Upload User Data</button>
+   </div> </form>)}
+
+ <div className='pb-8 pt-12'>
   {currentUser === null ? (
-    <p className='text-xl text-white font-bold'>Select your creator wallet to upload video URL</p>
+    <p className='text-xl text-white font-bold w-full'>Select your creator wallet to upload video URL</p>
   ) : (
     <p className='text-xl text-white font-bold'>
       Add video to {currentUser}'s Channel3
@@ -353,6 +404,7 @@ const Channel3 = ({account,
  <form onSubmit={(e) => handleFormSubmit(e, selectedUser, account)}>
   <div>
     <input
+    className='pl-2'
       type="text"
       name="url"
       value={formData.url}
@@ -383,7 +435,7 @@ const Channel3 = ({account,
       <ul>
             <li className='py-2'>
               <button
-                className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm-text-xs md-text-l 2xl-text-xl flex justify-center"
+                className="w-full sm:w-max md:w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm-text-xs md-text-l 2xl-text-xl flex justify-center"
                 onClick={() => checkSharesBalance(account)}
               >
                 {currentUser} {account.substring(0, 5) + "..." + account.substring(account.length - 4)}
