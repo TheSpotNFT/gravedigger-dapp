@@ -19,7 +19,7 @@ const Channel3 = ({account,
   const [currentUser, setCurrentUser] = useState(null);
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
-  console.log("account", account);
+  //console.log("account", account);
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -44,6 +44,7 @@ const Channel3 = ({account,
   });
 
   const [formErrors, setFormErrors] = useState({});
+  const [hasSharesBalance, setHasSharesBalance] = useState();
   
   const [username, setUsername] = useState('');
 
@@ -186,7 +187,7 @@ const Channel3 = ({account,
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
       setCurrentUser(selectedUser);
-      console.log(selectedUser);
+      //console.log(selectedUser);
      
       
     
@@ -194,6 +195,9 @@ const Channel3 = ({account,
 
     fetchData();
   }, [selectedUser]);
+
+  
+  
 
   const checkSharesBalance = async (account) => {
     console.log("Account:", account);
@@ -215,7 +219,9 @@ const Channel3 = ({account,
           //console.log(`sharesBalance result for address ${account}: ${result}`);
           //console.log(`Your Wallet Address: ${account}`);
   
-          const hasSharesBalance = result;
+          //const hasSharesBalance = result;
+          setHasSharesBalance(result);
+          console.log(hasSharesBalance);
           if (result >= 1) {
             // Find the user with a matching address in the 'users' array
             const matchingUser = users.find(user => user.address === account);
@@ -231,7 +237,7 @@ const Channel3 = ({account,
               setSelectedUser("User not found");
             }
           } else {
-            setSelectedUser("You do not own The Spot's ticket or You are not setup as a creator");
+            setSelectedUser("You do not own The Spot's ticket");
           }
         }
       }
@@ -240,6 +246,10 @@ const Channel3 = ({account,
     }
   };
 
+  useEffect(() => {
+  
+    checkSharesBalance(account);
+  }, [account]); 
 
   return (
 <div className='flex w-full pt-4 px-8'>
@@ -381,17 +391,28 @@ const Channel3 = ({account,
   <div className='pt-40 md:pt-0 w-3/5 flex-grow flex flex-col items-center'>
     <div className='text-white font-bold text-4xl pt-12 pb-24'>Channel3 Creator Portal</div>
  {/* Form Input Section */}
- {currentUser === null && (
+ {currentUser === null || currentUser === 'User not found' && (
  <p className='text-xl text-white font-bold pt-8 pb-6'>Add the username to associate with your connected wallet address <div className='text-spot-yellow'>{account}</div> <div className='px-12'>Ensure this is your StarsArena wallet address. For more info check out The Spot on Channel3 to find out more about the platform.</div></p>
  
  )}
-  {currentUser === null && (
+  {currentUser === null || currentUser === 'User not found' && (
  <form className='text-white' onSubmit={handleUsernameSubmit}>
       <label>
         <div className='pr-2 pb-4 flex'><div className='pr-2'>Username:</div>
         <input className='text-black w-32 pl-2' type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
       </div></label><div className='pt-6 pb-8'>
-      <button className='align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60' type="submit">Link Username to Wallet</button>
+      <button
+  className={`align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow ${
+    username === '' || hasSharesBalance < 1 ? 'pointer-events-none opacity-50' : 'bg-slate-900 hover:bg-spot-yellow hover:text-black hover:border-white'
+  } duration-300`}
+  type="submit"
+  //onClick={checkSharesBalance(account)}
+  disabled={username === '' || hasSharesBalance < 1}
+>
+  Link Username to Wallet
+</button>
+
+
    </div> </form>)}
 
  <div className='pb-8 pt-12'>
@@ -417,10 +438,10 @@ const Channel3 = ({account,
   <div className='pt-6'>
     <button
   className={`align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60 ${
-    selectedUser === null || selectedUser.startsWith('You') ? 'pointer-events-none opacity-50' : '' // Add pointer-events-none and opacity-50 classes when currentUser is null
+    selectedUser === null || selectedUser.startsWith('You') || currentUser === "User not found" ? 'pointer-events-none opacity-50' : '' // Add pointer-events-none and opacity-50 classes when currentUser is null
   }`}
   type="submit"
-  disabled={selectedUser === null || selectedUser.startsWith('You')}
+  disabled={selectedUser === null || selectedUser.startsWith('You') || currentUser === "User not found"}
 >
   Add Video
 </button>
