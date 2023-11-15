@@ -5,6 +5,8 @@ import Player from '@vimeo/player';
 import LogoutButton from "../Logout";
 import { SA_ADDRESS, SA_ABI } from '../Contracts/StarsArena';
 import { ethers, Contract } from "ethers";
+import { HOTTAKES_ABI, HOTTAKES_ADDRESS } from '../Contracts/HotTakes';
+
 //Build fail?
 const Channel3 = ({account,
     web3Modal,
@@ -210,10 +212,10 @@ const Channel3 = ({account,
         const signer = provider.getSigner();
   
         if (SA_ABI && SA_ADDRESS && signer) {
-          const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
+          const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.sharesBalance(account, "0x04b54f4e5e7abf5113857ce3bd8ebf2823c3d3e5"/*"0x3aa3a263061c8395362b0098372d33c8f78072ed" THE ARENA*/);
+          const result = await contract.keysBalance(account, "0x04b54f4e5e7abf5113857ce3bd8ebf2823c3d3e5"/*"0x3aa3a263061c8395362b0098372d33c8f78072ed" THE ARENA*/);
   
           // 'result' is either true or false, you can use it as needed
           //console.log(`sharesBalance result for address ${account}: ${result}`);
