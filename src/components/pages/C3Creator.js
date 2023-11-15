@@ -213,7 +213,7 @@ const Channel3 = ({account,
           const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.sharesBalance(account, "0x3aa3a263061c8395362b0098372d33c8f78072ed");
+          const result = await contract.sharesBalance(account, "0x04b54f4e5e7abf5113857ce3bd8ebf2823c3d3e5"/*"0x3aa3a263061c8395362b0098372d33c8f78072ed" THE ARENA*/);
   
           // 'result' is either true or false, you can use it as needed
           //console.log(`sharesBalance result for address ${account}: ${result}`);

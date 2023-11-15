@@ -1,14 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, onValue, get } from 'firebase/database';
+import { getDatabase, ref, onValue, get, orderByChild, equalTo, push, set } from 'firebase/database';
 import Player from '@vimeo/player';
 import LogoutButton from "../Logout";
 import { SA_ADDRESS, SA_ABI } from '../Contracts/StarsArena';
 import { ethers, Contract } from "ethers";
-import ToggleSwitch from '../ToggleSwitch';
-import  { HOTTAKES_ADDRESS, HOTTAKES_ABI } from '../Contracts/HotTakes';
-
-
 //Build fail?
 const Channel3 = ({account,
     web3Modal,
@@ -23,12 +19,7 @@ const Channel3 = ({account,
   const [currentUser, setCurrentUser] = useState(null);
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
-  const [isToggled, setToggled] = useState(true);
-  const handleToggle = () => {
-    setToggled(!isToggled);
-    console.log({isToggled});
-    
-  };
+  //console.log("account", account);
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -45,6 +36,110 @@ const Channel3 = ({account,
   function exploreClick(){
     setExplore(!explore);
   }
+
+  const [formData, setFormData] = useState({
+    address: '',
+    username: '',
+    url: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({});
+  const [hasSharesBalance, setHasSharesBalance] = useState();
+  
+  const [username, setUsername] = useState('');
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  };
+
+  const handleUsernameSubmit = async (e) => {
+    e.preventDefault();
+
+    // Initialize Firebase app and get a reference to the database
+    const app = initializeApp(firebaseConfig); // Replace with your Firebase configuration
+    const database = getDatabase(app);
+
+    // Create a reference to the user's data using the username as the key
+    const userRef = ref(database, `users/${username}`);
+
+    // Create a new user data object
+    const userData = {
+      address: account,
+      username: username,
+    };
+
+    try {
+      // Push the user data to the database
+      await set(userRef, userData);
+
+      // Success message or any other action you want to take
+      console.log('User data uploaded to the database successfully');
+
+      // Clear the form fields
+      setUsername('');
+    } catch (error) {
+      // Handle the error if there's an issue with pushing data to the database
+      console.error('Error uploading user data to the database:', error);
+    }
+  };
+
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Clear the error for this field when the user types something
+  setFormErrors({
+    ...formErrors,
+    [name]: ""
+  });
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
+
+  const handleFormSubmit = async (e, selectedUser, account) => {
+    e.preventDefault();
+  
+    // Initialize Firebase app and get a reference to the database
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+  
+    // Create a reference to the "videos" node under the selected user
+    const videosRef = ref(database, `users/${selectedUser}/videos`);
+  
+    // Create a new video object
+    const newVideo = {
+      address: account,
+      username: selectedUser,
+      url: formData.url, // Use the URL from the form
+      
+    };
+    console.log(account, selectedUser, formData.url);
+    try {
+      // Push the new video object to the database
+      const newVideoRef = push(videosRef); // Create a new reference using push
+      await set(newVideoRef, newVideo); // Use set to save the new video data
+  
+      // Success message or any other action you want to take
+      console.log('Video added to the database successfully');
+  
+      // Reset the form fields
+      setFormData({
+        url: '', // Reset the URL field
+      });
+    } catch (error) {
+      // Handle the error if there's an issue with pushing data to the database
+      console.error('Error adding video to the database:', error);
+    }
+  };
+  
 
   // Initialize Firebase with your config
   const firebaseConfig = {
@@ -87,53 +182,26 @@ const Channel3 = ({account,
   }, []);
 
   useEffect(() => {
- 
-    const fetchData = async () => {
 
-      playerRefs.current.forEach((player) => player.destroy());
-      playerRefs.current = [];
+    const fetchData = async () => {
       const app = initializeApp(firebaseConfig);
       const database = getDatabase(app);
       setCurrentUser(selectedUser);
-      const userRef = ref(database, `users/${selectedUser}/videos`); // Update the path
+      //console.log(selectedUser);
+     
       
-      try {
-        const snapshot = await get(userRef);
-        if (snapshot.exists()) {
-          const videosData = snapshot.val();
-          const videoDataArray = Object.values(videosData);
-          const videoUrls = videoDataArray.map((videoData) => videoData.url);
     
-          setUserVideos(videoUrls);
-         
-
-          videoUrls.forEach((videoUrl, index) => {
-            //console.log(`Video ${index + 1}: ${videoUrl}`);
-          });
-
-          // Initialize the Vimeo players for each video
-          playerRefs.current = videoUrls.map((videoUrl, index) => {
-            const options = {
-              url: videoUrl, // Assuming the URL is the Vimeo video URL
-              //width: 860,
-            };
-            return new Player(`vimeo-player-${index}`, options);
-          });
-        } else {
-          console.log('No data found for the provided userId:', currentUser);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
     };
 
-    if (selectedUser) {
-      fetchData();
-    }
+    fetchData();
   }, [selectedUser]);
 
-  /* THE ARENA
-  const checkSharesBalance = async (user) => {
+  
+  
+
+  const checkSharesBalance = async (account) => {
+    console.log("Account:", account);
+
     try {
       const { ethereum } = window;
   
@@ -145,72 +213,43 @@ const Channel3 = ({account,
           const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.sharesBalance(account, user.address);
-          //console.log(result);
+          const result = await contract.sharesBalance(account, "0x3aa3a263061c8395362b0098372d33c8f78072ed");
   
           // 'result' is either true or false, you can use it as needed
-          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
+          //console.log(`sharesBalance result for address ${account}: ${result}`);
           //console.log(`Your Wallet Address: ${account}`);
-          //console.log(`User's Address: ${user.address}`);
-          //console.log(`User's name: ${user.username}`);
-          const hasSharesBalance = result.gte(1);
-          if (hasSharesBalance == true) {
-            // Enable the button or take any other actions as needed
-            setSelectedUser(user.username);
-            //console.log(selectedUser);
-            //console.log(hasSharesBalance);
-            console.log(user.username);
-            //console.log(account);
+  
+          //const hasSharesBalance = result;
+          setHasSharesBalance(result);
+          console.log(hasSharesBalance);
+          if (result >= 1) {
+            // Find the user with a matching address in the 'users' array
+            const matchingUser = users.find(user => user.address === account);
+  
+            if (matchingUser) {
+              // Set 'selectedUser' to the username of the matching user
+              setSelectedUser(matchingUser.username);
+              //console.log(users);
+              //console.log(selectedUser);
+              //console.log(users.0.username);
+              //console.log(account);
+            } else {
+              setSelectedUser("User not found");
+            }
           } else {
-            setSelectedUser('You do not have access to ' + user.username);
+            setSelectedUser("You do not own The Spot's ticket");
           }
         }
       }
     } catch (error) {
       console.error("Error checking sharesBalance:", error);
     }
-  }; 
-  */
-
-// Hot Takes
-  const checkKeysBalance = async (user) => {
-    try {
-      const { ethereum } = window;
-  
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-  
-        if (SA_ABI && SA_ADDRESS && signer) {
-          const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
-  
-          // Call the sharesBalance function
-          const result = await contract.keysBalance(account, user.address);
-          //console.log(result);
-  
-          // 'result' is either true or false, you can use it as needed
-          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
-          //console.log(`Your Wallet Address: ${account}`);
-          //console.log(`User's Address: ${user.address}`);
-          //console.log(`User's name: ${user.username}`);
-          const hasSharesBalance = result.gte(1);
-          if (hasSharesBalance == true) {
-            // Enable the button or take any other actions as needed
-            setSelectedUser(user.username);
-            //console.log(selectedUser);
-            //console.log(hasSharesBalance);
-            console.log(user.username);
-            //console.log(account);
-          } else {
-            setSelectedUser('You do not have access to ' + user.username);
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error checking keysBalance:", error);
-    }
   };
+
+  useEffect(() => {
   
+    checkSharesBalance(account);
+  }, [account]); 
 
   return (
 <div className='flex w-full pt-4 px-8'>
@@ -249,6 +288,15 @@ const Channel3 = ({account,
           onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
         >
           Genesis Collection
+        </button>
+        </div>
+        <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/channel3")}
+        >
+          Channel3
         </button>
         </div>
         <div className="py-2">
@@ -339,68 +387,86 @@ const Channel3 = ({account,
           </div></div></div>
      
   </div>
-<div className='md:flex pt-6 md:pt-0 w-full'>
-  <div className='w-full md:w-full items-center pt-40 md:pt-0'>
-    
-  {currentUser ? (
-  <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
-) : <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>}
 
-    {userVideos.length > 0 ? (
-  <div className='grid-cols-1 mx-auto'>
-    {userVideos.map((videoUrl, index) => (
-      <div key={index} className='mx-auto w-full'>
-       
-        <p className='pb-4'></p>
-        <div id={`vimeo-player-${index}`}></div>
+  <div className='pt-40 md:pt-0 w-3/5 flex-grow flex flex-col items-center'>
+    <div className='text-white font-bold text-4xl pt-12 pb-24'>Channel3 Creator Portal</div>
+ {/* Form Input Section */}
+ {currentUser === null || currentUser === 'User not found' && (
+ <p className='text-xl text-white font-bold pt-8 pb-6'>Add the username to associate with your connected wallet address <div className='text-spot-yellow'>{account}</div> <div className='px-12'>Ensure this is your StarsArena wallet address. For more info check out The Spot on Channel3 to find out more about the platform.</div></p>
+ 
+ )}
+  {currentUser === null || currentUser === 'User not found' && (
+ <form className='text-white' onSubmit={handleUsernameSubmit}>
+      <label>
+        <div className='pr-2 pb-4 flex'><div className='pr-2'>Username:</div>
+        <input className='text-black w-32 pl-2' type="text" placeholder="Username" value={username} onChange={handleUsernameChange} />
+      </div></label><div className='pt-6 pb-8'>
+      <button
+  className={`align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow ${
+    username === '' || hasSharesBalance < 1 ? 'pointer-events-none opacity-50' : 'bg-slate-900 hover:bg-spot-yellow hover:text-black hover:border-white'
+  } duration-300`}
+  type="submit"
+  //onClick={checkSharesBalance(account)}
+  disabled={username === '' || hasSharesBalance < 1}
+>
+  Link Username to Wallet
+</button>
+
+
+   </div> </form>)}
+
+ <div className='pb-8 pt-12'>
+  {currentUser === null ? (
+    <p className='text-xl text-white font-bold w-full'>Select your creator wallet to upload video URL</p>
+  ) : (
+    <p className='text-xl text-white font-bold'>
+      Add video to {currentUser}'s Channel3
+    </p>
+  )}
+</div>
+ <form onSubmit={(e) => handleFormSubmit(e, selectedUser, account)}>
+  <div>
+    <input
+    className='pl-2'
+      type="text"
+      name="url"
+      value={formData.url}
+      onChange={handleInputChange}
+      placeholder="Video URL"
+    />
+  </div>
+  <div className='pt-6'>
+    <button
+  className={`align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white bg-opacity-60 ${
+    selectedUser === null || selectedUser.startsWith('You') || currentUser === "User not found" ? 'pointer-events-none opacity-50' : '' // Add pointer-events-none and opacity-50 classes when currentUser is null
+  }`}
+  type="submit"
+  disabled={selectedUser === null || selectedUser.startsWith('You') || currentUser === "User not found"}
+>
+  Add Video
+</button>
+
+  </div>
+</form>
+
         
-      </div>
-    ))}
-        </div>
-      ) : (
-        <p className='text-white'>Select a creator to view their content</p>
-      )}
     </div>
 
-    <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
+<div className='w-1/5 pr-10'>
+      <h2 className='text-white font-bold pb-4 pt-6'>Select your Creator Wallet</h2>
+      <div className='pb-2'>
+      <ul>
+            <li className='py-2'>
+              <button
+                className="w-full sm:w-max md:w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm-text-xs md-text-l 2xl-text-xl flex justify-center"
+                onClick={() => checkSharesBalance(account)}
+              >
+                {currentUser} {account.substring(0, 5) + "..." + account.substring(account.length - 4)}
+              </button>
+            </li>
+          </ul></div>
+</div>
 
-    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} /*onClick={handleToggle}*/>
-      {isToggled ? 'HotTakes.io' : 'The Arena'}
-    </button></div>
-
-    <button
-                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-                  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-                  onClick={onClickUrl("/creator")}
-                >
-                  Creator Portal
-                </button>
-        <h2 className='text-white font-bold text-2xl pb-4 pt-6'><button
-                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-white text-white bg-slate-900 bg-opacity-60
-                  font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center cursor-default"
-              
-                >Creators</button></h2>
-        <div className='pb-2'>
-          <ul>
-        
-            {users.map((user, index) => (
-              <li className='py-2' key={index}>
-                <button
-                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-                  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-                  onClick={() => {
-                    checkKeysBalance(user);
-                    console.log(user.username);
-                  }
-                  }>
-                  {user.username}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      </div>
       
 
 

@@ -16,7 +16,8 @@ import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleC
 import { json } from "react-router-dom";
 import fallbackimage from "../../assets/thespotmaster.png"
 
-export const ScribbleUpdate = ({
+
+export const SAnft = ({
     account,
     web3Modal,
     loadWeb3Modal,
@@ -305,7 +306,7 @@ export const ScribbleUpdate = ({
                         <div
                             className={`text-spot-yellow text-lg font-bold pr-3 pl-2`}
                         >
-                            Upload Image
+                            Upload your shit
                         </div>
                         <div className="pr-2">
                             <div className="w-full flex">
@@ -327,10 +328,10 @@ export const ScribbleUpdate = ({
                             imgURL={`https://ipfs.moralis.io:2053/ipfs/${imgURLHash}`}
                             account={account}
                             pieceName={textinput}
+                            buttonLabel="Add to your community. Token"
                             collectorName={collectorName}
                             customColor={customColor}
                             customNoun={customNoun}
-                            buttonLabel="Update Metadata for"
                             collectionClaimedWith={collectionUsedToClaim}
                             idClaimedWith={idClaimedWith}
                             nftId={nftId}
@@ -341,20 +342,13 @@ export const ScribbleUpdate = ({
                             web3Provider={web3Provider}
                             nftSelected={nftSelected}
                         />
-                        <div className="pl-1 pr-5 pt-10"><button
-                            className="m-1 w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
-     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
 
-                            onClick={flipPauseState}
-                        >
-                            Flip Paused State for Minting: {isPaused}
-                        </button></div>
 
 
                     </div>
                     <div className="pb-6 bg-slate-800">
                         <h1 className="text-center font-mono text-lg text-yellow-400 pt-1 pb-6">
-                            Scribble Customs Metadata Update
+                            Add your words
                         </h1>
 
                         <div className="grid grid-cols-1 gap-4 pt-1 pl-4">
@@ -364,12 +358,7 @@ export const ScribbleUpdate = ({
                                     {nftId}
                                 </div>
                             </div>
-                            <div className="flex">
-                                <div className=" text-white pr-6">Collector's Name: </div>
-                                <div className="text-spot-yellow font-mono">
-                                    {collectorName}
-                                </div>
-                            </div>
+
                             <div className="flex">
                                 <div className=" text-white pr-5">Piece Name: </div>
                                 <div className="text-spot-yellow font-mono">
@@ -383,40 +372,9 @@ export const ScribbleUpdate = ({
                                     />
                                 </div>
                             </div>
+
                             <div className="flex">
-                                <div className=" text-white pr-6">Color: </div>
-                                <div className="text-spot-yellow font-mono">
-                                    {customColor}
-                                </div>
-
-
-                            </div>
-                            <div className="flex">
-                                <div className=" text-white pr-6">Noun: </div>
-                                <div className="text-spot-yellow font-mono">
-                                    {customNoun}
-                                </div>
-
-
-                            </div>
-                            <div className="flex">
-                                <div className=" text-white pr-6">Collection Used to Claim: </div>
-                                <div className="text-spot-yellow font-mono">
-                                    {collectionUsedToClaim}
-                                </div>
-
-
-                            </div>
-                            <div className="flex">
-                                <div className=" text-white pr-6">Id Claimed With: </div>
-                                <div className="text-spot-yellow font-mono">
-                                    {idClaimedWith}
-                                </div>
-
-
-                            </div>
-                            <div className="flex">
-                                <div className=" text-white pr-6">Lore: </div>
+                                <div className=" text-white pr-6">Words: </div>
                                 <div>
                                     <input
                                         type="text"

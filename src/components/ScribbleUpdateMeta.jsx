@@ -39,6 +39,7 @@ export default function ScribbleUpdateMetadata({
     ownedCards,
     web3Provider,
     tombstoneSelected,
+    buttonLabel,
 }) {
 
 
@@ -175,7 +176,7 @@ export default function ScribbleUpdateMetadata({
      hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base disabled:border-gray-600 disabled:hover:bg-gray-900 disabled:text-gray-600 disabled:hover:text-gray-600"
                         onClick={() => customizeScribbleCard()}
                     >
-                        Update Metadata for Token {nftId}
+                        {buttonLabel} {nftId}
                     </button>
                 </div>
             </div>

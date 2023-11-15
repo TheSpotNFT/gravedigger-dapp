@@ -24,6 +24,9 @@ import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 import Channel3 from "./components/pages/Channel3";
 import Creator from "./components/pages/C3Creator";
+import { SAnft } from "./components/pages/SAnft";
+import CreatorPortal from "./components/pages/CreatorStream";
+import ViewerPage from "./components/pages/ViewerStream";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -161,6 +164,38 @@ function App() {
                 }
               />
               <Route
+                path="/create"
+                exact
+                element={
+                  <CreatorPortal
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
+                path="/viewer"
+                exact
+                element={
+                  <ViewerPage
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+              <Route
                 path="/gravedigger"
                 exact
                 element={
@@ -197,6 +232,22 @@ function App() {
                 exact
                 element={
                   <ScribbleUpdate
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+               <Route
+                path="/SAnft"
+                exact
+                element={
+                  <SAnft
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}

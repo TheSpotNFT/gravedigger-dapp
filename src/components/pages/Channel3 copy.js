@@ -5,10 +5,6 @@ import Player from '@vimeo/player';
 import LogoutButton from "../Logout";
 import { SA_ADDRESS, SA_ABI } from '../Contracts/StarsArena';
 import { ethers, Contract } from "ethers";
-import ToggleSwitch from '../ToggleSwitch';
-import  { HOTTAKES_ADDRESS, HOTTAKES_ABI } from '../Contracts/HotTakes';
-
-
 //Build fail?
 const Channel3 = ({account,
     web3Modal,
@@ -23,12 +19,6 @@ const Channel3 = ({account,
   const [currentUser, setCurrentUser] = useState(null);
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
-  const [isToggled, setToggled] = useState(true);
-  const handleToggle = () => {
-    setToggled(!isToggled);
-    console.log({isToggled});
-    
-  };
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -132,7 +122,6 @@ const Channel3 = ({account,
     }
   }, [selectedUser]);
 
-  /* THE ARENA
   const checkSharesBalance = async (user) => {
     try {
       const { ethereum } = window;
@@ -168,46 +157,6 @@ const Channel3 = ({account,
       }
     } catch (error) {
       console.error("Error checking sharesBalance:", error);
-    }
-  }; 
-  */
-
-// Hot Takes
-  const checkKeysBalance = async (user) => {
-    try {
-      const { ethereum } = window;
-  
-      if (ethereum) {
-        const provider = new ethers.providers.Web3Provider(ethereum);
-        const signer = provider.getSigner();
-  
-        if (SA_ABI && SA_ADDRESS && signer) {
-          const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
-  
-          // Call the sharesBalance function
-          const result = await contract.keysBalance(account, user.address);
-          //console.log(result);
-  
-          // 'result' is either true or false, you can use it as needed
-          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
-          //console.log(`Your Wallet Address: ${account}`);
-          //console.log(`User's Address: ${user.address}`);
-          //console.log(`User's name: ${user.username}`);
-          const hasSharesBalance = result.gte(1);
-          if (hasSharesBalance == true) {
-            // Enable the button or take any other actions as needed
-            setSelectedUser(user.username);
-            //console.log(selectedUser);
-            //console.log(hasSharesBalance);
-            console.log(user.username);
-            //console.log(account);
-          } else {
-            setSelectedUser('You do not have access to ' + user.username);
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error checking keysBalance:", error);
     }
   };
   
@@ -363,11 +312,6 @@ const Channel3 = ({account,
     </div>
 
     <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
-
-    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} /*onClick={handleToggle}*/>
-      {isToggled ? 'HotTakes.io' : 'The Arena'}
-    </button></div>
-
     <button
                   className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
                   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -389,7 +333,7 @@ const Channel3 = ({account,
                   className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
                   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
                   onClick={() => {
-                    checkKeysBalance(user);
+                    checkSharesBalance(user);
                     console.log(user.username);
                   }
                   }>
