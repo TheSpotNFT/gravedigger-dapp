@@ -214,7 +214,7 @@ const Channel3 = ({account,
               newBuyModes[index] = true;
               return newBuyModes;
             });
-            getBuyPriceAfterFee(user.address);
+            //getBuyPriceAfterFee(user.address);
             
           }
         }
@@ -478,6 +478,7 @@ const Channel3 = ({account,
               newBuyModes[index] = 1;
               return newBuyModes;
             });
+            getBuyPriceAfterFee(user.address);
 
             checkKeysBalance(user, index);
             if (buyModes[index]) {
