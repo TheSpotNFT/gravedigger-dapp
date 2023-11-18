@@ -466,7 +466,7 @@ const Channel3 = ({account,
       <li className='py-2' key={index}>
         <button
           className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 
-            ${buyModes[index] ? 'bg-green-500 text-white' : 'border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black hover:border-white'} 
+            ${buyModes[index] ? 'border-4 border-green-500 text-green-500 hover:border-white hover:bg-green-500 hover:text-black' : 'border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black hover:border-white'} 
             duration-300 font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center`}
           onClick={() => {
             // Set all buyModes to 0
