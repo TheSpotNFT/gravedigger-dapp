@@ -191,7 +191,7 @@ const Channel3 = ({account,
           const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.keysBalance(account, user.address);
+          const result = await contract.keysBalance(user.address, account);
           //console.log(result);
   
           // 'result' is either true or false, you can use it as needed
@@ -203,8 +203,8 @@ const Channel3 = ({account,
           if (hasSharesBalance == true) {
             // Enable the button or take any other actions as needed
             setSelectedUser(user.username);
-            //console.log(selectedUser);
-            //console.log(hasSharesBalance);
+            console.log(selectedUser);
+            console.log(hasSharesBalance);
             console.log(user.username);
             //console.log(account);
           } else {
