@@ -24,11 +24,17 @@ const Channel3 = ({account,
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
   const [isToggled, setToggled] = useState(true);
+  const [currentBuyPrice, setCurrentBuyPrice] = useState([]);
+  const [currentBuyPriceEther, setCurrentBuyPriceEther] = useState(0);
   const handleToggle = () => {
     setToggled(!isToggled);
     console.log({isToggled});
     
   };
+  const spotWallet = "0x32bD2811Fb91BC46756232A0B8c6b2902D7d8763";
+  
+
+  const [buyModes, setBuyModes] = useState(Array(users.length).fill(false));
 
   const handleUserClick = (user) => {
     setSelectedUser(user);
@@ -173,7 +179,7 @@ const Channel3 = ({account,
   */
 
 // Hot Takes
-  const checkKeysBalance = async (user) => {
+  const checkKeysBalance = async (user, index) => {
     try {
       const { ethereum } = window;
   
@@ -203,6 +209,13 @@ const Channel3 = ({account,
             //console.log(account);
           } else {
             setSelectedUser('You do not have access to ' + user.username);
+            setBuyModes((prevBuyModes) => {
+              const newBuyModes = [...prevBuyModes];
+              newBuyModes[index] = true;
+              return newBuyModes;
+            });
+            getBuyPriceAfterFee(user.address);
+            
           }
         }
       }
@@ -210,7 +223,73 @@ const Channel3 = ({account,
       console.error("Error checking keysBalance:", error);
     }
   };
+
+  const getBuyPriceAfterFee = async (user) => {
+    try {
+      const { ethereum } = window;
   
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+  
+        if (SA_ABI && SA_ADDRESS && signer) {
+          const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
+          console.log(user);
+          // Call the sharesBalance function
+          const result = await contract.getBuyPriceAfterFee(user, "1");
+          const resultString = result.toString();
+          console.log(resultString);
+          setCurrentBuyPrice(resultString);
+          const currentBuyPriceEther = Number(ethers.utils.formatUnits(result, 'ether')).toFixed(2);
+        
+          // Update state with the Ether value
+          setCurrentBuyPriceEther(currentBuyPriceEther);
+          console.log(currentBuyPriceEther);
+          
+        }
+      }
+    } catch (error) {
+      console.error("Error checking keysPrice:", error);
+    }
+  };
+  
+  async function buyKey(user) {
+
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        if (HOTTAKES_ABI && HOTTAKES_ADDRESS && signer) {
+          const contract = new Contract(
+            HOTTAKES_ADDRESS,
+            HOTTAKES_ABI,
+            signer
+          );
+
+          let options = {
+            // price is 0.666 avax
+            value: currentBuyPrice,
+          };
+
+          console.log(currentBuyPrice, spotWallet, user.address);
+          let tx = await contract.buyKeys(spotWallet, user.address, "1", options);
+          //console.log(tx.hash);
+        
+          alert(
+            "Successfully Bought Key"
+          );
+        } else {
+          console.log("error with contract abi, address, or signer");
+        }
+      }
+    } catch (error) {
+      console.log("Error on mint");
+      console.log(error);
+    } finally {
+     
+    }
+  }
 
   return (
 <div className='flex w-full pt-4 px-8'>
@@ -364,8 +443,9 @@ const Channel3 = ({account,
 
     <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
 
-    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} /*onClick={handleToggle}*/>
+    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} onClick={onClickUrl("https://hottakes.io")}>
       {isToggled ? 'HotTakes.io' : 'The Arena'}
+     
     </button></div>
 
     <button
@@ -380,25 +460,39 @@ const Channel3 = ({account,
                   font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center cursor-default"
               
                 >Creators</button></h2>
-        <div className='pb-2'>
-          <ul>
-        
-            {users.map((user, index) => (
-              <li className='py-2' key={index}>
-                <button
-                  className="w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-                  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-                  onClick={() => {
-                    checkKeysBalance(user);
-                    console.log(user.username);
-                  }
-                  }>
-                  {user.username}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div className='pb-2'>
+  <ul>
+    {users.map((user, index) => (
+      <li className='py-2' key={index}>
+        <button
+          className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 
+            ${buyModes[index] ? 'bg-green-500 text-white' : 'border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black hover:border-white'} 
+            duration-300 font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center`}
+          onClick={() => {
+            // Set all buyModes to 0
+            setBuyModes(Array(users.length).fill(0));
+
+            // Set the clicked index to 1
+            setBuyModes((prevBuyModes) => {
+              const newBuyModes = [...prevBuyModes];
+              newBuyModes[index] = 1;
+              return newBuyModes;
+            });
+
+            checkKeysBalance(user, index);
+            if (buyModes[index]) {
+              buyKey(user, index);
+            }
+            console.log(user.username);
+          }}
+        >
+          {buyModes[index] ? `Buy ${user.username} (${currentBuyPriceEther})` : user.username}
+        </button>
+      </li>
+    ))}
+  </ul>
+</div>
+
       </div>
       </div>
       
