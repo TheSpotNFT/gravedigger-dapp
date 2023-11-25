@@ -32,6 +32,9 @@ const Channel3 = ({account,
     
   };
   const spotWallet = "0x32bD2811Fb91BC46756232A0B8c6b2902D7d8763";
+  const [events, setEvents] = useState([]);
+  const [contract, setContract] = useState(null);
+  
   
 
   const [buyModes, setBuyModes] = useState(Array(users.length).fill(false));
@@ -291,6 +294,52 @@ const Channel3 = ({account,
     }
   }
 
+  useEffect(() => {
+    const initializeContract = async () => {
+      // Connect to the Ethereum provider (you may need to replace this with your provider)
+      const provider = new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc');
+
+      // Create a new contract instance
+      const yourContract = new ethers.Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, provider);
+
+      // Set the contract instance in the state
+      setContract(yourContract);
+    };
+
+    initializeContract();
+  }, []);
+
+  useEffect(() => {
+    const listenForEvents = async () => {
+      if (contract) {
+        // Replace 'Trade' with the actual event name
+        const tradeFilter = contract.filters.Trade();
+
+        // Listen for the Trade event
+        contract.on(tradeFilter, handleEvent);
+
+        // Clean up the event listener when the component is unmounted
+        return () => {
+          contract.off(tradeFilter, handleEvent);
+        };
+      }
+    };
+
+    const handleEvent = (event) => {
+      // Handle the event data as needed
+      console.log('Trade Event:', event);
+
+      // Extract relevant information from the event
+      const { trader, subject, application, isBuy, keyAmount, ethAmount, protocolEthAmount, subjectEthAmount, applicationEthAmount, supply } = event.args;
+
+      // Update the events in the state
+      setEvents((prevEvents) => [...prevEvents, { trader, subject, application, isBuy, keyAmount, ethAmount, protocolEthAmount, subjectEthAmount, applicationEthAmount, supply }]);
+    };
+
+    listenForEvents();
+  }, [contract]);
+
+
   return (
 <div className='flex w-full pt-4 px-8'>
 
@@ -439,6 +488,7 @@ const Channel3 = ({account,
       ) : (
         <p className='text-white'>Select a creator to view their content</p>
       )}
+     <div className='text-white'>Test</div> 
     </div>
 
     <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>

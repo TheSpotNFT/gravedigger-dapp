@@ -88,7 +88,7 @@ export default function Ecosystem({
                 </button>
               </div>
               <div className="py-2">
-                <a href="#spotbotmobile">
+                <a href="/#spotbotmobile">
                   <button
                     className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -98,7 +98,7 @@ export default function Ecosystem({
                   </button></a>
               </div>
               <div className="py-2">
-                <a href="#vibesmobile">
+                <a href="/#vibesmobile">
                   <button
                     className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -304,7 +304,7 @@ export default function Ecosystem({
                 </button>
               </div>
               <div className="py-2">
-                <a href="#vibes">
+                <a href="/#vibes">
                   <button
                     className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
@@ -314,7 +314,7 @@ export default function Ecosystem({
                   </button></a>
               </div>
               <div className="py-2">
-                <a href="#spotbot">
+                <a href="/#spotbot">
                   <button
                     className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
