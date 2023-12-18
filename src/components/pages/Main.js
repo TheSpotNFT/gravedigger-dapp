@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ethers, Contract } from "ethers";
+import { SPOTBOT_ADDRESS, SPOTBOT_ABI } from '../Contracts/SpotBotContract';
 import ReactGA from 'react-ga';
 import LogoutButton from "../Logout";
 import goatdmain from "../../assets/goatdmain.png";
@@ -80,7 +82,52 @@ function exploreClick(){
   function alertClick() {
     alert("The Evolution is Coming Soon...");
   }
- 
+
+const [textinput, setTextinput] = useState("1");
+const textinputUser = (event) => {
+  setTextinput(event.target.value);
+};
+
+
+async function mintNFT(setTxProcessing) {
+  //setTxProcessing(true);
+  try {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      if (SPOTBOT_ABI && SPOTBOT_ADDRESS && signer) {
+        const contract = new Contract(
+          SPOTBOT_ADDRESS,
+          SPOTBOT_ABI,
+          signer
+        );
+
+        let options = {
+          // price is 1.5 avax
+          value: ethers.utils.parseEther(`${textinput * 0.15}`),
+          gasLimit: ethers.BigNumber.from("500000")
+        };
+
+        let tx = await contract.mint(textinput, options);
+        console.log(tx.hash);
+        //setTxProcessing(false);
+        /*alert(
+          "Minted Successfully! View your NFT on Campfire, Kalao or Joepegs!"
+        );*/
+      } else {
+        console.log("error with contract abi, address, or signer");
+      }
+    }
+  } catch (error) {
+    console.log("Error on mint");
+    console.log(error);
+    alert(error.data.message);
+  } finally {
+    //setTxProcessing(false);
+  }
+}
+
 //Scrolling Listener
 
 
@@ -269,13 +316,24 @@ const slideRight = () => {
 
  <div className="font-mono text-l px-4 py-2 text-white">The Spot Bots are taking over. 3k bots need to be produced in order to fire up the Sacrificial Power Obtaining Technology and then the remaining 2k bots will be produced by sacrificing other NFTs to the collective. Our gamefi offering, phase 2 will launch once 3k bots are minted, with phase 3 activating once all 5k are produced.</div>
  <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://underground.tech")}
-        >
-          Mint Spot Bot
-        </button>
+ <div className="mx-auto pr-4 pt-1 pb-3">
+              <div className="text-white pr-4"><div className="font-mono text-l px-4 py-2 text-white">Quantity of Bots to Mint:</div><input
+                type="number"
+                className="border-2 border-slate-600 bg-slate-400 text-left font-mansalva placeholder-slate-600 pl-2 w-16"
+                placeholder="Amount"
+                value={textinput}
+                onChange={textinputUser.bind(this)}
+              />{" "}</div>
+            </div>
+            <div className="w-full md:pb-2"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+              hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+
+              onClick={() => mintNFT()}
+            //onClick={alertClick}
+            >
+              Mint {textinput}
+            </button></div>
         </div>
        
 
@@ -574,13 +632,24 @@ const slideRight = () => {
     <div className="text-white pr-10">
       <h1 className="text-5xl pt-2 font-mono">The Spot Bot</h1>
       <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
-      <div className="px-96 pb-8"><button
+      <div className="px-96 pb-8"><div className="mx-auto pt-1 pb-3"><div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">Quantity of Bots to Mint:</div>
+              <input
+                type="number"
+                className="border-2 border-slate-600 bg-slate-400 text-left font-mansalva placeholder-slate-600 pl-2 pr-4 w-16"
+                placeholder="Amount"
+                value={textinput}
+                onChange={textinputUser.bind(this)}
+              />{" "}
+            </div>
+            <div className="w-full md:pb-2 pt-4"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
-              onClick={onClickUrl("https://underground.tech")}
+              hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
+
+              onClick={() => mintNFT()}
+            //onClick={alertClick}
             >
-              Enter the Production Plant
-            </button></div>
+              Mint {textinput}
+            </button></div></div>
             <div className="px-96 pb-8"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
