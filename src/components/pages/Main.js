@@ -106,7 +106,7 @@ async function mintNFT(setTxProcessing) {
         let options = {
           // price is 1.5 avax
           value: ethers.utils.parseEther(`${textinput * 0.15}`),
-          gasLimit: ethers.BigNumber.from("500000")
+        
         };
 
         let tx = await contract.mint(textinput, options);
