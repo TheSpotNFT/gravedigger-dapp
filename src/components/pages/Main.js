@@ -317,7 +317,7 @@ const slideRight = () => {
  <div className="font-mono text-l px-4 py-2 text-white">The Spot Bots are taking over. 3k bots need to be produced in order to fire up the Sacrificial Power Obtaining Technology and then the remaining 2k bots will be produced by sacrificing other NFTs to the collective. Our gamefi offering, phase 2 will launch once 3k bots are minted, with phase 3 activating once all 5k are produced.</div>
  <div className="py-2">
  <div className="mx-auto pr-4 pt-1 pb-3">
-              <div className="text-white pr-4"><div className="font-mono text-l px-4 py-2 text-white">Quantity of Bots to Mint:</div><input
+              <div className="text-white pr-4"><div className="font-mono text-l px-4 py-2 text-white">Quantity of Bots to Mint (0.15 AVAX each):</div><input
                 type="number"
                 className="border-2 border-slate-600 bg-slate-400 text-left font-mansalva placeholder-slate-600 pl-2 w-16"
                 placeholder="Amount"
@@ -632,7 +632,7 @@ const slideRight = () => {
     <div className="text-white pr-10">
       <h1 className="text-5xl pt-2 font-mono">The Spot Bot</h1>
       <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
-      <div className="px-96 pb-8"><div className="mx-auto pt-1 pb-3"><div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">Quantity of Bots to Mint:</div>
+      <div className="px-96 pb-8"><div className="mx-auto pt-1 pb-3"><div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">Quantity of Bots to Mint (0.15 AVAX each):</div>
               <input
                 type="number"
                 className="border-2 border-slate-600 bg-slate-400 text-left font-mansalva placeholder-slate-600 pl-2 pr-4 w-16"
