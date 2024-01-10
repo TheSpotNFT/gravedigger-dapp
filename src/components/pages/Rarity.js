@@ -17,6 +17,7 @@ import { SPOTBOT_ABI, SPOTBOT_ADDRESS } from "../Contracts/SpotBotContract";
 import { json } from "react-router-dom";
 import spotBotRarity from "../../spotBotRarity.json";
 import LogoutButton from "../Logout";
+import rankedData from '../../rankedOutput.json'; 
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -30,6 +31,7 @@ export const Rarity = ({
     logoutOfWeb3Modal,
     txProcessing,
     setTxProcessing,
+    id
 }) => {
   
   useEffect(() => {
@@ -66,6 +68,14 @@ export const Rarity = ({
       if (newWindow) newWindow.opener = null;
     };
 
+    //Ranking
+    const getRankById = (id) => {
+      return rankedData[id]?.ranking || 'Rank not found';
+    }
+
+    const rank = getRankById(id);
+
+
     //Metadata
     const [collectorName, setCollectorName] = useState("");
     const [collectionUsedToClaim, setCollectionUsedToClaim] = useState("");
@@ -87,6 +97,14 @@ export const Rarity = ({
     const [textinputText1, setTextinputText1] = useState("");
 
     const [pauseStateFlipped, setPauseStateFlipped] = useState();
+
+    const sortNftsByRank = (nfts) => {
+      return nfts.sort((a, b) => {
+        const rankA = rankedData[a.token_id]?.ranking || Infinity;
+        const rankB = rankedData[b.token_id]?.ranking || Infinity;
+        return rankA - rankB;
+      });
+    };
 
 
     //name font info
@@ -352,6 +370,8 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
+                <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
+                <div className="pt-2"><h2>Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
@@ -388,6 +408,8 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
+                <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
+                <div className="pt-2"><h2>Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
@@ -408,16 +430,7 @@ export const Rarity = ({
 </div>
 
                     </div></div>
-                    <div className="text-white font-mono text-xl">
-                      <div className="text-4xl pb-8">Trait Rarities</div>
-                      <div className="text-2xl pb-8">Trait Type: Value: Count in Collection</div>
-      {spotBotRarity.map((item) => (
-        <div key={`${item.attributeValue}-${item.value}`}>
-          <div>{`${item.attributeValue}: ${item.value}: `} 
-          {item.count}</div>
-        </div>
-      ))}
-    </div>
+               
             </div>
         </div>
     );
