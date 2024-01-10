@@ -359,7 +359,7 @@ export const Rarity = ({
   
 </div><div className="text-white pt-4">ID Lookup</div>
 <div className="flex pt-4 align-middle justify-center">
-  
+{/* 
 <div className="pt-2">
   <input
     type="text"
@@ -374,7 +374,7 @@ export const Rarity = ({
 </div></div>
 <div className="text-white pt-2 pl-4">
   {ranking !== '' && <p>Ranking: {ranking}</p>}
-</div></div>
+</div>*/}</div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div className="">
@@ -400,7 +400,7 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
-                <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
+                {/* <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>*/}
                 <div className="pt-2"><h2 className="text-white">Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
@@ -438,7 +438,7 @@ export const Rarity = ({
                 <div className="bg-slate-600">
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
-                <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
+                {/*<h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>*/}
                 <div className="pt-2"><h2 className="text-white">Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
