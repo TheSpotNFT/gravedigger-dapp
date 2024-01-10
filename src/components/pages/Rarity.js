@@ -365,7 +365,7 @@ export const Rarity = ({
     type="text"
     value={tokenId}
     onChange={(e) => setTokenId(e.target.value)}
-    placeholder="Enter Token ID"
+    placeholder="Enter ID"
     className='pl-4 w-24'
   />
   <div className="pt-4">
