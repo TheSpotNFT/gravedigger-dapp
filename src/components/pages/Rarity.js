@@ -371,7 +371,7 @@ export const Rarity = ({
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
                 <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
-                <div className="pt-2"><h2>Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
+                <div className="pt-2"><h2 className="text-white">Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
@@ -409,7 +409,7 @@ export const Rarity = ({
                   <h1>ID: {nfts.token_id}</h1>
                 </div>
                 <h2 className="text-blue-400">Rank: {rankedData[nfts.token_id]?.ranking || 'Rank not found'}</h2>
-                <div className="pt-2"><h2>Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
+                <div className="pt-2"><h2 className="text-white">Rarest Trait</h2><h2> {rankedData[nfts.token_id]?.rarestTrait || 'Rarest trait not found'}</h2></div>
                 <h5 className="text-white pt-2">BG: {collectorName} ({getCount('Background', `${collectorName}`)})</h5>
                 <h5 className="text-white">Body: {nfts.normalized_metadata.attributes[1].value} ({getCount('Body', `${nfts.normalized_metadata.attributes[1].value}`)})</h5>
                 <h5 className="text-white">Expression: {nfts.normalized_metadata.attributes[2].value} ({getCount('Expression', `${nfts.normalized_metadata.attributes[2].value}`)})</h5>
