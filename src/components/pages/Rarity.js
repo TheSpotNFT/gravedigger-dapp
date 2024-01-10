@@ -56,6 +56,17 @@ export const Rarity = ({
       setNftsToDisplay(!nftsToDisplay);
     }
 
+    //Filter 
+    const [filterId, setFilterId] = useState('');
+
+    //LOOKUP
+    const [tokenId, setTokenId] = useState('');
+    const [ranking, setRanking] = useState('');
+    const findRanking = (id) => {
+      const rank = rankedData[id]?.ranking || 'Rank not found';
+      setRanking(rank);
+    };
+
     const [nftsToDisplay, setNftsToDisplay] = useState(true);
     const [explore, setExplore] = useState(false);
     const [filter, setFilter] = useState("");
@@ -344,7 +355,26 @@ export const Rarity = ({
           onClick={toggleNfts}
         >
           {nftsToDisplay ? "Show All Bots Minted" : "Show Your Bots Only"}
-        </button></div>
+        </button>
+  
+</div><div className="text-white pt-4">ID Lookup</div>
+<div className="flex pt-4 align-middle justify-center">
+  
+<div className="pt-2">
+  <input
+    type="text"
+    value={tokenId}
+    onChange={(e) => setTokenId(e.target.value)}
+    placeholder="Enter Token ID"
+    className='pl-4 w-24'
+  />
+  <div className="pt-4">
+  <button className='align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-4 xl:px-4 px-4 py-4 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-40
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center' onClick={() => findRanking(tokenId)}>Submit</button>
+</div></div>
+<div className="text-white pt-2 pl-4">
+  {ranking !== '' && <p>Ranking: {ranking}</p>}
+</div></div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div className="">
