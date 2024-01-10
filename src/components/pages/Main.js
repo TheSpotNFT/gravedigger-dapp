@@ -315,7 +315,15 @@ const slideRight = () => {
  <div><img src={spotbot4} alt="Spot Bot" className=""></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">The Spot Bots are taking over. 3k bots need to be produced in order to fire up the Sacrificial Power Obtaining Technology and then the remaining 2k bots will be produced by sacrificing other NFTs to the collective. Our gamefi offering, phase 2 will launch once 3k bots are minted, with phase 3 activating once all 5k are produced.</div>
- 
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={onClickUrl("/rarity")}
+        >
+          Rarity Listings
+        </button>
+        </div>
        
 
    {/*Vibes */}
