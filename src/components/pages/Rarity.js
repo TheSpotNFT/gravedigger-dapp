@@ -63,8 +63,9 @@ export const Rarity = ({
     //LOOKUP
     const [tokenId, setTokenId] = useState('');
     const [ranking, setRanking] = useState('');
-    const findRanking = (id) => {
-      const rank = rankedData[id]?.ranking || 'Rank not found';
+    const findRanking = () => {
+      const rank = metadataRanked[tokenId]?.attributes[6].value || 'Rank not found';
+      console.log(tokenId, metadataRanked[tokenId]);
       setRanking(rank);
     };
 
@@ -358,7 +359,7 @@ export const Rarity = ({
           {nftsToDisplay ? "Show All Bots Minted" : "Show Your Bots Only"}
         </button>
   
-</div><div className="text-white font-mono pt-8">ID Lookup</div>
+</div>{/* <div className="text-white font-mono pt-8">ID Lookup</div>
 <div className="flex pt-4 align-middle justify-center">
 
 <div className="">
@@ -377,7 +378,7 @@ export const Rarity = ({
   {ranking !== '' && <p>Ranking: {ranking}</p>}
 </div>
 
-</div></div>
+    </div></div>*/}
                 {/* canvas div ends */}
                 {/* Stats div*/}
                 <div className="">
