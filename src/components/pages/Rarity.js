@@ -115,6 +115,17 @@
   }, [displayedNFTs]);
 
   //Filter
+   const [filteredItem, setFilteredItem] = useState(null);
+   const handleFilterChange = (filterCriterion) => {
+    console.log("Filter Criterion:", filterCriterion); // Debug log
+    const item = metadataRanked.find(nft => {
+        console.log("Comparing:", nft.edition, filterCriterion); // Debug log
+        return nft.edition === parseInt(filterCriterion);
+    });
+    console.log("Filtered Item:", item); // Debug log
+    setFilteredItem(item);
+};
+
 
       const batchSize = 20;
       //Metadata
@@ -359,42 +370,69 @@
     <input 
       type="number" 
       value={filter} 
-      onChange={(e) => setFilter(e.target.value)} 
+      onChange={(e) => {
+        setFilter(e.target.value);
+        handleFilterChange(e.target.value);
+    }}
       placeholder="Enter Edition Number" 
       className="pl-2"
     />
   </div>
 
   <div className="nft-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8">
-  {displayedNFTs.map((nft, index) => (
-    <div 
-      className="grid grid-cols-1 bg-white bg-opacity-10" 
-      key={nft.edition} 
-      ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}
-    >
-      <div className="aspect-w-16 aspect-h-9 overflow-hidden">
-        <img className="object-cover object-center w-full h-full" src={nft.image} alt={`SPOT bot #${nft.edition}`}></img>
-      </div>
-      <div className="p-4">
-        <div className="pr-2 pl-2 h-60 overflow-y-auto">
-          <div className="font-bold text-sm mb-2">
-            <div className="bg-slate-600">
-            <h2 className="text-blue-400 text-lg font-mono">Rank: {nft.attributes.find(attr => attr.trait_type === "Rank")?.value || 'Rank not found'}</h2>
-              
-            </div>
-            <h1 className="pt-2 pb-2 text-md font-mono text-spot-yellow">ID: {nft.edition}</h1>
-            {nft.attributes.map(attr => {
-              const count = getCount(attr.trait_type, attr.value);
-              return count ? (
-                <h5 key={attr.trait_type} className="text-white break-words font-mono">{attr.trait_type}: {attr.value} (Count: {count})</h5>
-              ) : null;
-            })}
+  {filteredItem && Object.keys(filteredItem).length > 0 ? (
+  // Render the filtered NFT
+  <div className="grid grid-cols-1 bg-white bg-opacity-10" key={filteredItem.edition}>
+    <div className="aspect-w-16 aspect-h-9 overflow-hidden">
+      <img className="object-cover object-center w-full h-full" src={filteredItem.image} alt={`SPOT bot #${filteredItem.edition}`}></img>
+    </div>
+    <div className="p-4">
+      <div className="pr-2 pl-2 h-60 overflow-y-auto">
+        <div className="font-bold text-sm mb-2">
+          <div className="bg-slate-600">
+            <h2 className="text-blue-400 text-lg font-mono">Rank: {filteredItem.attributes.find(attr => attr.trait_type === "Rank")?.value || 'Rank not found'}</h2>
           </div>
+          <h1 className="pt-2 pb-2 text-md font-mono text-spot-yellow">ID: {filteredItem.edition}</h1>
+          {filteredItem.attributes.map(attr => {
+            const count = getCount(attr.trait_type, attr.value);
+            return count ? (
+              <h5 key={attr.trait_type} className="text-white break-words font-mono">{attr.trait_type}: {attr.value} (Count: {count})</h5>
+            ) : null;
+          })}
         </div>
       </div>
     </div>
-  ))}
+  </div>
+) : (
+    // Render all NFTs
+    displayedNFTs.map((nft, index) => (
+      <div 
+        className="grid grid-cols-1 bg-white bg-opacity-10" 
+        key={nft.edition} 
+        ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}
+      >
+        <div className="aspect-w-16 aspect-h-9 overflow-hidden">
+          <img className="object-cover object-center w-full h-full" src={nft.image} alt={`SPOT bot #${nft.edition}`}></img>
+        </div>
+        <div className="p-4">
+          <div className="pr-2 pl-2 h-60 overflow-y-auto">
+            <div className="font-bold text-sm mb-2">
+              <h2 className="text-blue-400 text-lg font-mono">Rank: {nft.attributes.find(attr => attr.trait_type === "Rank")?.value || 'Rank not found'}</h2>
+              <h1 className="pt-2 pb-2 text-md font-mono text-spot-yellow">ID: {nft.edition}</h1>
+              {nft.attributes.map(attr => {
+                const count = getCount(attr.trait_type, attr.value);
+                return count ? (
+                  <h5 key={attr.trait_type} className="text-white break-words font-mono">{attr.trait_type}: {attr.value} (Count: {count})</h5>
+                ) : null;
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    ))
+  )}
 </div>
+
 
       
               </div>
