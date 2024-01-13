@@ -19,6 +19,7 @@
   import LogoutButton from "../Logout";
   import rankedData from '../../rankedOutput.json'; 
   import metadataRanked from '../../spotBotMetadata_Ranked.json';
+  
 
   ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -382,7 +383,7 @@
   <div className="nft-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8">
   {filteredItem && Object.keys(filteredItem).length > 0 ? (
   // Render the filtered NFT
-  <div className="grid grid-cols-1 bg-white bg-opacity-10" key={filteredItem.edition}>
+  <div className="grid grid-cols-1 bg-white bg-opacity-10 cursor-pointer" key={filteredItem.edition} onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${filteredItem.edition}`, "_blank")}>
     <div className="aspect-w-16 aspect-h-9 overflow-hidden">
       <img className="object-cover object-center w-full h-full" src={filteredItem.image} alt={`SPOT bot #${filteredItem.edition}`}></img>
     </div>
@@ -407,8 +408,9 @@
     // Render all NFTs
     displayedNFTs.map((nft, index) => (
       <div 
-        className="grid grid-cols-1 bg-white bg-opacity-10" 
+        className="grid grid-cols-1 bg-white bg-opacity-10 cursor-pointer" 
         key={nft.edition} 
+        onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${nft.edition}`, "_blank")}
         ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}
       >
         <div className="aspect-w-16 aspect-h-9 overflow-hidden">
