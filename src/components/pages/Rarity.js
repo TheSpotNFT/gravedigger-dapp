@@ -19,6 +19,7 @@
   import LogoutButton from "../Logout";
   import rankedData from '../../rankedOutput.json'; 
   import metadataRanked from '../../spotBotMetadata_Ranked.json';
+  import spotBotTokens from '../../spotBotTokens.json';
   
 
   ReactGA.initialize('G-YJ9C2P37P6');
@@ -221,6 +222,7 @@
           try {
               response = await axios.request(options);
               setDisplayNfts(response.data.result);
+              console.log(displayNfts);
           } catch (error) {
               console.log(error);
           }
@@ -408,7 +410,7 @@
     // Render all NFTs
     displayedNFTs.map((nft, index) => (
       <div 
-        className="grid grid-cols-1 bg-white bg-opacity-10 cursor-pointer" 
+        className={`grid grid-cols-1  bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(nft.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`}
         key={nft.edition} 
         onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${nft.edition}`, "_blank")}
         ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}
