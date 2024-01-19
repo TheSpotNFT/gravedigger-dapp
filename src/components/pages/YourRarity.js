@@ -402,6 +402,7 @@ export const YourRarity = ({
         >
           View Entire Collection
         </button>
+        <div className="text-mono text-white text-3xl pt-24">Your Collection</div>
 </div>
 
 <div className="nft-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8">
