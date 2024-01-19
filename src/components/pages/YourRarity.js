@@ -182,7 +182,8 @@ export const YourRarity = ({
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await fetch('https://glacier-api.avax.network/v1/chains/43114/addresses/0x84b126C2e11689FD8A51c20e7d5beD6616F60558/balances:listErc721?pageSize=100&contractAddress=0x20Ef794f891C050D27bEC63F50B202cce97D7224', options);
+            console.log(account);
+            const response = await fetch(`https://glacier-api.avax.network/v1/chains/43114/addresses/${account}/balances:listErc721?pageSize=100&contractAddress=0x20Ef794f891C050D27bEC63F50B202cce97D7224`, options);
             const data = await response.json();
             console.log(data.erc721TokenBalances); // Log the data for debugging
             setNftSelected(data.erc721TokenBalances); // Update the state with the fetched data
