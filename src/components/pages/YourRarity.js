@@ -181,19 +181,25 @@ export const YourRarity = ({
 
     useEffect(() => {
         const fetchData = async () => {
+          if (!account || account.length === 0) {
+            console.log('Account is not set');
+            return; // Exit the function if account is not valid
+          }
+      
           try {
-            console.log(account);
+            console.log('Fetching data for account:', account);
             const response = await fetch(`https://glacier-api.avax.network/v1/chains/43114/addresses/${account}/balances:listErc721?pageSize=100&contractAddress=0x20Ef794f891C050D27bEC63F50B202cce97D7224`, options);
             const data = await response.json();
-            console.log(data.erc721TokenBalances); // Log the data for debugging
+            console.log('Fetched data:', data.erc721TokenBalances); // Log the data for debugging
             setNftSelected(data.erc721TokenBalances); // Update the state with the fetched data
           } catch (err) {
-            console.error(err);
+            console.error('Fetch error:', err);
           }
         };
-    
+      
         fetchData();
-      }, [account]); 
+      }, [account]); // Dependency array includes account, so the effect runs when account changes
+      
   
 
     const [tokenIds, setTokenIds] = useState([]);
