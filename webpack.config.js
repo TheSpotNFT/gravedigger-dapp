@@ -13,6 +13,7 @@ module.exports = {
       //   url: require.resolve("url"),
       //   os: require.resolve("os-browserify/browser"),
       //   crypto: require.resolve("crypto-browserify"),
+      
       stream: false,
       assert: false,
       http: false,
@@ -20,6 +21,8 @@ module.exports = {
       url: false,
       os: false,
       crypto: false,
+      fs: false, // Set fs to false
+      path: require.resolve('path-browserify'), // Use path-browserify for path
     },
     plugins: [
       new webpack.DefinePlugin({

@@ -26,7 +26,7 @@ import NFTCard from './RarityCard'; // Adjust the path based on your file struct
 ReactGA.initialize('G-YJ9C2P37P6');
 
 
-export const Rarity = ({
+export const YourRarity = ({
     account,
     web3Modal,
     loadWeb3Modal,
@@ -83,7 +83,6 @@ export const Rarity = ({
       const newWindow = window.open(url, "_blank", "noopener,noreferrer");
       if (newWindow) newWindow.opener = null;
     };
-    
 
     //Ranking
     const getRankById = (id) => {
@@ -174,9 +173,36 @@ export const Rarity = ({
         /* For retrieval of traits */
     }
     const [walletTraits, setWalletTraits] = useState([]);
-    const [nftSelected, setNftSelected] = useState(false);
+    const [nftSelected, setNftSelected] = useState([]);
   
     const userAddress = account;
+   
+    const options = {method: 'GET', headers: {accept: 'application/json'}};
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await fetch('https://glacier-api.avax.network/v1/chains/43114/addresses/0x84b126C2e11689FD8A51c20e7d5beD6616F60558/balances:listErc721?pageSize=100&contractAddress=0x20Ef794f891C050D27bEC63F50B202cce97D7224', options);
+            const data = await response.json();
+            console.log(data.erc721TokenBalances); // Log the data for debugging
+            setNftSelected(data.erc721TokenBalances); // Update the state with the fetched data
+          } catch (err) {
+            console.error(err);
+          }
+        };
+    
+        fetchData();
+      }, [account]); 
+  
+
+    const [tokenIds, setTokenIds] = useState([]);
+    const [apiResponse, setApiResponse] = useState([]);
+   
+
+
+    const tokenIdsFromQuery = nftSelected.map(item => item.tokenId);
+    const filteredMetadata = metadataRanked.filter(item => tokenIdsFromQuery.includes(item.edition.toString()));
+    console.log(filteredMetadata);
 
 
     /*async function getNFTs() {
@@ -368,54 +394,20 @@ export const Rarity = ({
             <div className="gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 <div className="text-white font-mono text-4xl py-8">Spot Bot Rarity</div>
-  <div className="pt-4 pb-4">
-    <div className="text-mono text-white">Filter by ID:</div>
-  <div className="pb-8"><input 
-    type="number" 
-    value={filter} 
-    onChange={(e) => {
-      setFilter(e.target.value);
-      handleFilterChange(e.target.value);
-  }}
-    placeholder="Enter ID Number" 
-    className="pl-2"
-  /></div>
-    <button
+  <div className="pt-4">
+  <button
           className="align-middle w-1/2 mx-auto rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
   hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/yourRarity")}
+          onClick={onClickUrl("/rarity")}
         >
-          View Your NFTs
+          View Entire Collection
         </button>
 </div>
 
 <div className="nft-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8">
-{filteredItem && Object.keys(filteredItem).length > 0 ? (
-// Render the filtered NFT
-<div className={`grid grid-cols-1  bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(filteredItem.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`} key={filteredItem.edition} onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${filteredItem.edition}`, "_blank")}>
-  <div className="aspect-w-16 aspect-h-9 overflow-hidden">
-    <img className="object-cover object-center w-full h-full" src={filteredItem.image} alt={`SPOT bot #${filteredItem.edition}`}></img>
-  </div>
-  <div className="p-4">
-    <div className="pr-2 pl-2 h-60 overflow-y-auto">
-      <div className="font-bold text-sm mb-2">
-        <div className="bg-slate-600">
-          <h2 className="text-blue-400 text-lg font-mono">Rank: {filteredItem.attributes.find(attr => attr.trait_type === "Rank")?.value || 'Rank not found'}</h2>
-        </div>
-        <h1 className="pt-2 pb-2 text-md font-mono text-spot-yellow">ID: {filteredItem.edition}</h1>
-        {filteredItem.attributes.map(attr => {
-          const count = getCount(attr.trait_type, attr.value);
-          return count ? (
-            <h5 key={attr.trait_type} className="text-white break-words font-mono">{attr.trait_type}: {attr.value} (Count: {count})</h5>
-          ) : null;
-        })}
-      </div>
-    </div>
-  </div>
-</div>
-) : (
-  // Render all NFTs
-  displayedNFTs.map((nft, index) => (
+
+
+  {filteredMetadata.map((nft, index) => (
     <div 
       className={`grid grid-cols-1  bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(nft.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`}
       key={nft.edition} 
@@ -440,8 +432,8 @@ export const Rarity = ({
         </div>
       </div>
     </div>
-  ))
-)}
+  ))}
+
 </div>
 
 

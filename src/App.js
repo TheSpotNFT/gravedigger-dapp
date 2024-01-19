@@ -20,6 +20,7 @@ import { ethers } from "ethers";
 import { Scribble } from "./components/pages/ScribbleCustoms";
 import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
 import { Rarity } from "./components/pages/Rarity";
+import { YourRarity } from "./components/pages/YourRarity";
 import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 import Channel3 from "./components/pages/Channel3";
@@ -136,6 +137,22 @@ function App() {
                 exact
                 element={
                   <Channel3
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+               <Route
+                path="/yourRarity"
+                exact
+                element={
+                  <YourRarity
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
