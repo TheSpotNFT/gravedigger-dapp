@@ -31,7 +31,7 @@ import analog1 from "../../assets/analog/7-b.png";
 import analog2 from "../../assets/analog/2.png";
 import analog3 from "../../assets/analog/41.png";
 import analog4 from "../../assets/anananoir.png";
-import spotmobile from "../../assets/spotmobile.png";
+import spotmobile from "../../assets/spotbot/261.png";
 import FlippableCard from "../../components/flippable-card";
 import "../../index.css";
 import Footer from "../Footer";
@@ -577,6 +577,17 @@ const slideRight = () => {
      
   </div>
     <div className={`h-screen bg-spotbg bg-cover bg-no-repeat bg-center bg-fixed bg-slate-900 scroll-smooth snap-start ${background ? "bg-opacity-0 duration-1000" : "bg-opacity-100"}`}>
+    <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60 flex justify-end">
+  <button
+    className="w-1/4 rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 py-2 bg-gray-300 bg-opacity-30 border-4 border-spot-yellow text-spot-yellow
+hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl"
+    onClick={onClickUrl("/rarity")}
+  >
+    Rarity
+  </button>
+</div>
+
+
 
     </div>
     <div className="snap-item scroll-smooth h-screen">

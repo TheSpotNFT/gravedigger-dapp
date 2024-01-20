@@ -21,7 +21,7 @@ module.exports = {
       'spot-yellow': '#fff600',
     },
       backgroundImage: {
-        'spotbg': "url('./assets/Background_trans.png')",
+        'spotbg': "url('./assets/spotbot/2611.png')",
         'botbg' : "url('./assets/812.png')",
         'botbg2' : "url('./assets/spotbot/4.png')",
         'botbg3' : "url('./assets/spotbot/8.png')",
