@@ -25,9 +25,11 @@ import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 import Channel3 from "./components/pages/Channel3";
 import Creator from "./components/pages/C3Creator";
+import Underground from "./components/pages/Underground";
 import { SAnft } from "./components/pages/SAnft";
 import CreatorPortal from "./components/pages/CreatorStream";
 import ViewerPage from "./components/pages/ViewerStream";
+import { Gallery } from "./components/pages/Gallery";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -149,10 +151,42 @@ function App() {
                 }
               />
                <Route
+                path="/underground"
+                exact
+                element={
+                  <Underground
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+               <Route
                 path="/yourRarity"
                 exact
                 element={
                   <YourRarity
+                    account={account}
+                    web3Modal={web3Modal}
+                    loadWeb3Modal={loadWeb3Modal}
+                    web3Provider={web3Provider}
+                    setWeb3Provider={setWeb3Provider}
+                    logoutOfWeb3Modal={logoutOfWeb3Modal}
+                    txProcessing={txProcessing}
+                    setTxProcessing={setTxProcessing}
+                  />
+                }
+              />
+               <Route
+                path="/gallery"
+                exact
+                element={
+                  <Gallery
                     account={account}
                     web3Modal={web3Modal}
                     loadWeb3Modal={loadWeb3Modal}
