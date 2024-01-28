@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 const NFTCard = ({ nft }) => {
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  if (!nft || !nft.metadata || imageError) {
-    console.error("Invalid NFT data or image failed to load", nft);
-    return null; // Don't render this card if NFT data is invalid or image failed to load
+  if (!nft || !nft.metadata) {
+    console.error("Invalid NFT data", nft);
+    return null; // Don't render this card if NFT data is invalid
   }
 
   let attributes = [];
@@ -25,19 +26,35 @@ const NFTCard = ({ nft }) => {
     setImageError(true);
   };
 
+  const handleImageLoad = () => {
+    setImageLoaded(true);
+  };
+
+  const link = `https://avax.hyperspace.xyz/collection/avax/${nft.address}?tokenAddress=${nft.address}_${nft.tokenId}`;
+
+
   return (
-    <div className={`nft-card pt-4 px-4 ${imageError ? 'invisible' : ''}`}>
-      <img 
-        src={nft.metadata.imageUri} 
-        className='rounded-lg w-full'
-        alt={nft.metadata.name} 
+    <div>
+      <img
+        src={nft.metadata.imageUri}
+        alt={nft.metadata.name}
+        onLoad={handleImageLoad} // handle successful image load
         onError={handleImageError} // handle image load error
+        style={{ display: 'none' }} // hide the image initially
       />
-      {!imageError && (
-        <div className="nft-info text-gray-500 text-2xl">
-          <h3 className='pt-4 font-mono'>{nft.name}</h3>
-          
-        
+      {imageLoaded && !imageError && (
+        <div className={`nft-card pt-4 px-4 ${imageError || !imageLoaded ? 'invisible' : ''}`}>
+          {/* Render the image again for display */}
+          <a href={link} target="_blank" rel="noopener noreferrer">
+          <img
+            src={nft.metadata.imageUri}
+            className='rounded-lg w-full'
+            alt={nft.metadata.name}
+          /></a>
+          <div className="nft-info text-gray-500 text-2xl">
+            <h3 className='pt-4 font-mono'>{nft.name}</h3>
+            {/* ... other NFT info ... */}
+          </div>
         </div>
       )}
     </div>

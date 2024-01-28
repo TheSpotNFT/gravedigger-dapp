@@ -420,17 +420,18 @@ const lastItemRef = useCallback(node => {
 
 
 <div className="nft-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 pt-8 w-full">
-
-{items.map((item, index) => {
+  {items.map((item, index) => {
     const key = item.metadataLastUpdatedTimestamp + "-" + index;
+    const isLastItem = index === items.length - 1;
     return (
-      <div key={key}>
+      <div key={key} ref={isLastItem ? lastItemRef : null}>
         {/* Render your NFT card here */}
         <NFTCard nft={item} />
       </div>
     );
   })}
 </div>
+
 
 
     
