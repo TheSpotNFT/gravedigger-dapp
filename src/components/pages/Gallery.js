@@ -416,7 +416,7 @@ const lastItemRef = useCallback(node => {
             {/* Canvas Row*/}
             <div className="gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
-<div className="text-white font-mono text-4xl py-8">Your NFT Gallery</div>
+<div className="text-white font-mono text-4xl py-8 pt-32">Your NFT Gallery</div>
 
 
 <div className="nft-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-4 pt-8 w-full">
