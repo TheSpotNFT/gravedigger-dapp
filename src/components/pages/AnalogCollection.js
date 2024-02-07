@@ -37,7 +37,8 @@ const AnalogCollection = () => {
 
 
   return (
-    <div className="px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">
+    <div className="pt-24 px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">
+      <div className="text-5xl pb-8">Analog</div>
       Analog is a dNFT that you may change to a specific variation if you own a
       Spot NFT and the 1/1 piece. Below you can browse all the variations of the
       pieces and commit a variation once you own the piece. Get a Spot NFT at

@@ -17,20 +17,23 @@ import sendNFT from "../../components/sendNFTombstoned";
 import { TOMBSTONE_ADDRESS } from "../Contracts/TombstoneContract";
 import SendNFTombstoned from "../../components/sendNFTombstoned";
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { useAuth } from "../../Auth";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Board = ({
-  account,
-  web3Modal,
-  loadWeb3Modal,
-  web3Provider,
-  setWeb3Provider,
-  logoutOfWeb3Modal,
   txProcessing,
   setTxProcessing,
 }) => {
-  
+  const {
+    account,
+    web3Modal,
+    loadWeb3Modal,
+    web3Provider,
+    setWeb3Provider,
+    logoutOfWeb3Modal,
+    // ... any other states or functions you need ...
+  } = useAuth();
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
@@ -553,7 +556,7 @@ export const Board = ({
         {/* canvas div */}
 
         <div
-          className="p-1 mb-10 sm:mb-10"
+          className="pl-48 p-1 mb-10 sm:mb-10"
           ref={div}
           style={{ height: "30rem", width: "30rem" }}
         >

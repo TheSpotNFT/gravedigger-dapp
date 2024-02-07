@@ -11,21 +11,26 @@ import UnnamedMint from '../UnnamedMint';
 import axios from "axios";
 import { UNNAMED_ABI, UNNAMED_ADDRESS } from '../Contracts/UnnamednftContract';
 import { UNNAMEDBRANDING_ABI, UNNAMEDBRANDING_ADDRESS } from '../Contracts/UnnamedBrandedContract';
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { useAuth } from '../../Auth';
+
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Unnamed = ({
-    account,
-    web3Modal,
-    loadWeb3Modal,
-    web3Provider,
-    setWeb3Provider,
-    logoutOfWeb3Modal,
+
     txProcessing,
     setTxProcessing,
 }) => {
-
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);

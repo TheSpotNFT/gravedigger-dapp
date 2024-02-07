@@ -2,14 +2,22 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ethers, Contract } from "ethers";
 import { ANALOG_ABI, ANALOG_ADDRESS } from '../components/Contracts/AnalogAbi';
+import { useAuth } from "../Auth";
 
 function Card(
   props,
-  account,
   txProcessing,
   setTxProcessing,
-  web3Provider,) {
-
+) {
+  const {
+    account,
+    web3Modal,
+    loadWeb3Modal,
+    web3Provider,
+    setWeb3Provider,
+    logoutOfWeb3Modal,
+    // ... any other states or functions you need ...
+  } = useAuth();
   const [variation, setVariation] = useState(props.image1);
   const [variationSelection, setVariationSelection] = useState("1");
   const analogContract = "0xBe18CF471925d683c272AAFe9d1aaFDA99612B69";

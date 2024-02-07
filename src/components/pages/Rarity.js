@@ -21,22 +21,24 @@ import rankedData from '../../rankedOutput.json';
 import metadataRanked from '../../spotBotMetadata_Ranked.json';
 import spotBotTokens from '../../spotBotTokens.json';
 import NFTCard from './RarityCard'; // Adjust the path based on your file structure
+import { useAuth } from "../../Auth";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 
 export const Rarity = ({
+    id
+}) => {
+  const {
     account,
     web3Modal,
     loadWeb3Modal,
     web3Provider,
     setWeb3Provider,
     logoutOfWeb3Modal,
-    txProcessing,
-    setTxProcessing,
-    id
-}) => {
+    // ... any other states or functions you need ...
+  } = useAuth();
   
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -234,9 +236,11 @@ export const Rarity = ({
 */
 
     const [data, setData] = useState(null);
+    const toggleShowOnlyYellowBorder = () => {
+      setShowOnlyYellowBorder(!showOnlyYellowBorder);
+    };
+    const [showOnlyYellowBorder, setShowOnlyYellowBorder] = useState(false);
 
-  
-    
     const getCount = (attributeValue, value) => {
       const item = spotBotRarity.find(item => item.attributeValue === attributeValue && item.value === value);
       return item ? item.count : null;
@@ -251,119 +255,7 @@ export const Rarity = ({
     // Main Component Return
     return (
         <div className="container mx-auto w-full">
-          <div className="pt-6 px-12 bg-slate-900">
-        <div className="fixed"><div className="pb-2"><LogoutButton
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-          /></div>
-          <div>
-          <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-4 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-40
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={exploreClick}
-        >
-          {explore ? "Hide" : "Explore"}
-        </button></div>
-        <div className={`${explore ? 'absolute left-0 top-22 w-full opacity-100' : 'absolute -left-60 top-22 w-full opacity-0'} transition-all duration-500`}>
-        <div className="py-2 pt-4">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/")}
-        >
-          Home
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
-        >
-          Genesis Collection
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/spotbot")}
-        >
-          Spot Bot
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/goatd")}
-        >
-          Goatd
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/gravedigger")}
-        >
-          NFTombstones
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/unnamed")}
-        >
-          Unnamed Branding
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/analog")}
-        >
-          Analog
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/staking")}
-        >
-          Staking
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/scribble")}
-        >
-          Scribble Customs
-        </button></div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://twitter.com/TheSpotUG")}
-        >
-          Twitter
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://discord.com/invite/4wvC6xTFyB")}
-        >
-          Discord
-        </button>
-          </div></div></div>
-    
-  </div>
+        
             {/* Canvas Row*/}
             <div className="gap-4 mt-1 ml-6 sm:p-5 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
@@ -387,6 +279,14 @@ export const Rarity = ({
         >
           View Your NFTs
         </button>
+        <div className="pt-4">
+        <button 
+        onClick={toggleShowOnlyYellowBorder}
+        className="align-middle w-1/2 mx-auto rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+        hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+      >
+         {showOnlyYellowBorder ? "Show Entire Collection" : "Show Minted NFTs Only"}
+      </button></div>
 </div>
 
 <div className="nft-list grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 pt-8">
@@ -417,7 +317,10 @@ export const Rarity = ({
   // Render all NFTs
   displayedNFTs.map((nft, index) => (
     <div 
-      className={`grid grid-cols-1  bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(nft.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`}
+    className={`${
+      showOnlyYellowBorder && !spotBotTokens.token_ids.includes(nft.edition) ? 'hidden' : 'grid grid-cols-1'
+    } bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(nft.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`}
+    
       key={nft.edition} 
       onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${nft.edition}`, "_blank")}
       ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}

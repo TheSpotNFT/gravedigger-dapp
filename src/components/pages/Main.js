@@ -40,21 +40,23 @@ import VibesMintMobile from "../vibesMintsMobile";
 import gud from "../../assets/gud.png"
 import bad from "../../assets/bad.png"
 import MobileMenu from "../MobileMenu";
+import { useAuth } from "../../Auth";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 
 const Main = ({
-  account,
-  web3Modal,
-  loadWeb3Modal,
-  web3Provider,
-  setWeb3Provider,
-  logoutOfWeb3Modal,
-  txProcessing,
-  setTxProcessing,
+ 
 }) => {
-
+  const {
+    account,
+    web3Modal,
+    loadWeb3Modal,
+    web3Provider,
+    setWeb3Provider,
+    logoutOfWeb3Modal,
+    // ... any other states or functions you need ...
+  } = useAuth();
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
@@ -163,142 +165,7 @@ const slideRight = () => {
 
 
        
-      <div className="pt-0 px-0 bg-slate-900">
-        <div className="fixed"><div className="pb-2"><LogoutButton
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-          /></div>
-          <div>
-          <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-4 xl:px-4 px-4 py-0 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-40
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={exploreClick}
-        >
-          {explore ? "Hide" : "Explore"}
-        </button></div>
-        <div className={`${explore ? 'absolute left-0 top-22 w-full opacity-100' : 'absolute -left-60 top-22 w-full opacity-0'} transition-all duration-500`}>
-        <div className="py-2 pt-4">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl('/ecosystem')}
-        >
-          Eco-System
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
-        >
-          Genesis Collection
-        </button>
-        </div>
-        <div className="py-2">
-          <a href="#spotbotmobile">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={exploreClick}
-        >
-          Spot Bot
-        </button></a>
-        </div>
-        <div className="py-2">
-          <a href="#vibesmobile">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={exploreClick}
-        >
-          Vibes
-        </button></a>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/channel3")}
-        >
-          Channel3
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={
-            onClickUrl("/goatd")
-          
-          }
-        >
-          Goatd
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/gravedigger")}
-        >
-          NFTombstones
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/unnamed")}
-        >
-          Unnamed Branding
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/analog")}
-        >
-          Analog
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/staking")}
-        >
-          Staking
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/scribble")}
-        >
-          Scribble Customs
-        </button></div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://twitter.com/TheSpotUG")}
-        >
-          Twitter
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://discord.com/invite/4wvC6xTFyB")}
-        >
-          Discord
-        </button>
-          </div></div></div>
-     
-  </div>
+      
        
 
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
@@ -443,139 +310,7 @@ const slideRight = () => {
       {/* DESKTOP LAYOUT */}
     <div className="snap-container flex-auto mx-auto px-12 hidden lg:block scroll-smooth">
     
-      <div className="pt-6 px-12 bg-slate-900">
-        <div className="fixed"><div className="pb-2"><LogoutButton
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-          /></div>
-          <div>
-          <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-4 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-40
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={exploreClick}
-        >
-          {explore ? "Hide" : "Explore"}
-        </button></div>
-        <div className={`${explore ? 'absolute left-0 top-22 w-full opacity-100' : 'absolute -left-60 top-22 w-full opacity-0'} transition-all duration-500`}>
-        <div className="py-2 pt-4">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl('/ecosystem')}
-        >
-          Eco-System
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
-        >
-          Genesis Collection
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-1 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/channel3")}
-        >
-          Channel3
-        </button>
-        </div>
-        <div className="py-2">
-          <a href="#vibes">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-        onClick={exploreClick}
-        >
-          Vibes
-        </button></a>
-        </div>
-        <div className="py-2">
-          <a href="#spotbot">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-            onClick={exploreClick}
-        >
-          Spot Bot
-        </button></a>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/goatd")}
-        >
-          Goatd
-        </button>
-        </div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/gravedigger")}
-        >
-          NFTombstones
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/unnamed")}
-        >
-          Unnamed Branding
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/analog")}
-        >
-          Analog
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/staking")}
-        >
-          Staking
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("/scribble")}
-        >
-          Scribble Customs
-        </button></div>
-        <div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://twitter.com/TheSpotUG")}
-        >
-          Twitter
-        </button>
-        </div><div className="py-2">
-        <button
-          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
-  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
-          onClick={onClickUrl("https://discord.com/invite/4wvC6xTFyB")}
-        >
-          Discord
-        </button>
-          </div></div></div>
-     
-  </div>
+      
     <div className={`h-screen bg-spotbg bg-cover bg-no-repeat bg-center bg-fixed bg-slate-900 scroll-smooth snap-start ${background ? "bg-opacity-0 duration-1000" : "bg-opacity-100"}`}>
     <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60 flex justify-end">
   <button
@@ -583,7 +318,7 @@ const slideRight = () => {
 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl"
     onClick={onClickUrl("/rarity")}
   >
-    Rarity
+    Spot Bot Rarity
   </button>
 </div>
 
@@ -832,34 +567,36 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Analog is a series of dNFTs that you may change to a specific variation if you own a
       Spot NFT and the 1/1 piece. IRL pieces are created in the analog world and brought into the digital to live on the blockchain. Check it out and browse all the variations of the
       pieces and commit a variation once you own the piece. Get a Spot NFT at
-      <href
-        style={{ cursor: "pointer" }}
-        onClick={onClickUrl("https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8")}
-        className="text-spot-yellow"
-      >
-        {" "}
-        Campfire.exchange
-      </href>{" "}
-      and your Analog piece on{" "}
-      <href
-        style={{ cursor: "pointer" }}
-        className="text-spot-yellow"
-        onClick={onClickUrl(
-          "https://campfire.exchange/collections/0xbe18cf471925d683c272aafe9d1aafda99612b69"
-        )}
-      >
-        Campfire.exchange
-      </href>{" "}
-      or{" "}
-      <href
-        style={{ cursor: "pointer" }}
-        className="text-spot-yellow"
-        onClick={onClickUrl(
-          "https://nftrade.com/assets/avalanche/0xbe18cf471925d683c272aafe9d1aafda99612b69"
-        )}
-      >
-        NFTrade.com
-      </href><div className="pt-12 lg:px-16 xl:px-36"><button
+      <a
+  href="https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ cursor: "pointer" }}
+  className="text-spot-yellow"
+>
+  Campfire.exchange
+</a>
+{" "}and your Analog piece on{" "}
+<a
+  href="https://campfire.exchange/collections/0xbe18cf471925d683c272aafe9d1aafda99612b69"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ cursor: "pointer" }}
+  className="text-spot-yellow"
+>
+  Campfire.exchange
+</a>
+{" "}or{" "}
+<a
+  href="https://nftrade.com/assets/avalanche/0xbe18cf471925d683c272aafe9d1aafda99612b69"
+  target="_blank"
+  rel="noopener noreferrer"
+  style={{ cursor: "pointer" }}
+  className="text-spot-yellow"
+>
+  NFTrade.com
+</a>
+<div className="pt-12 lg:px-16 xl:px-36"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-2xl flex justify-center"
               onClick={onClickUrl("/analog")}

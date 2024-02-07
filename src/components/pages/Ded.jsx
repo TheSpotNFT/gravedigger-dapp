@@ -15,20 +15,22 @@ import axios from "axios";
 import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { json } from "react-router-dom";
+import { useAuth } from "../../Auth";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Ded = ({
-    account,
-    web3Modal,
-    loadWeb3Modal,
-    web3Provider,
-    setWeb3Provider,
-    logoutOfWeb3Modal,
-    txProcessing,
-    setTxProcessing,
-}) => {
 
+}) => {
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);

@@ -12,6 +12,7 @@ import {
 } from "./Contracts/TombstoneContract";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "./Contracts/ScribbleContract";
 import image1 from "../assets/scribble/CARD_PLACEHOLDER.jpg"
+import { useAuth } from "../Auth";
 
 export default function ScribbleMint({
     props,
@@ -25,7 +26,7 @@ export default function ScribbleMint({
     top,
     id,
     saveImage,
-    account,
+
     noun,
     name,
     color,
@@ -37,10 +38,18 @@ export default function ScribbleMint({
     setTxProcessing,
     ownedCards,
     mintEnabled,
-    web3Provider,
+
     tombstoneSelected,
 }) {
-
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
 
     function alertClick() {
         alert("Wen Mint??! Follow @ScribbleWarl0ck on bird app to find out more..");

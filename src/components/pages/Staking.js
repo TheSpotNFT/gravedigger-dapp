@@ -2,17 +2,23 @@ import { React, useEffect } from "react";
 import ReactGA from 'react-ga';
 import collection from "../../StakingCollections";
 import Card from "../../components/StakingCards";
+import { useAuth } from "../../Auth";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
-export const StakingCards = ({account,
-  web3Modal,
-  loadWeb3Modal,
-  web3Provider,
-  setWeb3Provider,
-  logoutOfWeb3Modal,
+export const StakingCards = ({
   txProcessing,
   setTxProcessing}) => {
+  
+  const {
+      account,
+      web3Modal,
+      loadWeb3Modal,
+      web3Provider,
+      setWeb3Provider,
+      logoutOfWeb3Modal,
+      // ... any other states or functions you need ...
+    } = useAuth();
 
 const renderCard = (collection, index) => {
   return (
@@ -42,7 +48,8 @@ useEffect(() => {
 }, []);
 
   return (
-    <div className="px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">
+    <div className="pt-32 px-10 py-4 gap-10 font-mono text-spot-yellow bg-slate-900">
+      <div className="text-5xl pb-8">Staking</div>
       Stake your NFTs in either our non-custodial single sided staking or our
       non-custodial staking pairs. Your NFTs never leave your wallet and you can
       stake as many at the same time as you would like. We will always be adding

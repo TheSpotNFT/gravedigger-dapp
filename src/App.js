@@ -30,6 +30,8 @@ import { SAnft } from "./components/pages/SAnft";
 import CreatorPortal from "./components/pages/CreatorStream";
 import ViewerPage from "./components/pages/ViewerStream";
 import { Gallery } from "./components/pages/Gallery";
+import Menu from "./components/Menu";
+import { AuthProvider } from "./Auth";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -41,81 +43,18 @@ function App() {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
   
-  const [account, setAccount] = useState("");
+  
   const [txProcessing, setTxProcessing] = useState(false);
-  const [web3Provider, setWeb3Provider] = useState(null);
-  const web3Modal = web3ModalSetup();
-
-  const logoutOfWeb3Modal = async () => {
-    await web3Modal.clearCachedProvider();
-    if (
-      web3Provider &&
-      web3Provider.provider &&
-      typeof web3Provider.provider.disconnect == "function"
-    ) {
-      await web3Provider.provider.disconnect();
-    }
-    setTimeout(() => {
-      window.location.reload();
-    }, 1);
-  };
-
-  const loadWeb3Modal = useCallback(async () => {
-    const provider = await web3Modal.connect();
-    setWeb3Provider(new ethers.providers.Web3Provider(provider));
-
-    provider.on("chainChanged", (chainId) => {
-      console.log(`Chain changed to -- ${chainId}`);
-      setWeb3Provider(new ethers.providers.Web3Provider(provider));
-      setTimeout(() => {
-        window.location.reload();
-      }, 1);
-    });
-
-    provider.on("accountsChanged", () => {
-      console.log(`Account changed`);
-      setWeb3Provider(new ethers.providers.Web3Provider(provider));
-    });
-
-    // Subscribe to session disconnection
-    provider.on("disconnect", (code, reason) => {
-      console.log("Disconnecting...");
-      console.log(code, reason);
-      logoutOfWeb3Modal();
-    });
-    // eslint-disable-next-line
-  }, [setWeb3Provider]);
-
-  useEffect(() => {
-    if (web3Modal && web3Modal.cachedProvider) {
-      loadWeb3Modal();
-    }
-  }, [loadWeb3Modal]);
-
-  useEffect(() => {
-    const getAddress = async () => {
-      if (web3Provider && web3Provider.getSigner()) {
-        const newAddress = await web3Provider.getSigner().getAddress();
-        setAccount(newAddress);
-      }
-    };
-    getAddress();
-  }, [web3Provider]);
-
-
 
   return (
+   <AuthProvider>
     <div className="App bg-slate-900">
       <Router>
+      <Menu className="fixed top-0 left-0 z-50"
+            
+  />
         <div className="bg-slate-900 w-full h-100">
-          {/*<Nav
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-  />*/}
+          {/**/}
           <div className="flex justify-center items-center gap-2">
             <Routes>
               <Route
@@ -123,14 +62,7 @@ function App() {
                 exact
                 element={
                   <Main
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -139,14 +71,7 @@ function App() {
                 exact
                 element={
                   <Channel3
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -155,14 +80,7 @@ function App() {
                 exact
                 element={
                   <Underground
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -171,14 +89,7 @@ function App() {
                 exact
                 element={
                   <YourRarity
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -187,14 +98,7 @@ function App() {
                 exact
                 element={
                   <Gallery
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -203,14 +107,7 @@ function App() {
                 exact
                 element={
                   <Creator
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -219,14 +116,7 @@ function App() {
                 exact
                 element={
                   <CreatorPortal
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -235,14 +125,7 @@ function App() {
                 exact
                 element={
                   <ViewerPage
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                   
                   />
                 }
               />
@@ -251,14 +134,8 @@ function App() {
                 exact
                 element={
                   <Board
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  txProcessing={txProcessing}
+                  setTxProcessing={setTxProcessing}
                   />
                 }
               />
@@ -267,14 +144,8 @@ function App() {
                 exact
                 element={
                   <Scribble
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  txProcessing={txProcessing}
+                  setTxProcessing={setTxProcessing}
                   />
                 }
               />
@@ -283,14 +154,8 @@ function App() {
                 exact
                 element={
                   <ScribbleUpdate
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  txProcessing={txProcessing}
+                  setTxProcessing={setTxProcessing}
                   />
                 }
               />
@@ -299,14 +164,7 @@ function App() {
                 exact
                 element={
                   <SAnft
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  
                   />
                 }
               />
@@ -316,14 +174,8 @@ function App() {
                 exact
                 element={
                   <Unnamed
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  txProcessing={txProcessing}
+                  setTxProcessing={setTxProcessing}
                   />
                 }
               />
@@ -332,14 +184,7 @@ function App() {
                 exact
                 element={
                   <Plots
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                    
                   />
                 }
               />
@@ -348,14 +193,8 @@ function App() {
                 exact
                 element={
                   <Goatd
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                  txProcessing={txProcessing}
+                  setTxProcessing={setTxProcessing}
                   />
                 }
               />
@@ -364,46 +203,28 @@ function App() {
                 exact
                 element={
                   <Rarity
-                    account={account}
-                    web3Modal={web3Modal}
-                    loadWeb3Modal={loadWeb3Modal}
-                    web3Provider={web3Provider}
-                    setWeb3Provider={setWeb3Provider}
-                    logoutOfWeb3Modal={logoutOfWeb3Modal}
-                    txProcessing={txProcessing}
-                    setTxProcessing={setTxProcessing}
+                   
                   />
                 }
               />
                <Route path="/analog" exact element={<AnalogCollection 
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            txProcessing={txProcessing}
-            setTxProcessing={setTxProcessing}/>} />
+            />} />
 
              <Route path="/staking" exact element={<Staking 
-            account={account}
-            web3Modal={web3Modal}
-            loadWeb3Modal={loadWeb3Modal}
-            web3Provider={web3Provider}
-            setWeb3Provider={setWeb3Provider}
-            logoutOfWeb3Modal={logoutOfWeb3Modal}
-            txProcessing={txProcessing}
-            setTxProcessing={setTxProcessing}/>} />
+                 txProcessing={txProcessing}
+                 setTxProcessing={setTxProcessing}
+            />} />
               <Route path="/ecosystem" exact element={<Ecosystem />} />
               <Route path="/team" exact element={<Team />} />
        
-              <Route path="/ded" exact element={<Ded account={account} />} />
+              <Route path="/ded" exact element={<Ded />} />
               <Route path="/learning" exact element={<Learning />}/>
             </Routes>
           </div>
         </div>
       </Router>
     </div>
+    </AuthProvider>
   );
 }
 

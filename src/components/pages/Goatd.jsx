@@ -6,22 +6,26 @@ import Mint from '../GoatdMint';
 import axios from 'axios';
 import { GOATD_ADDRESS, GOATD_ABI } from '../Contracts/GoatdContract';
 import { ethers, Contract } from "ethers";
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { useAuth } from '../../Auth';
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Goatd = ({
-    props,
-    account,
-    web3Modal,
-    loadWeb3Modal,
-    web3Provider,
-    setWeb3Provider,
-    logoutOfWeb3Modal,
     txProcessing,
     setTxProcessing,
-}) => {
 
+
+}) => {
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
 
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
@@ -291,10 +295,10 @@ export const Goatd = ({
         <div className='container flex-auto mx-auto w-full pt-6'>
 
             {/* Canvas Row*/}
-            <div className="xl:sticky top-30 grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 gap-4 mt-1 md:ml-4 sm:ml-0 sm:p-0 sm:pt-0 md:pt-4 lg:pt-10 xl-pt-10 2xl:pt-10 bg-slate-900 lg:pb-3">
+            <div className="top-30 grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-1 gap-4 mt-1 md:ml-4 sm:ml-0 sm:p-0 sm:pt-0 md:pt-4 lg:pt-10 xl-pt-10 2xl:pt-10 bg-slate-900 lg:pb-3">
                 {/* canvas div */}
 
-                <div className="col-span-2 p-1 mb-10 sm:mb-2" ref={div} style={{ height: "22rem", width: "22rem" }}>
+                <div className="xl:pl-60 col-span-2 p-1 mb-10 sm:mb-2" ref={div} style={{ height: "22rem", width: "22rem" }}>
                     <canvas
                         ref={canvas}
                         width={width}
@@ -398,7 +402,7 @@ export const Goatd = ({
                 </div>{/* SearchBox Ends */}
 
             </div>{/* Canvas Row Div Ends*/}
-            <div className='flex relative items-center overflow-hidden z-[0]'>
+            <div className='flex items-center overflow-hidden'>
                 <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
                 <div id='slider' className="p-10 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}

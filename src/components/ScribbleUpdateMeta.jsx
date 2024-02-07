@@ -9,7 +9,8 @@ import axios from "axios";
 import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "./Contracts/ScribbleContract";
 import { ENGRAVER_ABI, ENGRAVER_ADDRESS } from "./Contracts/EngraverContract";
-import image1 from "../assets/scribble/CARD_PLACEHOLDER.jpg"
+import image1 from "../assets/scribble/CARD_PLACEHOLDER.jpg";
+import { useAuth } from "../Auth";
 
 export default function ScribbleUpdateMetadata({
     props,
@@ -23,7 +24,7 @@ export default function ScribbleUpdateMetadata({
     top,
     id,
     saveImage,
-    account,
+
     customNoun,
     customColor,
     pieceName,
@@ -37,11 +38,19 @@ export default function ScribbleUpdateMetadata({
     txProcessing,
     setTxProcessing,
     ownedCards,
-    web3Provider,
+
     tombstoneSelected,
     buttonLabel,
 }) {
-
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
 
 
     async function uploadToMoralis(filename, contents) {
