@@ -427,7 +427,7 @@ export const Unnamed = ({
 
 
             </div>{/* Canvas Row Div Ends*/}
-            <div className='flex relative items-center overflow-hidden z-[0]'>
+            <div className='flex items-center overflow-hidden'>
                 <MdChevronLeft onClick={slideLeft} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' />
                 <div id='slider' className="pt-10 pb-1 flex gap-5 xl:flex-row font-mono text-spot-yellow w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide snap-mandatory snap-x">
                     {ownedCards ? ownedFilter.map(createCard) : dataSearch.map(createCard)}
