@@ -21,22 +21,25 @@ import rankedData from '../../rankedOutput.json';
 import metadataRanked from '../../spotBotMetadata_Ranked.json';
 import spotBotTokens from '../../spotBotTokens.json';
 import NFTCard from '../NFTCard'; // Adjust the path based on your file structure
+import { useAuth } from "../../Auth";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 
 export const Gallery = ({
+    id
+}) => {
+  
+  const {
     account,
     web3Modal,
     loadWeb3Modal,
     web3Provider,
     setWeb3Provider,
     logoutOfWeb3Modal,
-    txProcessing,
-    setTxProcessing,
-    id
-}) => {
+    // ... any other states or functions you need ...
+  } = useAuth();
   
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
