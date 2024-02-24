@@ -27,6 +27,8 @@ export const Goatd = ({
         // ... any other states or functions you need ...
     } = useAuth();
 
+    console.log(account);
+
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
@@ -91,6 +93,8 @@ export const Goatd = ({
 
     }*/
 
+
+
     useEffect(() => {
         const getTraits = async () => {
             const options = {
@@ -110,6 +114,8 @@ export const Goatd = ({
                 let response = await axios.request(options);
                 let data = response.data;
                 setWalletTraits(data.result.map((nft) => nft.token_id));
+                console.log(walletTraits.map(trait => ' ' + trait));
+                console.log(walletTraits);
             } catch (error) {
                 console.log(error);
             }
