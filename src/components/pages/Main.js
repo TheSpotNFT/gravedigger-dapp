@@ -418,34 +418,8 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
     <div className="snap-item scroll-smooth h-screen">
       {/*Spot Explainer */}
     <div className="grid grid-cols-2 h-screen pt-24 lg:pr-10 2xl:pr-24">
-    <div className="xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-3/5 block"></img></div>
-    <div className="text-white pt-10 font-mono">
-      <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
-      <div className="lg:text-lg xl:text-xl 2xl:text-xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Join us at The Spot on Avax, where devs can be devs and degens can be degens. We host a ton of projects such as dNFTs and other one of a kind personalized NFTs. From NFTombstones to Goat'd there is something for everyone. Pick up an OG spot today so you can take advantage of everything at The Spot on Avax. </div>
-    
-      <div className="px-48 pt-4 pb-4"><a href="/ecosystem"><button
-              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
-              
-            >
-              Eco-system Overview
-            </button></a></div>
-       <div className="px-48"><button
-              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
-              onClick={onClickUrl("/goatd")}
-            >
-              Launch Goatd
-            </button></div>
-           
-            <div className="px-48 pt-4"><a href="#vibes"><button
-              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
-      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
-              
-            >
-              Vibes
-            </button></a></div>
-            <div className="text-sm lg:text-sm xl:text-sm 2xl:text-lg lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-8 pr-24 pl-16">Play safe, wrap up your spot in our 404 contract! First approve, then wrap. We won't wrap it up without your consent.</div> 
+    <div className="pl-24 xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-4/5 block"></img>
+    <div className="text-sm font-mono text-white text-bold lg:text-sm xl:text-sm 2xl:text-lg lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-8 pr-24 pl-16">Play safe, wrap up your spot in our 404 contract! First approve, then wrap. We won't wrap it up without your consent.</div> 
             <div className="px-48 pt-8"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
@@ -469,6 +443,33 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
             >
               Wrap Them Up!
             </button></div></div>
+    <div className="text-white pt-10 font-mono">
+      <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
+      <div className="lg:text-lg xl:text-xl 2xl:text-xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Join us at The Spot on Avax, where devs can be devs and degens can be degens and everyone else can be whoever they want to be. We host a ton of projects such as dNFTs like Analog and UnnamedNFT and other one of a kind personalized NFTs such as NFTombstones and Goat'd pfps. There is literally something for everyone at The Spot on Avax. Pick up an OG spot today so you can take advantage of everything at The Spot on Avax, your Spot unlocks all the staking and dNFT functionality of our collections. </div>
+    
+      <div className="px-48 pt-4 pb-4"><a href="/ecosystem"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              
+            >
+              Eco-system Overview
+            </button></a></div>
+       <div className="px-48"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              onClick={onClickUrl("/goatd")}
+            >
+              Launch Goatd
+            </button></div>
+           
+            <div className="px-48 pt-4"><a href="#vibes"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              
+            >
+              Vibes
+            </button></a></div>
+            </div>
      
     </div>
   </div>
