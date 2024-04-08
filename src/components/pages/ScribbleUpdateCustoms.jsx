@@ -15,18 +15,22 @@ import { ethers, Contract } from "ethers";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { json } from "react-router-dom";
 import fallbackimage from "../../assets/thespotmaster.png"
+import { useAuth } from "../../Auth";
+
 
 export const ScribbleUpdate = ({
-    account,
-    web3Modal,
-    loadWeb3Modal,
-    web3Provider,
-    setWeb3Provider,
-    logoutOfWeb3Modal,
     txProcessing,
     setTxProcessing,
 }) => {
-
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
     //user input text vars
 
     const textinputUser = (event) => {

@@ -52,7 +52,7 @@ useEffect(() => {
   return (
     <div className="aspect-w-1 aspect-h-1">
     <div
-    className="relative bg-cover bg-center bg-botbg h-[1600px] w-[1600px] overflow-hidden"
+    className="bg-cover bg-center bg-plots h-[1600px] w-[1600px] overflow-hidden"
   >
       <svg
         className="absolute top-0 left-0 w-[1600px] h-[1600px] overflow-hidden"

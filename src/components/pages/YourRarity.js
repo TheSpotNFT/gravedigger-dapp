@@ -39,6 +39,7 @@ export const YourRarity = ({
     logoutOfWeb3Modal,
     // ... any other states or functions you need ...
   } = useAuth();
+  
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);

@@ -30,6 +30,7 @@ module.exports = {
         'nftombstonebg' : "url('./assets/nftombstone.png')",
         'spotmobilebg' : "url('./assets/spotmobile.png')",
         'unnamedbg' : "url('./assets/unnamedImages/11.png')",
+        'plots' : "url('./assets/plots3.png')",
       }
   },
   },

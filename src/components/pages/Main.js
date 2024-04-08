@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { ethers, Contract } from "ethers";
 import { SPOTBOT_ADDRESS, SPOTBOT_ABI } from '../Contracts/SpotBotContract';
+import { SPOT404_ADDRESS, SPOT404_ABI } from "../Contracts/Spot404";
+import SPOTNFTABI from '../Contracts/SpotNFTAbi.json';
 import ReactGA from 'react-ga';
 import LogoutButton from "../Logout";
 import goatdmain from "../../assets/goatdmain.png";
@@ -33,6 +35,7 @@ import analog3 from "../../assets/analog/41.png";
 import analog4 from "../../assets/anananoir.png";
 import spotmobile from "../../assets/spotbot/261.png";
 import FlippableCard from "../../components/flippable-card";
+import ChadYellow from "../../assets/chad_yellow.png";
 import "../../index.css";
 import Footer from "../Footer";
 import VibesMint from "../../components/vibesMints";
@@ -76,6 +79,11 @@ const observer = new IntersectionObserver(entries => {
 })
 const [explore, setExplore] = useState(false);
 const [background, setBackground] = useState(false);
+const [textinputText, setTextinputText] = useState([]);
+
+const textinputUserText = (event) => {
+  setTextinputText(event.target.value);
+};
 
 function exploreClick(){
   setExplore(!explore);
@@ -89,6 +97,62 @@ const [textinput, setTextinput] = useState("1");
 const textinputUser = (event) => {
   setTextinput(event.target.value);
 };
+const [txProcessing, setTxProcessing] = useState()
+
+
+async function setApprovalForAll() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (SPOTNFTABI && "0x0C6945E825fc3c80F0a1eA1d3E24d6854F7460d8" && signer) {
+              const contract = new Contract("0x0C6945E825fc3c80F0a1eA1d3E24d6854F7460d8", SPOTNFTABI, signer);
+
+
+              let tx = await contract.setApprovalForAll("0x088aa15add5A141Fc144d4B30D6a600B4DA55DF2", "1");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Your Spot Approved for Wrapping"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+async function wrap721() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (SPOT404_ABI && SPOT404_ADDRESS && signer) {
+              const contract = new ethers.Contract(SPOT404_ADDRESS, SPOT404_ABI, signer);
+
+              // Convert the input string to an array of numbers
+              const inputArray = textinputText.split(',').map(n => parseInt(n.trim(), 10));
+
+              // Call the smart contract function with the array
+              let tx = await contract.wrapSet(inputArray);
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert("Wrapped it up!");
+          }
+      }
+  } catch (error) {
+      console.log(error);
+      alert("An error occurred. See the console for details.");
+  } finally {
+      setTxProcessing(false);
+  }
+}
 
 
 async function mintNFT(setTxProcessing) {
@@ -161,13 +225,7 @@ const slideRight = () => {
     <div> 
       {/* MOBILE LAYOUT */}
       <div className="snap-container flex-auto mx-auto px-12 block lg:hidden scroll-smooth scrollbar-hide ">
-
-
-
-       
-      
-       
-
+        
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
 
    {/*Spot Bot */}
@@ -178,6 +236,38 @@ const slideRight = () => {
             >
               Eco-system Overview
             </button></a></div>
+            <div id="spotwrapmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Wrap Your Spot</div>
+ <div className="mx-auto w-full"><img src={ChadYellow} alt="The Spot" className="w-full"></img></div>
+
+ <div className="font-mono text-l px-4 py-2 text-white">Play safe, wrap up your spot in our 404 contract! First approve, then wrap. We won't wrap it up without your consent.</div>
+ <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={setApprovalForAll}
+        >
+          Approve To Wrap Spots
+        </button>
+        </div>
+        <div className="pt-4">
+                                    <input
+                                        type="text"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-12"
+                                        placeholder="IDs to Wrap (separate IDs with a comma)"
+                                        value={textinputText}
+                                        onChange={textinputUserText.bind(this)}
+                                    />
+                                </div>
+        <div className="py-2">
+          
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={wrap721}
+        >
+          Wrap Them Up!
+        </button>
+        </div>
    <div id="spotbotmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Spot Bot</div>
  <div><img src={spotbot4} alt="Spot Bot" className=""></img></div>
 
@@ -331,8 +421,8 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
     <div className="xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-3/5 block"></img></div>
     <div className="text-white pt-10 font-mono">
       <h1 className="text-5xl pt-4 pb-10 pr-12">The Spot on Avax</h1>
-      <div className="lg:text-lg xl:text-xl 2xl:text-3xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Come chill with us down at The Spot, where we are developing dNFTs on avalanche. Over the past 12 months we have developed multiple dNFT and customizable NFT projects. These include our first release, Goatd (Greatest of all Time Degens) and our latest release The Spot Bot. We are focusing on dNFTs and have helped artists release their projects on the avalanche blockchain implementing upgradeable and changeable NFTs. From our Analog collection which is focused on bringing irl artists to avalanche and incorporating a variation selection to NFTombstones where you can engrave your tombstone with a personal message. Check out our latest releases The Spot Bot and Vibes.</div>
-       
+      <div className="lg:text-lg xl:text-xl 2xl:text-xl lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-24 pr-24">Join us at The Spot on Avax, where devs can be devs and degens can be degens. We host a ton of projects such as dNFTs and other one of a kind personalized NFTs. From NFTombstones to Goat'd there is something for everyone. Pick up an OG spot today so you can take advantage of everything at The Spot on Avax. </div>
+    
       <div className="px-48 pt-4 pb-4"><a href="/ecosystem"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
@@ -354,7 +444,31 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
               
             >
               Vibes
-            </button></a></div></div>
+            </button></a></div>
+            <div className="text-sm lg:text-sm xl:text-sm 2xl:text-lg lg:pt-4 2xl:pt-12 lg:pb-12 2xl:pb-8 pr-24 pl-16">Play safe, wrap up your spot in our 404 contract! First approve, then wrap. We won't wrap it up without your consent.</div> 
+            <div className="px-48 pt-8"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              onClick={setApprovalForAll}
+            >
+              Approve Your Spots to be Wrapped
+            </button></div>
+            <div className="pl-1 pr-6 pt-4">
+                                    <input
+                                        type="text"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-12"
+                                        placeholder="IDs to Wrap (separate IDs with a comma)"
+                                        value={textinputText}
+                                        onChange={textinputUserText.bind(this)}
+                                    />
+                                </div>
+            <div className="px-48 pt-4"><button
+              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+              onClick={wrap721}
+            >
+              Wrap Them Up!
+            </button></div></div>
      
     </div>
   </div>

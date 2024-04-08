@@ -114,7 +114,6 @@ export const Goatd = ({
                 let response = await axios.request(options);
                 let data = response.data;
                 setWalletTraits(data.result.map((nft) => nft.token_id));
-                console.log(walletTraits.map(trait => ' ' + trait));
                 console.log(walletTraits);
             } catch (error) {
                 console.log(error);

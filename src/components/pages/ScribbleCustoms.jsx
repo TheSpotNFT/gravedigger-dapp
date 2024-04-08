@@ -11,24 +11,29 @@ import image1 from "../../assets/scribble/CARD_PLACEHOLDER.jpg"
 import DisplayCards from "../ScribbleCard1";
 import { SCRIBBLECLAIM_ABI, SCRIBBLECLAIM_ADDRESS } from "../Contracts/ScribbleContract";
 import { ethers, Contract } from "ethers";
-import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { useAuth } from "../../Auth";
+
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
 export const Scribble = ({
-    account,
-    web3Modal,
-    loadWeb3Modal,
-    web3Provider,
-    setWeb3Provider,
-    logoutOfWeb3Modal,
+
     txProcessing,
     setTxProcessing,
 }) => {
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
-
+    const {
+        account,
+        web3Modal,
+        loadWeb3Modal,
+        web3Provider,
+        setWeb3Provider,
+        logoutOfWeb3Modal,
+        // ... any other states or functions you need ...
+    } = useAuth();
     const isAuthenticated = Boolean(account);
     const userAddress = account;
     const [filter, setFilter] = useState("");
