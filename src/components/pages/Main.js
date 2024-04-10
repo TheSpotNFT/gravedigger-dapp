@@ -3,6 +3,8 @@ import { ethers, Contract } from "ethers";
 import { SPOTBOT_ADDRESS, SPOTBOT_ABI } from '../Contracts/SpotBotContract';
 import { SPOT404_ADDRESS, SPOT404_ABI } from "../Contracts/Spot404";
 import SPOTNFTABI from '../Contracts/SpotNFTAbi.json';
+import { EFF404_ABI, EFF404_ADDRESS } from "../Contracts/Eff404Contract";
+import { EFF_ABI, EFF_ADDRESS } from "../Contracts/EffContract";
 import ReactGA from 'react-ga';
 import LogoutButton from "../Logout";
 import goatdmain from "../../assets/goatdmain.png";
@@ -29,6 +31,7 @@ import cc2 from "../../assets/scribble/CC2.png";
 import cc3 from "../../assets/scribble/CC3.png";
 import cc4 from "../../assets/scribble/CC4.png";
 import analogmain from "../../assets/analog.png";
+import eff from "../../assets/eff.png";
 import analog1 from "../../assets/analog/7-b.png";
 import analog2 from "../../assets/analog/2.png";
 import analog3 from "../../assets/analog/41.png";
@@ -80,10 +83,17 @@ const observer = new IntersectionObserver(entries => {
 const [explore, setExplore] = useState(false);
 const [background, setBackground] = useState(false);
 const [textinputText, setTextinputText] = useState([]);
+const [textinputText1, setTextinputText1] = useState([]);
 
 const textinputUserText = (event) => {
   setTextinputText(event.target.value);
 };
+
+
+const textinputUserText1 = (event) => {
+  setTextinputText1(event.target.value);
+};
+
 
 function exploreClick(){
   setExplore(!explore);
@@ -94,6 +104,7 @@ function exploreClick(){
   }
 
 const [textinput, setTextinput] = useState("1");
+
 const textinputUser = (event) => {
   setTextinput(event.target.value);
 };
@@ -154,6 +165,59 @@ async function wrap721() {
   }
 }
 
+async function effSetApprovalForAll() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (EFF_ABI && "0xabCddFC922a39dB1747c1e46c273a50f0f42Bfb3" && signer) {
+              const contract = new Contract("0xabCddFC922a39dB1747c1e46c273a50f0f42Bfb3", EFF_ABI, signer);
+
+
+              let tx = await contract.setApprovalForAll("0x0F342513b5881919e07F7682Df74C720345d8634", "1");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Your Eff_Inscription Approved for Wrapping"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+async function effWrap721() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (EFF404_ABI && EFF404_ADDRESS && signer) {
+              const contract = new ethers.Contract(EFF404_ADDRESS, EFF404_ABI, signer);
+
+              // Convert the input string to an array of numbers
+              const inputArray = textinputText1.split(',').map(n => parseInt(n.trim(), 10));
+
+              // Call the smart contract function with the array
+              let tx = await contract.wrapSet(inputArray);
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert("Wrapped it up!");
+          }
+      }
+  } catch (error) {
+      console.log(error);
+      alert("An error occurred. See the console for details.");
+  } finally {
+      setTxProcessing(false);
+  }
+}
 
 async function mintNFT(setTxProcessing) {
   //setTxProcessing(true);
@@ -382,6 +446,7 @@ const slideRight = () => {
  <div><img src={cc3} alt="Scribble" className=""></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">Own a SCRIBBLE WARLOCK piece? Claim your custom card today. Enter in your prompts and SCRIBBLE will gift you a dope custom card.</div>
+
  <div className="py-2 pb-8">
         <button
           className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
@@ -391,8 +456,35 @@ const slideRight = () => {
           Launch Scribble Customs
         </button>
         </div>
-
-
+        <img src={eff} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-4/5 block"></img>
+        <div className="py-2">
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={effSetApprovalForAll}
+        >
+          Approve To Wrap Eff_Inscriptions
+        </button>
+        </div>
+        <div className="pt-4">
+                                    <input
+                                        type="text"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-12"
+                                        placeholder="IDs to Wrap (separate IDs with a comma)"
+                                        value={textinputText1}
+                                        onChange={textinputUserText1.bind(this)}
+                                    />
+                                </div>
+        <div className="py-2">
+          
+        <button
+          className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+  hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+          onClick={effWrap721}
+        >
+          Wrap Them Up!
+        </button>
+        </div>
       </div>
 
 
@@ -725,6 +817,45 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       </div>
       </div>  
     </div>
+
+    <div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
+  {/* Image container on the left */}
+  <div className="flex-1 flex justify-center items-center">
+    <img src={eff} alt="EffEm" className="p-5 m-0 w-1/2"></img>
+  </div>
+
+  {/* Button and text fields container on the right */}
+
+  <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+  <div className="text-white pr-2 font-mono">
+      <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $FUCKEM</h1></div>
+    {/* Button 1 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={effSetApprovalForAll}
+    >
+      Approve To Wrap Eff_Inscriptions
+    </button>
+
+    {/* Text Field */}
+    <input
+      type="text"
+      className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
+      placeholder="IDs to Wrap (separate IDs with a comma)"
+      value={textinputText1}
+      onChange={textinputUserText1.bind(this)}
+    />
+
+    {/* Button 2 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={effWrap721}
+    >
+      Wrap Them Up!
+    </button>
+  </div>
+</div>
+
   <div className="footer">
           <Footer />
         </div>
