@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactGA from 'react-ga';
+import { ethers, Contract } from "ethers";
 import Card from '../UnnamedCard';
 import unnamedCards from '../../unnamedCardData';//changed from traits
 import unnamedData from '../Contracts/UnnamedMetaData'
@@ -13,7 +14,7 @@ import { UNNAMED_ABI, UNNAMED_ADDRESS } from '../Contracts/UnnamednftContract';
 import { UNNAMEDBRANDING_ABI, UNNAMEDBRANDING_ADDRESS } from '../Contracts/UnnamedBrandedContract';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { useAuth } from '../../Auth';
-
+import { UNNAMED404_ABI, UNNAMED404_ADDRESS } from '../Contracts/Unnamed404Contract';
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -34,12 +35,22 @@ export const Unnamed = ({
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
     }, []);
-
+    const [selectedNFTs, setSelectedNFTs] = useState([]);
     const isAuthenticated = Boolean(account);
     const unnamedNFTContract = "0x6bdad2a83a8e70f459786a96a0a9159574685c0e";
     const spotNFTContract = '0x0C6945E825fc3c80F0a1eA1d3E24d6854F7460d8';
     const [filter, setFilter] = useState('');
     const [showButton, setShowButton] = useState(false);
+    const toggleSelectNFT = (id) => {
+        setSelectedNFTs(prevSelected => {
+            const isSelected = prevSelected.includes(id);
+            if (isSelected) {
+                return prevSelected.filter(item => item !== id);
+            } else {
+                return [...prevSelected, id];
+            }
+        });
+    };
 
     useEffect(() => {
         window.addEventListener("scroll", () => {
@@ -145,7 +156,60 @@ export const Unnamed = ({
         setUnnamedID(chosenTrait.UnnamedNFTID)
     }
 
+    async function approve() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (UNNAMED_ABI && UNNAMED_ADDRESS && signer) {
+                    const contract = new Contract(UNNAMED_ADDRESS, UNNAMED_ABI, signer);
 
+
+                    let tx = await contract.setApprovalForAll("0x39b0aC0d6C3BafAb706f314fc545Da77762fC5E3", "1");
+                    console.log(tx.hash);
+                    setTxProcessing(false);
+                    alert(
+                        "Your Unnamed is Approved for Wrapping"
+                    );
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setTxProcessing(false);
+        }
+    }
+
+    async function wrapTo404() {
+        setTxProcessing(true);
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                if (UNNAMED404_ABI && UNNAMED404_ADDRESS && signer) {
+                    const contract = new ethers.Contract(UNNAMED404_ADDRESS, UNNAMED404_ABI, signer);
+
+                    // Convert the input string to an array of numbers
+                    console.log(selectedNFTs);
+                    const inputArray = selectedNFTs;
+
+                    // Call the smart contract function with the array
+                    let tx = await contract.wrapSet(inputArray);
+                    console.log(tx.hash);
+                    setTxProcessing(false);
+                    alert("Wrapped it up!");
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            alert("An error occurred. See the console for details.");
+        } finally {
+            setTxProcessing(false);
+        }
+    }
 
     /*useEffect(() => {
         const approved = async () => {
@@ -207,22 +271,28 @@ export const Unnamed = ({
         getTraits();
     }, [account]);
 
-    function createCard(unnamedCards) { //Building the card here from Card.jsx passing props and simultaneously fetching traits on click.
+    function createCard(unnamedCards) {
+        const isSelected = selectedNFTs.includes(unnamedCards.id);
         return (
-
-            <div key={unnamedCards.edition} onClick={() => {
-                updateCanvasTraits(unnamedCards)
-
-            }}> <Card
+            <div key={unnamedCards.edition} onClick={() => updateCanvasTraits(unnamedCards)} style={{ border: isSelected ? '2px solid yellow' : '' }}>
+                <Card
                     nftName={unnamedCards.nftName}
                     traitType={unnamedCards.traitType}
                     traitName={unnamedCards.traitName}
                     image={unnamedCards.image}
                     id={unnamedCards.id}
                     brand={unnamedCards.brand}
-                /></div>
-        )
+                />
+                {unnamedCards.id <= 3000 && (
+                    <button onClick={(e) => {
+                        e.stopPropagation(); // Prevent card click event
+                        toggleSelectNFT(unnamedCards.id);
+                    }}>Bulk Select</button>
+                )}
+            </div>
+        );
     }
+
 
     // For Searching traits
     const searchText = (event) => {
@@ -335,7 +405,7 @@ export const Unnamed = ({
                 </div>
                 {/* canvas div ends */}
                 {/* Stats div*/}
-                <div className='sm:hidden md:hidden lg:block lg:col-start-4 grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "26rem", width: "23rem" }}>
+                <div className='sm:hidden md:hidden lg:block lg:col-start-4 grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "28rem", width: "23rem" }}>
                     {/* Individual Stats */}
                     <div className='font-mono text-white list-none flex'>
                         <div className={`text-${(walletTraits.includes(`${chosenTrait.UnnamedNFTID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>UnnamedNFT: </div>
@@ -397,11 +467,22 @@ export const Unnamed = ({
                         <div className='text-[red] pr-3 text-xl'>* </div>
                         UnnamedNFT not in your wallet.
                     </div>
-                    <div className="flex pr-2 pl-2 pt-2"> <button className="w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+                    <div className="flex pr-2 pl-2 pt-2 pb-4"> <button className="w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                             setOwnedCards(!ownedCards)
                         }}>{!ownedCards ? 'My UnnamedNFTs' : 'View All UnnamedNFTs'}</button></div>
-
+                    <button
+                        className="ml-4 rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200 hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
+                        onClick={approve}
+                    >
+                        Approve to Wrap
+                    </button>
+                    <button
+                        className="ml-4 rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200 hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
+                        onClick={wrapTo404}
+                    >
+                        Wrap to 404
+                    </button>
 
                     {/*<div className='font-mono text-white list-none flex pb-3 text-sm'><span className={traitsAvailability === '0' ? "text-green-300" : "text-[#fa2121]"}>
                             {traitsAvailability === '0' && currentDNA.length >= 14 ? 'Trait Combo is Unique!' : null}
@@ -434,7 +515,7 @@ export const Unnamed = ({
                 </div>
                 <MdChevronRight onClick={slideRight} size={40} className=' fill-gray-500 hover:scale-110 hover:fill-spot-yellow md:hidden sm:hidden lg:block xl:block 2xl:block' /></div>
 
-            <div className='lg:hidden md:block sm:block lg:col-start-4 grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "26rem", width: "23rem" }}>
+            <div className='lg:hidden md:block sm:block lg:col-start-4 grow border-dashed border-4 border-slate-500 p-3 pl-5 m-1 text-left w-80 md:mt-10 lg:mt-2 mt-10 sm:mt-10 text-sm' style={{ height: "28rem", width: "23rem" }}>
                 {/* Individual Stats */}
                 <div className='font-mono text-white list-none flex'>
                     <div className={`text-${(walletTraits.includes(`${chosenTrait.UnnamedNFTID}`)) ? "spot-yellow" : "[red]"} font-bold pr-3 pl-2`}>UnnamedNFT: </div>
@@ -496,11 +577,22 @@ export const Unnamed = ({
                     <div className='text-[red] pr-3 text-xl'>* </div>
                     UnnamedNFT not in your wallet.
                 </div>
-                <div className="flex pr-2 pl-2 pt-2"> <button className="w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
+                <div className="flex pr-2 pl-2 pt-2 pb-4"> <button className="w-full rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200
     hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base" onClick={() => {
                         setOwnedCards(!ownedCards)
                     }}>{!ownedCards ? 'My UnnamedNFTs' : 'View All UnnamedNFTs'}</button></div>
-
+                <button
+                    className="ml-4 rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200 hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
+                    onClick={approve}
+                >
+                    Approve to Wrap
+                </button>
+                <button
+                    className="ml-4 rounded-lg px-1 py-1 border-2 border-gray-200 text-gray-200 hover:bg-gray-200 hover:text-gray-900 duration-300 font-mono font-bold text-base"
+                    onClick={wrapTo404}
+                >
+                    Wrap to 404
+                </button>
 
                 {/*<div className='font-mono text-white list-none flex pb-3 text-sm'><span className={traitsAvailability === '0' ? "text-green-300" : "text-[#fa2121]"}>
                             {traitsAvailability === '0' && currentDNA.length >= 14 ? 'Trait Combo is Unique!' : null}
