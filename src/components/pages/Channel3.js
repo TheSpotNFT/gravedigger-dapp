@@ -127,7 +127,7 @@ const Channel3 = () => {
           playerRefs.current = videoUrls.map((videoUrl, index) => {
             const options = {
               url: videoUrl, // Assuming the URL is the Vimeo video URL
-              //width: 860,
+              width: 1080,
             };
             return new Player(`vimeo-player-${index}`, options);
           });
@@ -349,8 +349,8 @@ const Channel3 = () => {
 
 
 <div className='md:flex pt-6 md:pt-0 w-full'>
-  <div className='w-full md:w-full items-center pt-40 md:pt-0'>
-    
+  <div className='w-full md:w-full items-center md:pt-0'>
+  <div className='flex flex-col items-center min-h-screen'>
   {currentUser ? (
   <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
 ) : <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>}
@@ -370,6 +370,7 @@ const Channel3 = () => {
         <p className='text-white'>Select a creator to view their content</p>
       )}
      <div className='text-white'></div> 
+     </div>
     </div>
 
     <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
