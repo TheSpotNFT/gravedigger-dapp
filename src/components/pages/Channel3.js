@@ -157,14 +157,14 @@ const Channel3 = () => {
           const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
   
           // Call the sharesBalance function
-          const result = await contract.sharesBalance(account, user.address);
+          const result = await contract.sharesBalance(user.address, account);
           //console.log(result);
   
           // 'result' is either true or false, you can use it as needed
-          console.log(`sharesBalance result for address ${user.address}: ${result}`);
-          console.log(`Your Wallet Address: ${account}`);
-          console.log(`User's Address: ${user.address}`);
-          console.log(`User's name: ${user.username}`);
+          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
+          //console.log(`Your Wallet Address: ${account}`);
+          //console.log(`User's Address: ${user.address}`);
+          //console.log(`User's name: ${user.username}`);
           const hasSharesBalance = result.gte(1);
           if (hasSharesBalance == true) {
             // Enable the button or take any other actions as needed
