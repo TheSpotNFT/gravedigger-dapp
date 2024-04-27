@@ -72,7 +72,7 @@ const Channel3 = () => {
   
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
-  
+  console.log(database);
 
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const Channel3 = () => {
     }
   }, [selectedUser]);
 
-  /* THE ARENA
+  // THE ARENA
   const checkSharesBalance = async (user) => {
     try {
       const { ethereum } = window;
@@ -182,9 +182,9 @@ const Channel3 = () => {
       console.error("Error checking sharesBalance:", error);
     }
   }; 
-  */
+ 
 
-// Hot Takes
+/* Hot Takes
   const checkKeysBalance = async (user, index) => {
     try {
       const { ethereum } = window;
@@ -229,7 +229,7 @@ const Channel3 = () => {
       console.error("Error checking keysBalance:", error);
     }
   };
-
+*/
   const getBuyPriceAfterFee = async (user) => {
     try {
       const { ethereum } = window;
@@ -239,7 +239,7 @@ const Channel3 = () => {
         const signer = provider.getSigner();
   
         if (SA_ABI && SA_ADDRESS && signer) {
-          const contract = new Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, signer);
+          const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
           console.log(user);
           // Call the sharesBalance function
           const result = await contract.getBuyPriceAfterFee(user, "1");
@@ -266,10 +266,10 @@ const Channel3 = () => {
       if (ethereum) {
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
-        if (HOTTAKES_ABI && HOTTAKES_ADDRESS && signer) {
+        if (SA_ABI && SA_ADDRESS && signer) {
           const contract = new Contract(
-            HOTTAKES_ADDRESS,
-            HOTTAKES_ABI,
+            SA_ADDRESS,
+            SA_ABI,
             signer
           );
 
@@ -279,7 +279,7 @@ const Channel3 = () => {
           };
 
           console.log(currentBuyPrice, spotWallet, user.address);
-          let tx = await contract.buyKeys(spotWallet, user.address, "1", options);
+          let tx = await contract.buyShares(user.address, "1", options);
           //console.log(tx.hash);
         
           alert(
@@ -303,7 +303,7 @@ const Channel3 = () => {
       const provider = new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc');
 
       // Create a new contract instance
-      const yourContract = new ethers.Contract(HOTTAKES_ADDRESS, HOTTAKES_ABI, provider);
+      const yourContract = new ethers.Contract(SA_ADDRESS, SA_ABI, provider);
 
       // Set the contract instance in the state
       setContract(yourContract);
@@ -312,7 +312,7 @@ const Channel3 = () => {
     initializeContract();
   }, []);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const listenForEvents = async () => {
       if (contract) {
         // Replace 'Trade' with the actual event name
@@ -341,6 +341,7 @@ const Channel3 = () => {
 
     listenForEvents();
   }, [contract]);
+  */
 
 
   return (
@@ -368,13 +369,15 @@ const Channel3 = () => {
       ) : (
         <p className='text-white'>Select a creator to view their content</p>
       )}
-     <div className='text-white'>Test</div> 
+     <div className='text-white'></div> 
     </div>
 
     <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
 
-    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} onClick={onClickUrl("https://hottakes.io")}>
-      {isToggled ? 'HotTakes.io' : 'The Arena'}
+    <div className='pb-8'><button className={`w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-lg 2xl:text-xl flex justify-center`} onClick={onClickUrl("https://arena.social")}>
+      {//{isToggled ? 'HotTakes.io' : 'The Arena'}
+}
+Enter The Arena
      
     </button></div>
 
@@ -410,7 +413,7 @@ const Channel3 = () => {
             });
             getBuyPriceAfterFee(user.address);
 
-            checkKeysBalance(user, index);
+            checkSharesBalance(user, index);
             if (buyModes[index]) {
               buyKey(user, index);
             }
