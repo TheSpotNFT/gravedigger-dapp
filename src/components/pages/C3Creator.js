@@ -243,7 +243,7 @@ const Channel3 = () => {
               setSelectedUser("User not found");
             }
           } else {
-            setSelectedUser("You do not own The Spot's ticket");
+            setSelectedUser("You do not own a ticket to The Spot");
           }
         }
       }

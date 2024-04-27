@@ -23,7 +23,7 @@ const Channel3 = () => {
   } = useAuth();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState('The Spot');
   const [userVideos, setUserVideos] = useState([]);
   const playerRefs = useRef([]);
   const [isToggled, setToggled] = useState(true);
@@ -161,10 +161,10 @@ const Channel3 = () => {
           //console.log(result);
   
           // 'result' is either true or false, you can use it as needed
-          //console.log(`sharesBalance result for address ${user.address}: ${result}`);
-          //console.log(`Your Wallet Address: ${account}`);
-          //console.log(`User's Address: ${user.address}`);
-          //console.log(`User's name: ${user.username}`);
+          console.log(`sharesBalance result for address ${user.address}: ${result}`);
+          console.log(`Your Wallet Address: ${account}`);
+          console.log(`User's Address: ${user.address}`);
+          console.log(`User's name: ${user.username}`);
           const hasSharesBalance = result.gte(1);
           if (hasSharesBalance == true) {
             // Enable the button or take any other actions as needed
@@ -172,6 +172,9 @@ const Channel3 = () => {
             //console.log(selectedUser);
             //console.log(hasSharesBalance);
             console.log(user.username);
+           
+            console.log('Input 1:',account);
+            console.log('Input 2:',user.address);
             //console.log(account);
           } else {
             setSelectedUser('You do not have access to ' + user.username);
@@ -419,6 +422,7 @@ Enter The Arena
               buyKey(user, index);
             }
             console.log(user.username);
+            console.log(user.address);
           }}
         >
           {buyModes[index] ? `Buy ${user.username} (${currentBuyPriceEther})` : user.username}
