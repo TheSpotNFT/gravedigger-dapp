@@ -47,6 +47,10 @@ import gud from "../../assets/gud.png"
 import bad from "../../assets/bad.png"
 import MobileMenu from "../MobileMenu";
 import { useAuth } from "../../Auth";
+import { B3NOCHILL_ABI, B3NOCHILL_ADDRESS } from "../Contracts/B3nochill";
+import { BADBONEBIZ_ABI, BADBONEBIZ_ADDRESS } from "../Contracts/BadBoneBiz";
+import { NOCHILL_ABI, NOCHILL_ADDRESS } from "../Contracts/Nochill";
+import bones from "../../assets/B31544.png";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -84,14 +88,23 @@ const [explore, setExplore] = useState(false);
 const [background, setBackground] = useState(false);
 const [textinputText, setTextinputText] = useState([]);
 const [textinputText1, setTextinputText1] = useState([]);
+const [depositAmount, setDepositAmount] = useState([]);
+const [withdrawAmount, setWithdrawAmount] = useState([]);
 
 const textinputUserText = (event) => {
   setTextinputText(event.target.value);
 };
 
-
 const textinputUserText1 = (event) => {
   setTextinputText1(event.target.value);
+};
+
+const textinputUserText2 = (event) => {
+  setDepositAmount(event.target.value);
+};
+
+const textinputUserText3 = (event) => {
+  setWithdrawAmount(event.target.value);
 };
 
 
@@ -127,6 +140,59 @@ async function setApprovalForAll() {
               setTxProcessing(false);
               alert(
                   "Your Spot Approved for Wrapping"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+async function setApprovalForAllBadBoneBiz() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (BADBONEBIZ_ABI && BADBONEBIZ_ADDRESS && signer) {
+              const contract = new Contract(BADBONEBIZ_ADDRESS, BADBONEBIZ_ABI, signer);
+
+
+              let tx = await contract.setApprovalForAll("0xBCfEa9DbE3C5D03B380D4f8013Ae22C8517BEECd", "1");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Your Bonez Approved for Wrapping"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+
+async function setApprovalForAllNoChill() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (NOCHILL_ABI && NOCHILL_ADDRESS && signer) {
+              const contract = new Contract(NOCHILL_ADDRESS, NOCHILL_ABI, signer);
+
+
+              let tx = await contract.approve("0xBCfEa9DbE3C5D03B380D4f8013Ae22C8517BEECd", "1000000000000000000000000");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Spending Approved!"
               );
           }
       }
@@ -218,6 +284,65 @@ async function effWrap721() {
       setTxProcessing(false);
   }
 }
+
+
+
+const depositTokens = async () => {
+  setTxProcessing(true);
+  console.log(depositAmount);
+  try {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      if (signer) {
+        const contract = new ethers.Contract(B3NOCHILL_ADDRESS, B3NOCHILL_ABI, signer);
+              // Convert the input string to an array of numbers
+              const inputArray = depositAmount.split(',').map(n => parseInt(n.trim(), 10));
+
+              // Call the smart contract function with the array
+              let tx = await contract.wrapSet(inputArray);
+
+        console.log(tx.hash);
+        alert("Tokens deposited successfully!");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    alert("An error occurred. See the console for details.");
+  } finally {
+    setTxProcessing(false);
+  }
+};
+
+
+const withdrawTokens = async () => {
+  setTxProcessing(true);
+  try {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      if (signer) {
+        const contract = new ethers.Contract(B3NOCHILL_ADDRESS, B3NOCHILL_ABI, signer);
+
+            // Convert the input string to an array of numbers
+            const inputArray = withdrawAmount.split(',').map(n => parseInt(n.trim(), 10));
+
+            // Call the smart contract function with the array
+            let tx = await contract.wrapSet(inputArray);
+
+        console.log(tx.hash);
+        alert("Tokens withdrawn successfully!");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    alert("An error occurred. See the console for details.");
+  } finally {
+    setTxProcessing(false);
+  }
+};
 
 async function mintNFT(setTxProcessing) {
   //setTxProcessing(true);
@@ -855,6 +980,69 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
     </button>
   </div>
 </div>
+
+<div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
+  {/* Image container on the left */}
+  <div className="flex-1 flex justify-center items-center">
+    <img src={bones} alt="Bonez" className="p-5 m-0 w-1/2"></img>
+  </div>
+
+  {/* Button and text fields container on the right */}
+
+  <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+  <div className="text-white pr-2 font-mono">
+      <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $b3NOCHILL</h1></div>
+    {/* Button 1 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={setApprovalForAllBadBoneBiz}
+    >
+      Approve To Wrap Bad Bone Biz
+    </button>
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={setApprovalForAllNoChill}
+    >
+      Approve To Spend $NOCHILL
+    </button>
+
+    {/* Text Field */}
+    <input
+      type="text"
+      className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
+      placeholder="IDs to Wrap (separate IDs with a comma)"
+      value={depositAmount}
+      onChange={textinputUserText2.bind(this)}
+    />
+
+    {/* Button 2 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={depositTokens}
+    >
+      Wrap Them Bonez Up!
+    </button>
+
+     {/* Text Field */}
+     <input
+      type="text"
+      className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
+      placeholder="IDs to Wrap (separate IDs with a comma)"
+      value={withdrawAmount}
+      onChange={textinputUserText3.bind(this)}
+    />
+
+    {/* Button 3 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={withdrawTokens}
+    >
+      UnWrap Them Bonez..
+    </button>
+  </div>
+</div>
+
+
 
   <div className="footer">
           <Footer />
