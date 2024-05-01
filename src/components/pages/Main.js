@@ -121,7 +121,7 @@ const [textinput, setTextinput] = useState("1");
 const textinputUser = (event) => {
   setTextinput(event.target.value);
 };
-const [txProcessing, setTxProcessing] = useState()
+const [txProcessing, setTxProcessing] = useState();
 
 
 async function setApprovalForAll() {
@@ -161,7 +161,7 @@ async function setApprovalForAllBadBoneBiz() {
               const contract = new Contract(BADBONEBIZ_ADDRESS, BADBONEBIZ_ABI, signer);
 
 
-              let tx = await contract.setApprovalForAll("0xBCfEa9DbE3C5D03B380D4f8013Ae22C8517BEECd", "1");
+              let tx = await contract.setApprovalForAll("0xd1DdA723Db979456f486Bcd60cC23e8468805730", "1");
               console.log(tx.hash);
               setTxProcessing(false);
               alert(
@@ -188,7 +188,7 @@ async function setApprovalForAllNoChill() {
               const contract = new Contract(NOCHILL_ADDRESS, NOCHILL_ABI, signer);
 
 
-              let tx = await contract.approve("0xBCfEa9DbE3C5D03B380D4f8013Ae22C8517BEECd", "1000000000000000000000000");
+              let tx = await contract.approve("0xd1DdA723Db979456f486Bcd60cC23e8468805730", "1000000000000000000000000");
               console.log(tx.hash);
               setTxProcessing(false);
               alert(
@@ -991,7 +991,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
   <div className="flex-1 flex flex-col justify-center items-center space-y-4">
   <div className="text-white pr-2 font-mono">
-      <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $b3NOCHILL</h1></div>
+      <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $BBBNOCHILL</h1></div>
     {/* Button 1 */}
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
@@ -1040,6 +1040,8 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       UnWrap Them Bonez..
     </button>
   </div>
+
+
 </div>
 
 
