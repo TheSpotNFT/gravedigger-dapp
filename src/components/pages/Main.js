@@ -330,7 +330,7 @@ const withdrawTokens = async () => {
             const inputArray = withdrawAmount.split(',').map(n => parseInt(n.trim(), 10));
 
             // Call the smart contract function with the array
-            let tx = await contract.wrapSet(inputArray);
+            let tx = await contract.unwrapSet(inputArray);
 
         console.log(tx.hash);
         alert("Tokens withdrawn successfully!");
@@ -1027,7 +1027,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
      <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
-      placeholder="IDs to Wrap (separate IDs with a comma)"
+      placeholder="IDs to UnWrap (separate IDs with a comma)"
       value={withdrawAmount}
       onChange={textinputUserText3.bind(this)}
     />
