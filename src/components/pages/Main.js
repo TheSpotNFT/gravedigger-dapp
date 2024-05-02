@@ -50,7 +50,11 @@ import { useAuth } from "../../Auth";
 import { B3NOCHILL_ABI, B3NOCHILL_ADDRESS } from "../Contracts/B3nochill";
 import { BADBONEBIZ_ABI, BADBONEBIZ_ADDRESS } from "../Contracts/BadBoneBiz";
 import { NOCHILL_ABI, NOCHILL_ADDRESS } from "../Contracts/Nochill";
+import { PEPE_ABI, PEPE_ADDRESS } from "../Contracts/Pepe";
+import { COQ_ABI, COQ_ADDRESS } from "../Contracts/Coq";
+import { PEPECOQ_ABI, PEPECOQ_ADDRESS } from "../Contracts/PepeCoq";
 import bones from "../../assets/B31544.png";
+import pepe from "../../assets/6194.png";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
@@ -90,6 +94,8 @@ const [textinputText, setTextinputText] = useState([]);
 const [textinputText1, setTextinputText1] = useState([]);
 const [depositAmount, setDepositAmount] = useState([]);
 const [withdrawAmount, setWithdrawAmount] = useState([]);
+const [depositPepeAmount, setDepositPepeAmount] = useState([]);
+const [withdrawPepeAmount, setWithdrawPepeAmount] = useState([]);
 
 const textinputUserText = (event) => {
   setTextinputText(event.target.value);
@@ -107,6 +113,13 @@ const textinputUserText3 = (event) => {
   setWithdrawAmount(event.target.value);
 };
 
+const textinputUserText4 = (event) => {
+  setDepositPepeAmount(event.target.value);
+};
+
+const textinputUserText5 = (event) => {
+  setWithdrawPepeAmount(event.target.value);
+};
 
 function exploreClick(){
   setExplore(!explore);
@@ -176,6 +189,33 @@ async function setApprovalForAllBadBoneBiz() {
   }
 }
 
+async function setApprovalForAllPepe() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (PEPE_ABI && PEPE_ADDRESS && signer) {
+              const contract = new Contract(PEPE_ADDRESS, PEPE_ABI, signer);
+
+
+              let tx = await contract.setApprovalForAll("0x0293E3798984FDc66ed68fAA337C1d4FEb65Ba2B", "1");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Your Pepe Portraits Approved for Wrapping"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+
 
 async function setApprovalForAllNoChill() {
   setTxProcessing(true);
@@ -193,6 +233,32 @@ async function setApprovalForAllNoChill() {
               setTxProcessing(false);
               alert(
                   "Spending Approved!"
+              );
+          }
+      }
+  } catch (error) {
+      console.log(error);
+  } finally {
+      setTxProcessing(false);
+  }
+}
+
+async function setApprovalForAllCoq() {
+  setTxProcessing(true);
+  try {
+      const { ethereum } = window;
+      if (ethereum) {
+          const provider = new ethers.providers.Web3Provider(ethereum);
+          const signer = provider.getSigner();
+          if (COQ_ABI && COQ_ADDRESS && signer) {
+              const contract = new Contract(COQ_ADDRESS, COQ_ABI, signer);
+
+
+              let tx = await contract.approve("0x0293E3798984FDc66ed68fAA337C1d4FEb65Ba2B", "500000000000000000000000000");
+              console.log(tx.hash);
+              setTxProcessing(false);
+              alert(
+                  "Spending $COQ Approved!"
               );
           }
       }
@@ -328,6 +394,63 @@ const withdrawTokens = async () => {
 
             // Convert the input string to an array of numbers
             const inputArray = withdrawAmount.split(',').map(n => parseInt(n.trim(), 10));
+
+            // Call the smart contract function with the array
+            let tx = await contract.unwrapSet(inputArray);
+
+        console.log(tx.hash);
+        alert("Tokens withdrawn successfully!");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    alert("An error occurred. See the console for details.");
+  } finally {
+    setTxProcessing(false);
+  }
+};
+
+const depositPepeTokens = async () => {
+  setTxProcessing(true);
+  console.log(depositPepeAmount);
+  try {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      if (signer) {
+        const contract = new ethers.Contract(PEPECOQ_ADDRESS, PEPECOQ_ABI, signer);
+              // Convert the input string to an array of numbers
+              const inputArray = depositPepeAmount.split(',').map(n => parseInt(n.trim(), 10));
+
+              // Call the smart contract function with the array
+              let tx = await contract.wrapSet(inputArray);
+
+        console.log(tx.hash);
+        alert("Tokens deposited successfully!");
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    alert("An error occurred. See the console for details.");
+  } finally {
+    setTxProcessing(false);
+  }
+};
+
+
+const withdrawPepeTokens = async () => {
+  setTxProcessing(true);
+  try {
+    const { ethereum } = window;
+    if (ethereum) {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      if (signer) {
+        const contract = new ethers.Contract(PEPECOQ_ADDRESS, PEPECOQ_ABI, signer);
+
+            // Convert the input string to an array of numbers
+            const inputArray = withdrawPepeAmount.split(',').map(n => parseInt(n.trim(), 10));
 
             // Call the smart contract function with the array
             let tx = await contract.unwrapSet(inputArray);
@@ -1044,6 +1167,68 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
 </div>
 
+<div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
+  {/* Image container on the left */}
+  <div className="flex-1 flex justify-center items-center">
+    <img src={pepe} alt="Pepe Portraits" className="p-5 m-0 w-1/2"></img>
+  </div>
+
+  {/* Button and text fields container on the right */}
+
+  <div className="flex-1 flex flex-col justify-center items-center space-y-4">
+  <div className="text-white pr-2 font-mono">
+      <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $PEPECOQ</h1></div>
+    {/* Button 1 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={setApprovalForAllPepe}
+    >
+      Approve To Wrap Pepe Portraits
+    </button>
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={setApprovalForAllCoq}
+    >
+      Approve To Spend $COQ
+    </button>
+
+    {/* Text Field */}
+    <input
+      type="text"
+      className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
+      placeholder="IDs to Wrap (separate IDs with a comma)"
+      value={depositPepeAmount}
+      onChange={textinputUserText4.bind(this)}
+    />
+
+    {/* Button 2 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={depositPepeTokens}
+    >
+      Wrap Them Pepes with $Coq!
+    </button>
+
+     {/* Text Field */}
+     <input
+      type="text"
+      className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
+      placeholder="IDs to UnWrap (separate IDs with a comma)"
+      value={withdrawPepeAmount}
+      onChange={textinputUserText5.bind(this)}
+    />
+
+    {/* Button 3 */}
+    <button
+      className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
+      onClick={withdrawPepeTokens}
+    >
+      UnWrap and get your $Coq Back..
+    </button>
+  </div>
+
+
+</div>
 
 
   <div className="footer">
