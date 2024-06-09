@@ -189,10 +189,10 @@ const Sats = ({  }) => {
                 </div>
             </div>
             <div className="relative text-xl text-avax-black p-8 pt-36 md:pt-36 px-4 md:px-36 lg:px-40 xl:px-96">
-                Mint your Single Sided Asset by providing the details below.
+                Mint your Single Asset Tokens by providing the details below.
             </div>
             <div className="relative text-xl text-avax-black pb-8 px-4 md:px-36 lg:px-40 xl:px-96">
-                Fill out the form below to mint your SSA.
+                Fill out the form below to mint your SATS.
             </div>
             <div className="relative pb-16">
                 <button onClick={handleReset} className="bg-neutral-600 hover:bg-neutral-500 duration-300 rounded-md p-4 font-bold text-xl">
