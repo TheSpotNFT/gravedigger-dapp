@@ -137,12 +137,12 @@ const SatsGallery = () => {
                                             placeholder="Amount to Mint"
                                             value={mintAmount[token.tokenId] || ""}
                                             onChange={(e) => setMintAmount({ ...mintAmount, [token.tokenId]: e.target.value })}
-                                            className="bg-gray-700 text-white p-2 rounded mr-2"
+                                            className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full"
                                         /></div>
                                         <div className="pb-4">
                                         <button
                                             onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                         >
                                             Mint Additional
                                         </button></div>
