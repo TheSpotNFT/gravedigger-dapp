@@ -21,6 +21,7 @@ import { Scribble } from "./components/pages/ScribbleCustoms";
 import { ScribbleUpdate } from "./components/pages/ScribbleUpdateCustoms";
 import { Rarity } from "./components/pages/Rarity";
 import { YourRarity } from "./components/pages/YourRarity";
+import Sats from "./components/pages/Sats";
 import Plots from "./components/pages/Plots";
 import ReactGA from 'react-ga';
 import Channel3 from "./components/pages/Channel3";
@@ -32,6 +33,8 @@ import ViewerPage from "./components/pages/ViewerStream";
 import { Gallery } from "./components/pages/Gallery";
 import Menu from "./components/Menu";
 import { AuthProvider } from "./Auth";
+import TokenInfo from "./components/pages/TokenInfo";
+import SatsGallery from "./components/pages/Satsgallery";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -93,6 +96,16 @@ function App() {
                   />
                 }
               />
+                  <Route
+                path="/tokenInfo"
+                exact
+                element={
+                  <TokenInfo
+                    
+                  />
+                }
+              />
+              
                <Route
                 path="/gallery"
                 exact
@@ -184,6 +197,24 @@ function App() {
                 exact
                 element={
                   <Plots
+                    
+                  />
+                }
+              />
+               <Route
+                path="/sats"
+                exact
+                element={
+                  <Sats
+                    
+                  />
+                }
+              />
+                <Route
+                path="/satsgallery"
+                exact
+                element={
+                  <SatsGallery
                     
                   />
                 }

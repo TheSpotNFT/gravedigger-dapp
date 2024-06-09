@@ -137,6 +137,8 @@ const textinputUser = (event) => {
 const [txProcessing, setTxProcessing] = useState();
 
 
+
+
 async function setApprovalForAll() {
   setTxProcessing(true);
   try {
@@ -1021,7 +1023,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
     <div className="px-10 md:pt-12 2xl:pt-8 py-4 gap-10 font-mono text-white md:text-l 2xl:text-2xl">
       Analog is a series of dNFTs that you may change to a specific variation if you own a
       Spot NFT and the 1/1 piece. IRL pieces are created in the analog world and brought into the digital to live on the blockchain. Check it out and browse all the variations of the
-      pieces and commit a variation once you own the piece. Get a Spot NFT at
+      pieces and commit a variation once you own the piece. Get a Spot NFT at 
       <a
   href="https://campfire.exchange/collections/0x0c6945e825fc3c80f0a1ea1d3e24d6854f7460d8"
   target="_blank"
@@ -1229,6 +1231,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
 
 </div>
+
 
 
   <div className="footer">
