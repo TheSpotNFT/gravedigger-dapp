@@ -102,6 +102,57 @@ const SatsGallery = () => {
         }
     };
 
+    const claimShrapnel = async (tokenId) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const contract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
+
+                const tx = await contract.claimShrapnel(tokenId);
+                console.log(tx.hash);
+            }
+        } catch (error) {
+            console.error("Error on claimShrapnel:", error);
+            alert(error.message || "An error occurred while claiming shrapnel.");
+        }
+    };
+
+    const explodeToken = async (tokenId) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const contract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
+
+                const tx = await contract.explodeToken(tokenId);
+                console.log(tx.hash);
+            }
+        } catch (error) {
+            console.error("Error on explodeToken:", error);
+            alert(error.message || "An error occurred while exploding the token.");
+        }
+    };
+
+    const finalizeExplosion = async (tokenId) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const contract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
+
+                const tx = await contract.finalizeExplosion(tokenId);
+                console.log(tx.hash);
+            }
+        } catch (error) {
+            console.error("Error on finalizeExplosion:", error);
+            alert(error.message || "An error occurred while finalizing the explosion.");
+        }
+    };
+
     return (
         <div className="relative min-h-screen font-mono text-white w-3/5">
             <h1 className="text-3xl font-bold mb-4 pt-16">Sats Gallery</h1>
@@ -127,25 +178,60 @@ const SatsGallery = () => {
                                     <p>Mint Price: {ethers.utils.formatEther(details.mintAdditionalCost.toString())} AVAX</p>
                                     <p>Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
                                     <p className="text-xs break-words">Creator: {details.creator}</p>
-                                   
                                 </div>
+                                {account && account.toLowerCase() === details.creator.toLowerCase() && (
+                                    <>
+                                        {!details.exploded && (
+                                            <div className="pb-4">
+                                                <button
+                                                    onClick={() => explodeToken(token.tokenId)}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold w-full px-4 py-2 rounded"
+                                                >
+                                                    Explode Token
+                                                </button>
+                                            </div>
+                                        )}
+                                        {details.isExploding && (
+                                            <div className="pb-4">
+                                                <button
+                                                    onClick={() => finalizeExplosion(token.tokenId)}
+                                                    className="bg-orange-500 hover:bg-orange-700 text-white font-bold w-full px-4 py-2 rounded"
+                                                >
+                                                    Finalize Explosion
+                                                </button>
+                                            </div>
+                                        )}
+                                        {details.isExploding && (
+                                        <div className="pb-4">
+                                            <button
+                                                onClick={() => claimShrapnel(token.tokenId)}
+                                                className="bg-green-500 hover:bg-green-700 text-white font-bold w-full px-4 py-2 rounded"
+                                            >
+                                                Claim Shrapnel
+                                            </button>
+                                        </div>)}
+                                    </>
+                                )}
                                 {details.totalSupply.lt(details.maxSupply) && (
                                     <div className="mt-4">
-                                        <div className="pb-4"><input
-                                            type="number"
-                                            min="1"
-                                            placeholder="Amount to Mint"
-                                            value={mintAmount[token.tokenId] || ""}
-                                            onChange={(e) => setMintAmount({ ...mintAmount, [token.tokenId]: e.target.value })}
-                                            className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full"
-                                        /></div>
                                         <div className="pb-4">
-                                        <button
-                                            onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
-                                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
-                                        >
-                                            Mint Additional
-                                        </button></div>
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                placeholder="Amount to Mint"
+                                                value={mintAmount[token.tokenId] || ""}
+                                                onChange={(e) => setMintAmount({ ...mintAmount, [token.tokenId]: e.target.value })}
+                                                className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full"
+                                            />
+                                        </div>
+                                        <div className="pb-4">
+                                            <button
+                                                onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
+                                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
+                                            >
+                                                Mint Additional
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>
