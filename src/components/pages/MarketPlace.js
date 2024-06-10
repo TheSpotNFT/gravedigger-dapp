@@ -6,13 +6,19 @@ import { MARKET_ABI, MARKET_ADDRESS } from "../Contracts/MarketContract";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Auth";
 
-const SatsGallery = () => {
+const MarketPlace = () => {
     const [tokens, setTokens] = useState([]);
     const [loading, setLoading] = useState(true);
     const [tokenDetails, setTokenDetails] = useState({});
     const [selectedToken, setSelectedToken] = useState(null);
     const [sellOrders, setSellOrders] = useState([]);
+    const [buyOrders, setBuyOrders] = useState([]);
     const [listPrice, setListPrice] = useState("");
+    const [listAmount, setListAmount] = useState("");
+    const [buyPrice, setBuyPrice] = useState("");
+    const [buyAmount, setBuyAmount] = useState("");
+    const [spendAvax, setSpendAvax] = useState("");
+    const [isApproved, setIsApproved] = useState(false);
     const navigate = useNavigate();
     const {
         account,
@@ -66,20 +72,12 @@ const SatsGallery = () => {
                     })
                 );
 
-                // Filter tokens where totalSupply equals currentSupply
-                const filteredTokens = fetchedTokenDetails.filter(details => 
-                    details.totalSupply.eq(details.maxSupply)
-                );
-
                 const tokenDetailsMap = {};
-                filteredTokens.forEach(details => {
+                fetchedTokenDetails.forEach(details => {
                     tokenDetailsMap[details.tokenId] = details;
                 });
 
-                setTokens(filteredTokens.map(token => ({
-                    tokenId: token.tokenId,
-                    metadata: allFetchedTokens.find(t => t.tokenId === token.tokenId).metadata
-                })));
+                setTokens(allFetchedTokens);
                 setTokenDetails(tokenDetailsMap);
             }
         } catch (err) {
@@ -89,34 +87,129 @@ const SatsGallery = () => {
         }
     };
 
-    const fetchSellOrders = async (tokenId) => {
+    const fetchOrders = async (tokenId) => {
         try {
             const { ethereum } = window;
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
                 const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const orders = await marketContract.getSellOrders(tokenId);
-                setSellOrders(orders);
+                const sellOrders = await marketContract.getSellOrders(tokenId);
+                const buyOrders = await marketContract.getBuyOrders(tokenId);
+                setSellOrders(sellOrders.slice(0, 10));
+                setBuyOrders(buyOrders.slice(0, 10).sort((a, b) => a.price - b.price));
             }
         } catch (error) {
-            console.error("Error fetching sell orders:", error);
+            console.error("Error fetching orders:", error);
         }
     };
 
-    const listTokenForSale = async (tokenId, price) => {
+    const checkApproval = async () => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
+                const approved = await satsContract.isApprovedForAll(account, MARKET_ADDRESS);
+                setIsApproved(approved);
+            }
+        } catch (error) {
+            console.error("Error checking approval:", error);
+        }
+    };
+
+    const approveMarketplace = async () => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
+                const tx = await satsContract.setApprovalForAll(MARKET_ADDRESS, true);
+                await tx.wait();
+                setIsApproved(true);
+                console.log("Marketplace approved:", tx.hash);
+            }
+        } catch (error) {
+            console.error("Error approving marketplace:", error);
+        }
+    };
+
+    const listTokenForSale = async (tokenId, price, amount) => {
         try {
             const { ethereum } = window;
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
                 const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.listToken(tokenId, ethers.utils.parseEther(price), 1); // Assuming amount is 1 for simplicity
+                const tx = await marketContract.listToken(tokenId, ethers.utils.parseEther(price), amount);
+                await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
+                // Re-fetch orders after listing a token
+                fetchOrders(tokenId);
             }
         } catch (error) {
             console.error("Error listing token:", error);
             alert(error.message || "An error occurred while listing the token for sale.");
+        }
+    };
+
+    const placeBuyOrder = async (tokenId, price, amount) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+                const totalCost = ethers.utils.parseEther(price).mul(amount);
+                const tx = await marketContract.placeBuyOrder(tokenId, ethers.utils.parseEther(price), amount, { value: totalCost.toString() });
+                await tx.wait(); // Wait for the transaction to be confirmed
+                console.log(tx.hash);
+                // Re-fetch orders after placing a buy order
+                fetchOrders(tokenId);
+            }
+        } catch (error) {
+            console.error("Error placing buy order:", error);
+            alert(error.message || "An error occurred while placing the buy order.");
+        }
+    };
+
+    const cancelSellOrder = async (tokenId, price, amount) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+                const tx = await marketContract.cancelSellOrder(tokenId, price, amount);
+                await tx.wait(); // Wait for the transaction to be confirmed
+                console.log(tx.hash);
+                // Re-fetch orders after cancelling a sell order
+                fetchOrders(tokenId);
+            }
+        } catch (error) {
+            console.error("Error cancelling sell order:", error);
+            alert(error.message || "An error occurred while cancelling the sell order.");
+        }
+    };
+
+    const cancelBuyOrder = async (tokenId, price, amount) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+                const tx = await marketContract.cancelBuyOrder(tokenId, price, amount);
+                await tx.wait(); // Wait for the transaction to be confirmed
+                console.log(tx.hash);
+                // Re-fetch orders after cancelling a buy order
+                fetchOrders(tokenId);
+            }
+        } catch (error) {
+            console.error("Error cancelling buy order:", error);
+            alert(error.message || "An error occurred while cancelling the buy order.");
         }
     };
 
@@ -127,8 +220,12 @@ const SatsGallery = () => {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
                 const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.buyToken(order.tokenId, order.price, { value: order.price });
+                const totalCost = ethers.utils.parseUnits(order.price.toString(), 'wei').mul(order.amount);
+                const tx = await marketContract.buyToken(order.tokenId, order.price, order.amount, { value: totalCost.toString() });
+                await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
+                // Re-fetch orders after buying a token
+                fetchOrders(order.tokenId);
             }
         } catch (error) {
             console.error("Error buying token:", error);
@@ -136,9 +233,32 @@ const SatsGallery = () => {
         }
     };
 
+    const buyUpToLimit = async (tokenId, avaxLimit) => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+                const tx = await marketContract.buyUpToLimit(tokenId, ethers.utils.parseEther(avaxLimit), { 
+                    value: ethers.utils.parseEther(avaxLimit), 
+                    gasLimit: 3000000 // Increase the gas limit
+                });
+                await tx.wait(); // Wait for the transaction to be confirmed
+                console.log(tx.hash);
+                // Re-fetch orders after buying up to limit
+                fetchOrders(tokenId);
+            }
+        } catch (error) {
+            console.error("Error buying up to limit:", error);
+            alert(error.message || "An error occurred while buying tokens up to the limit.");
+        }
+    };
+
     const selectToken = (token) => {
         setSelectedToken(token);
-        fetchSellOrders(token.tokenId);
+        fetchOrders(token.tokenId);
+        checkApproval();
     };
 
     useEffect(() => {
@@ -157,7 +277,7 @@ const SatsGallery = () => {
                         if (!details) return null;
 
                         return (
-                            <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow cursor-pointer" onClick={() => selectToken(token)}>
+                            <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow" onClick={() => selectToken(token)}>
                                 <h2 className="text-2xl font-bold mb-2">{token.metadata.name}</h2>
                                 <img 
                                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
@@ -168,9 +288,9 @@ const SatsGallery = () => {
                                     <p>Total Supply: {details.maxSupply.toString()}</p>
                                     <p>Current Supply: {details.totalSupply.toString()}</p>
                                     <p>Mint Price: {ethers.utils.formatEther(details.mintAdditionalCost.toString())} AVAX</p>
-                                    <p className="font-bold text-xl">Exploded: {details.exploded.toString()}</p>
                                     <p>Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
                                     <p className="text-xs break-words">Creator: {details.creator}</p>
+                                    <p className="pt-4">Exploded: {details.exploded.toString()}</p>
                                 </div>
                             </div>
                         );
@@ -191,29 +311,19 @@ const SatsGallery = () => {
                         <img 
                             src={`https://gateway.ipfs.io/ipfs/${selectedToken.metadata.imageUri.split("ipfs://")[1]}`} 
                             alt={selectedToken.metadata.name} 
-                            className="w-full h-auto mb-2" 
-                        />
-                        <div className="mb-4">
-                            <h3 className="text-xl font-bold mb-2">Sell Orders</h3>
-                            {sellOrders.length > 0 ? (
-                                sellOrders.map((order, index) => (
-                                    <div key={index} className="mb-2">
-                                        <p>Price: {ethers.utils.formatEther(order.price)} AVAX</p>
-                                        <p>Amount: {order.amount.toString()}</p>
-                                        <button
-                                            onClick={() => buyToken(order)}
-                                            className="bg-green-500 hover:bg-green-700 text-white font-bold w-full px-4 py-2 rounded"
-                                        >
-                                            Buy
-                                        </button>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No sell orders available.</p>
-                            )}
-                        </div>
-                        <div className="mb-4">
-                            <h3 className="text-xl font-bold mb-2">List Token for Sale</h3>
+                            className="w-1/2 mx-auto h-auto mb-2" 
+                        /> {!isApproved && (
+                           <div className="pt-4 pb-4"> <button
+                                onClick={approveMarketplace}
+                                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold w-full px-4 py-2 rounded mb-2"
+                            >
+                                Approve Marketplace to Sell Tokens
+                            </button></div>
+                        )}
+                        <div className="grid grid-cols-3">
+                        <div className="mb-4 w-full pr-4">
+                           
+                            <h3 className="text-xl font-bold mb-2">Create Sell Order</h3>
                             <input
                                 type="text"
                                 placeholder="Price in AVAX"
@@ -221,13 +331,126 @@ const SatsGallery = () => {
                                 onChange={(e) => setListPrice(e.target.value)}
                                 className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
                             />
+                            <input
+                                type="number"
+                                placeholder="Token Amount"
+                                value={listAmount}
+                                onChange={(e) => setListAmount(e.target.value)}
+                                className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                            />
                             <button
-                                onClick={() => listTokenForSale(selectedToken.tokenId, listPrice)}
+                                onClick={() => listTokenForSale(selectedToken.tokenId, listPrice, listAmount)}
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                             >
                                 List for Sale
                             </button>
                         </div>
+                        <div className="mb-4 w-full">
+                            <h3 className="text-xl font-bold mb-2">Create Buy Order</h3>
+                            <input
+                                type="text"
+                                placeholder="Price in AVAX"
+                                value={buyPrice}
+                                onChange={(e) => setBuyPrice(e.target.value)}
+                                className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                            />
+                            <input
+                                type="number"
+                                placeholder="Token Amount"
+                                value={buyAmount}
+                                onChange={(e) => setBuyAmount(e.target.value)}
+                                className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                            />
+                            <button
+                                onClick={() => placeBuyOrder(selectedToken.tokenId, buyPrice, buyAmount)}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
+                            >
+                                Place Buy Order
+                            </button>
+                        </div>
+                        <div className="mb-4 w-full pl-4">
+                            <h3 className="text-xl font-bold mb-2">Buy Tokens Up to Limit</h3>
+                            <input
+                                type="text"
+                                placeholder="AVAX to Spend"
+                                value={spendAvax}
+                                onChange={(e) => setSpendAvax(e.target.value)}
+                                className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                            />
+                            <button
+                                onClick={() => buyUpToLimit(selectedToken.tokenId, spendAvax)}
+                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
+                            >
+                                Buy Up to Limit
+                            </button>
+                        </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+    <div className="mb-4">
+        <h3 className="text-xl font-bold mb-2 border-b-2 border-gray-700">Sell Orders</h3>
+        <div className="grid grid-cols-3 gap-4">
+            <div className="text-gray-400">Price</div>
+            <div className="text-gray-400">Amount</div>
+            <div></div>
+        </div>
+        {sellOrders.length > 0 ? (
+            sellOrders.map((order, index) => (
+                <div key={index} className="grid grid-cols-3 gap-4 border-b-2 border-gray-700 p-2 items-center">
+                    <div>{ethers.utils.formatEther(order.price)}</div>
+                    <div>{order.amount.toString()}</div>
+                    <div className="text-right">
+                        {order.user.toLowerCase() === account.toLowerCase() ? (
+                            <button
+                                onClick={() => cancelSellOrder(order.tokenId, order.price, order.amount)}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                            >
+                                Cancel
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() => buyToken(order)}
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold px-2 py-1 rounded"
+                            >
+                                Buy
+                            </button>
+                        )}
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p>No sell orders available.</p>
+        )}
+    </div>
+    <div className="mb-4">
+        <h3 className="text-xl font-bold mb-2 border-b-2 border-gray-700">Buy Orders</h3>
+        <div className="grid grid-cols-3 gap-4">
+            <div className="text-gray-400">Price</div>
+            <div className="text-gray-400">Amount</div>
+            <div></div>
+        </div>
+        {buyOrders.length > 0 ? (
+            buyOrders.map((order, index) => (
+                <div key={index} className="grid grid-cols-3 gap-4 border-b-2 border-gray-700 p-2 items-center">
+                    <div>{ethers.utils.formatEther(order.price)}</div>
+                    <div>{order.amount.toString()}</div>
+                    <div className="text-right">
+                        {order.user.toLowerCase() === account.toLowerCase() && (
+                            <button
+                                onClick={() => cancelBuyOrder(order.tokenId, order.price, order.amount)}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                            >
+                                Cancel
+                            </button>
+                        )}
+                    </div>
+                </div>
+            ))
+        ) : (
+            <p>No buy orders available.</p>
+        )}
+    </div>
+</div>
+
                     </div>
                 </div>
             )}
@@ -235,4 +458,4 @@ const SatsGallery = () => {
     );
 };
 
-export default SatsGallery;
+export default MarketPlace;
