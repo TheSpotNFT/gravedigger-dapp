@@ -92,6 +92,8 @@ const Sats = ({  }) => {
                     let options = { value: ethers.utils.parseEther("1") };
                     let tx = await contract.mint(metadataUrl, nftDetails.totalSupply, nftDetails.mintPrice, antiWhale, options);
                     console.log(tx.hash);
+                    await tx.wait();
+                    handleReset();
                 } else {
                     console.log("Error with contract ABI, address, or signer");
                 }
@@ -250,7 +252,7 @@ const Sats = ({  }) => {
                     <label className="block text-gray-100">Anti-Whale Protection</label>
                 </div>
                 <button onClick={handleSubmit} disabled={txProcessing} className="bg-spot-yellow text-black hover:bg-avax-red duration-300 rounded-md p-4 font-bold text-xl">
-                    {txProcessing ? "Processing..." : "Create your Sats!"}
+                    {txProcessing ? "Processing..." : "Create your SATs! (1 AVAX)"}
                 </button>
             </div>
         </div>

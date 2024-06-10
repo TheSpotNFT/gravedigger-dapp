@@ -230,7 +230,7 @@ const SatsGallery = () => {
                                                 onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                             >
-                                                Mint Additional
+                                                Mint Tokens
                                             </button>
                                         </div>
                                     </div>
