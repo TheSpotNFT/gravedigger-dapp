@@ -201,7 +201,7 @@ const SatsGallery = () => {
                                                 </button>
                                             </div>
                                         )}
-                                        {details.isExploding && (
+                                        {details.exploded && (
                                         <div className="pb-4">
                                             <button
                                                 onClick={() => claimShrapnel(token.tokenId)}
