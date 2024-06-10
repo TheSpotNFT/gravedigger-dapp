@@ -35,6 +35,7 @@ import Menu from "./components/Menu";
 import { AuthProvider } from "./Auth";
 import TokenInfo from "./components/pages/TokenInfo";
 import SatsGallery from "./components/pages/Satsgallery";
+import MarketPlace from "./components/pages/MarketPlace";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -215,6 +216,15 @@ function App() {
                 exact
                 element={
                   <SatsGallery
+                    
+                  />
+                }
+              />
+               <Route
+                path="/market"
+                exact
+                element={
+                  <MarketPlace
                     
                   />
                 }

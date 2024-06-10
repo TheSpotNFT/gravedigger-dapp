@@ -155,7 +155,7 @@ const SatsGallery = () => {
 
     return (
         <div className="relative min-h-screen font-mono text-white w-3/5">
-            <h1 className="text-3xl font-bold mb-4 pt-16">Sats Gallery</h1>
+            <h1 className="text-3xl font-bold mb-4 pt-16">SATs Gallery</h1>
             {loading ? (
                 <p>Loading...</p>
             ) : (

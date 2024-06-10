@@ -38,8 +38,6 @@ contract SingleAssetTokens is ERC1155, Ownable, IERC2981, ReentrancyGuard {
     event TreasuryAddressUpdated(address treasuryAddress);
     event ExplosionDelayUpdated(uint256 explosionDelay);
     event MintingFeeUpdated(uint256 mintingFee);
-    event DebugLog(string message, uint256 value);
-    event DebugLogAddress(string message, address addr);
 
     constructor(address _treasuryAddress, uint256 _explosionDelay) ERC1155("") Ownable(msg.sender) {
         require(_treasuryAddress != address(0), "Invalid treasury address");
@@ -158,13 +156,6 @@ contract SingleAssetTokens is ERC1155, Ownable, IERC2981, ReentrancyGuard {
 
         uint256 payoutPerToken = (token.accumulatedFees * 94) / 100 / totalSupply; // Subtracting 6% royalties
         uint256 payout = holderBalance * payoutPerToken;
-
-        emit DebugLogAddress("ClaimShrapnel: tokenHolder", msg.sender);
-        emit DebugLog("ClaimShrapnel: holderBalance", holderBalance);
-        emit DebugLog("ClaimShrapnel: totalSupply", totalSupply);
-        emit DebugLog("ClaimShrapnel: accumulatedFees", token.accumulatedFees);
-        emit DebugLog("ClaimShrapnel: payoutPerToken", payoutPerToken);
-        emit DebugLog("ClaimShrapnel: payout", payout);
 
         require(payout > 0, "Payout is zero");
 
