@@ -201,16 +201,17 @@ const SatsGallery = () => {
                                                 </button>
                                             </div>
                                         )}
-                                        {details.exploded && (
-                                        <div className="pb-4">
-                                            <button
-                                                onClick={() => claimShrapnel(token.tokenId)}
-                                                className="bg-green-500 hover:bg-green-700 text-white font-bold w-full px-4 py-2 rounded"
-                                            >
-                                                Claim Shrapnel
-                                            </button>
-                                        </div>)}
                                     </>
+                                )}
+                                {details.exploded && (
+                                    <div className="pb-4">
+                                        <button
+                                            onClick={() => claimShrapnel(token.tokenId)}
+                                            className="bg-green-500 hover:bg-green-700 text-white font-bold w-full px-4 py-2 rounded"
+                                        >
+                                            Claim Shrapnel
+                                        </button>
+                                    </div>
                                 )}
                                 {details.totalSupply.lt(details.maxSupply) && (
                                     <div className="mt-4">
