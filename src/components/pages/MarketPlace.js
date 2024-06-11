@@ -20,7 +20,7 @@ const MarketPlace = () => {
     const [spendAvax, setSpendAvax] = useState("");
     const [isApproved, setIsApproved] = useState(false);
     const [tokenBalance, setTokenBalance] = useState(0);
-    const [view, setView] = useState('card');
+    const [view, setView] = useState('list');
     const navigate = useNavigate();
     const {
         account,
@@ -30,6 +30,29 @@ const MarketPlace = () => {
         setWeb3Provider,
         logoutOfWeb3Modal,
     } = useAuth();
+
+    const formatPriceWithNotation = (price) => {
+        const parts = price.split('.');
+        if (parts.length === 1) return price;
+
+        const integerPart = parts[0];
+        let decimalPart = parts[1];
+
+        const leadingZeros = decimalPart.match(/^0+/);
+        const zeroCount = leadingZeros ? leadingZeros[0].length : 0;
+
+        decimalPart = decimalPart.replace(/^0+/, '');
+
+        return (
+            <span>
+                {integerPart}.0{zeroCount > 0 && <sup>{`(${zeroCount})`}</sup>}{decimalPart}
+            </span>
+        );
+    };
+
+    const formatEtherWithNotation = (value) => {
+        return formatPriceWithNotation(ethers.utils.formatEther(value));
+    };
 
     const fetchAllItems = async () => {
         setLoading(true);
@@ -350,14 +373,14 @@ const MarketPlace = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 pt-24">
-                    <div className="bg-gray-800 p-4 rounded shadow flex items-center hidden md:flex">
+                    <div className="p-4 rounded shadow flex items-center md:flex">
                         <div className="w-16 h-16"></div> {/* Placeholder for image column */}
                         <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                             <div className="flex-1">
                                 <h2 className="text-xl font-bold">Name</h2>
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold">Total Supply</h2>
+                                <h2 className="text-xl font-bold">Current Supply</h2>
                             </div>
                             <div className="flex-1">
                                 <h2 className="text-xl font-bold">Lowest Sell Order</h2>
@@ -384,12 +407,12 @@ const MarketPlace = () => {
                                 <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                                     <div className="flex-1">
                                         <h2 className="text-xl font-bold">{token.metadata.name}</h2>
-                                        <p className="md:hidden">Total Supply: {details.maxSupply.toString()}</p>
+                                        <p className="md:hidden">Current Supply: {details.totalSupply.toString()}</p>
                                         <p className="md:hidden">Lowest Sell Order: {lowestSellOrder ? ethers.utils.formatEther(lowestSellOrder.price) : 'N/A'} AVAX</p>
                                         <p className="md:hidden">Market Cap: {calculateMarketCap(details, lowestSellOrder)} AVAX</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{details.maxSupply.toString()}</p>
+                                        <p>{details.totalSupply.toString()}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
                                         <p>{lowestSellOrder ? ethers.utils.formatEther(lowestSellOrder.price) : 'N/A'} AVAX</p>
@@ -496,7 +519,7 @@ const MarketPlace = () => {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="mb-4">
-                                <h3 className="text-xl font-bold mb-2 border-b-2 border-gray-700">Sell Orders</h3>
+                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">Sell Orders</h3>
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
@@ -505,8 +528,8 @@ const MarketPlace = () => {
                                 </div>
                                 {sellOrders.length > 0 ? (
                                     sellOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 p-2 items-center">
-                                            <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 p-2 text-sm items-center">
+                                            <div>{formatEtherWithNotation(order.price)}</div>
                                             <div>{order.amount.toString()}</div>
                                             <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
                                             <div className="text-right">
@@ -533,7 +556,7 @@ const MarketPlace = () => {
                                 )}
                             </div>
                             <div className="mb-4">
-                                <h3 className="text-xl font-bold mb-2 border-b-2 border-gray-700">Buy Orders</h3>
+                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">Buy Orders</h3>
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
@@ -542,8 +565,8 @@ const MarketPlace = () => {
                                 </div>
                                 {buyOrders.length > 0 ? (
                                     buyOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 p-2 items-center">
-                                            <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 text-sm p-2 items-center">
+                                            <div>{formatEtherWithNotation(order.price)}</div>
                                             <div>{order.amount.toString()}</div>
                                             <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
                                             <div className="text-right">
