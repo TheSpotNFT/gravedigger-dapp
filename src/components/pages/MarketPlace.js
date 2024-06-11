@@ -59,13 +59,13 @@ const MarketPlace = () => {
         let allFetchedTokens = [];
         let currentPageToken = null;
         const chainId = 43113;
-
+    
         try {
             while (true) {
                 const pageTokenParam = currentPageToken ? `&pageToken=${currentPageToken}` : "";
                 const url = `https://glacier-api.avax.network/v1/chains/${chainId}/nfts/collections/${SATS_ADDRESS}/tokens?pageSize=100${pageTokenParam}`;
                 const options = { method: "GET", headers: { accept: "application/json" } };
-
+    
                 const response = await axios.get(url, options);
                 const data = response.data;
                 if (Array.isArray(data.tokens)) {
@@ -79,29 +79,41 @@ const MarketPlace = () => {
                     throw new Error(data.message || "Error fetching data");
                 }
             }
-
+    
+            // Sort the tokens by latest minted (highest token ID number)
+            allFetchedTokens.sort((a, b) => b.tokenId - a.tokenId);
+    
             // Fetch token details for each token
             const { ethereum } = window;
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
                 const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
-
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+    
                 const fetchedTokenDetails = await Promise.all(
                     allFetchedTokens.map(async (token) => {
                         const details = await satsContract.tokenDetails(token.tokenId);
+                        const sellOrders = await marketContract.getSellOrders(token.tokenId);
+                        const clonedSellOrders = [...sellOrders]; // Clone the sellOrders array
+                        const lowestSellOrder = clonedSellOrders.sort((a, b) => a.price - b.price)[0];
+                        const marketCap = lowestSellOrder
+                            ? calculateMarketCap(details, lowestSellOrder)
+                            : 'N/A';
                         return {
                             tokenId: token.tokenId,
                             ...details,
+                            lowestSellOrder,
+                            marketCap,
                         };
                     })
                 );
-
+    
                 const tokenDetailsMap = {};
                 fetchedTokenDetails.forEach(details => {
                     tokenDetailsMap[details.tokenId] = details;
                 });
-
+    
                 setTokens(allFetchedTokens);
                 setTokenDetails(tokenDetailsMap);
             }
@@ -111,6 +123,7 @@ const MarketPlace = () => {
             setLoading(false);
         }
     };
+    
 
     const fetchOrders = async (tokenId) => {
         try {
@@ -345,9 +358,6 @@ const MarketPlace = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-24">
                     {tokens.map((token) => {
                         const details = tokenDetails[token.tokenId];
-                        const lowestSellOrder = sellOrders
-                            .filter(order => order.tokenId === token.tokenId)
-                            .sort((a, b) => a.price - b.price)[0];
                         if (!details) return null;
 
                         return (
@@ -360,12 +370,13 @@ const MarketPlace = () => {
                                 />
                                 <div className="mb-2">
                                     <p>Total Supply: {details.maxSupply.toString()}</p>
-                                    <p>Current Supply: {details.totalSupply.toString()}</p>
-                                    <p>Mint Price: {ethers.utils.formatEther(details.mintAdditionalCost.toString())} AVAX</p>
-                                    <p>Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
+                                    <p className="text-spot-yellow">Current Supply: {details.totalSupply.toString()}</p>
+                                    <p>Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p>
+                                    <p className="text-spot-yellow">Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
                                     <p className="text-xs break-words">Creator: {details.creator}</p>
-                                    <p className="pt-4">Exploded: {details.exploded.toString()}</p>
-                                    <p>Market Cap: {calculateMarketCap(details, lowestSellOrder)} AVAX</p>
+                                    <p className="pt-4 text-spot-yellow">Exploded: {details.exploded.toString()}</p>
+                                    <p>Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
+                                    <p className="text-spot-yellow">Market Cap: {details.marketCap.toString()} AVAX</p>
                                 </div>
                             </div>
                         );
@@ -373,7 +384,7 @@ const MarketPlace = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 pt-24">
-                    <div className="p-4 rounded shadow flex items-center md:flex">
+                    <div className="p-4 rounded shadow flex items-center hidden md:flex">
                         <div className="w-16 h-16"></div> {/* Placeholder for image column */}
                         <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                             <div className="flex-1">
@@ -392,13 +403,10 @@ const MarketPlace = () => {
                     </div>
                     {tokens.map((token) => {
                         const details = tokenDetails[token.tokenId];
-                        const lowestSellOrder = sellOrders
-                            .filter(order => order.tokenId === token.tokenId)
-                            .sort((a, b) => a.price - b.price)[0];
                         if (!details) return null;
 
                         return (
-                            <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow flex items-center cursor-pointer" onClick={() => selectToken(token)}>
+                            <div key={token.tokenId} className="bg-gray-800 p-4 shadow flex items-center cursor-pointer" onClick={() => selectToken(token)}>
                                 <img 
                                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
                                     alt={token.metadata.name} 
@@ -408,17 +416,17 @@ const MarketPlace = () => {
                                     <div className="flex-1">
                                         <h2 className="text-xl font-bold">{token.metadata.name}</h2>
                                         <p className="md:hidden">Current Supply: {details.totalSupply.toString()}</p>
-                                        <p className="md:hidden">Lowest Sell Order: {lowestSellOrder ? ethers.utils.formatEther(lowestSellOrder.price) : 'N/A'} AVAX</p>
-                                        <p className="md:hidden">Market Cap: {calculateMarketCap(details, lowestSellOrder)} AVAX</p>
+                                        <p className="md:hidden">Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
+                                        <p className="md:hidden">Market Cap: {details.marketCap} AVAX</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
                                         <p>{details.totalSupply.toString()}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{lowestSellOrder ? ethers.utils.formatEther(lowestSellOrder.price) : 'N/A'} AVAX</p>
+                                        <p>{details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{calculateMarketCap(details, lowestSellOrder)} AVAX</p>
+                                        <p>{details.marketCap} AVAX</p>
                                     </div>
                                 </div>
                             </div>
@@ -442,7 +450,9 @@ const MarketPlace = () => {
                             alt={selectedToken.metadata.name} 
                             className="w-1/2 mx-auto h-auto mb-2" 
                         />
-                        <p className="text-center pb-4">Your Token Balance: {tokenBalance}</p>
+                        
+                        <p className="text-center pb-4 pt-4">Your Token Balance: {tokenBalance}</p>
+                        <p className="pb-4">Market Cap: {tokenDetails[selectedToken.tokenId]?.marketCap} AVAX</p>
                         {!isApproved && (
                             <div className="pt-4 pb-4"> 
                                 <button
