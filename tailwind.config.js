@@ -20,6 +20,10 @@ module.exports = {
       colors: {
       'spot-yellow': '#fff600',
     },
+    transitionProperty: {
+      'height': 'height',
+      'opacity': 'opacity'
+    },
       backgroundImage: {
         'spotbg': "url('./assets/spotbot/2611.png')",
         'botbg' : "url('./assets/812.png')",
@@ -33,6 +37,12 @@ module.exports = {
         'plots' : "url('./assets/plots3.png')",
       }
   },
+  },
+  variants: {
+    extend: {
+      display: ['group-hover'],
+      opacity: ['group-hover'],
+    },
   },
   plugins: [require('tailwind-scrollbar-hide')],
 }

@@ -44,7 +44,7 @@ const Menu = ({
   }
 
   return (
-    <div className="absolute w-0 h-0 overflow-hidden text-white">
+    <div className="absolute w-0 h-0 overflow-hidden text-white z-50">
       <div className="pt-0 px-0 bg-slate-900 block lg:hidden">
         <div className="fixed"><div className="pb-2"><LogoutButton
           account={account}

@@ -59,7 +59,7 @@ function App() {
   />
         <div className="bg-slate-900 w-full h-100">
           {/**/}
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex justify-center items-center gap-2 relative z-10">
             <Routes>
               <Route
                 path="/"
@@ -225,7 +225,7 @@ function App() {
                 exact
                 element={
                   <MarketPlace
-                    
+                   
                   />
                 }
               />

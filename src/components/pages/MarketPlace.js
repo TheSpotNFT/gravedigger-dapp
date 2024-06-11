@@ -54,6 +54,12 @@ const MarketPlace = () => {
         return formatPriceWithNotation(ethers.utils.formatEther(value));
     };
 
+    // Function to add spaces every three digits
+const formatNumber = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+  
+
     const fetchAllItems = async () => {
         setLoading(true);
         let allFetchedTokens = [];
@@ -327,7 +333,7 @@ const MarketPlace = () => {
     };
 
     return (
-        <div className="relative min-h-screen font-mono text-white w-full md:w-3/5">
+        <div className="relative min-h-screen font-mono text-white w-full md:w-3/5 sm:pt-24">
             <h1 className="text-3xl font-bold mb-4 pt-16">SATs Marketplace</h1>
             <div className="flex justify-end mb-4">
                 <button
@@ -362,21 +368,38 @@ const MarketPlace = () => {
 
                         return (
                             <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow cursor-pointer" onClick={() => selectToken(token)}>
-                                <h2 className="text-2xl font-bold mb-2">{token.metadata.name}</h2>
+                               
                                 <img 
                                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
                                     alt={token.metadata.name} 
-                                    className="w-full h-auto mb-2" 
+                                    className="w-full h-auto mb-2 rounded" 
                                 />
                                 <div className="mb-2">
-                                    <p>Total Supply: {details.maxSupply.toString()}</p>
-                                    <p className="text-spot-yellow">Current Supply: {details.totalSupply.toString()}</p>
-                                    <p>Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p>
-                                    <p className="text-spot-yellow">Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
-                                    <p className="text-xs break-words">Creator: {details.creator}</p>
-                                    <p className="pt-4 text-spot-yellow">Exploded: {details.exploded.toString()}</p>
-                                    <p>Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
-                                    <p className="text-spot-yellow">Market Cap: {details.marketCap.toString()} AVAX</p>
+                                <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{token.metadata.name}</h2>
+                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Total Supply: {formatNumber(details.maxSupply.toString())}</p></div>
+                                    <div className="pt-2 pb-2"><p className="">Current Supply: {formatNumber(details.totalSupply.toString())}</p></div>
+                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p></div>
+                                    <div className="pt-2 pb-2"><p>Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p></div>
+                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p className="">Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p></div>
+                                    
+
+                                   
+                                    
+                                    <div className="pt-2 pb-2"><p className="text-spot-yellow">Market Cap: {details.marketCap.toString()} AVAX</p></div>
+                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md">
+  <p className="text-xs break-words">
+    Creator: 
+    <a 
+      href={`https://snowscan.xyz/address/${details.creator}`} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="text-spot-yellow underline pl-4"
+    >
+      {details.creator.slice(0, 4)}...{details.creator.slice(-4)}
+    </a>
+  </p>
+</div>
+<div className="pt-2"><p className="">Exploded: {details.exploded.toString()}</p></div>
                                 </div>
                             </div>
                         );
@@ -388,7 +411,7 @@ const MarketPlace = () => {
                         <div className="w-16 h-16"></div> {/* Placeholder for image column */}
                         <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold">Name</h2>
+                                <h2 className="text-xl font-bold text-spot-yellow">Name</h2>
                             </div>
                             <div className="flex-1">
                                 <h2 className="text-xl font-bold">Current Supply</h2>
@@ -414,13 +437,13 @@ const MarketPlace = () => {
                                 />
                                 <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                                     <div className="flex-1">
-                                        <h2 className="text-xl font-bold">{token.metadata.name}</h2>
-                                        <p className="md:hidden">Current Supply: {details.totalSupply.toString()}</p>
+                                        <h2 className="text-xl font-bold text-spot-yellow">{token.metadata.name}</h2>
+                                        <p className="md:hidden">Current Supply: {formatNumber(details.totalSupply.toString())}</p>
                                         <p className="md:hidden">Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
                                         <p className="md:hidden">Market Cap: {details.marketCap} AVAX</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{details.totalSupply.toString()}</p>
+                                        <p>{formatNumber(details.totalSupply.toString())}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
                                         <p>{details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
