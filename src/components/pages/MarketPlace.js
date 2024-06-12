@@ -31,28 +31,41 @@ const MarketPlace = () => {
         logoutOfWeb3Modal,
     } = useAuth();
 
-    const formatPriceWithNotation = (price) => {
-        const parts = price.split('.');
-        if (parts.length === 1) return price;
-
-        const integerPart = parts[0];
-        let decimalPart = parts[1];
-
-        const leadingZeros = decimalPart.match(/^0+/);
-        const zeroCount = leadingZeros ? leadingZeros[0].length : 0;
-
-        decimalPart = decimalPart.replace(/^0+/, '');
-
-        return (
-            <span>
-                {integerPart}.0{zeroCount > 0 && <sup>{`(${zeroCount})`}</sup>}{decimalPart}
-            </span>
-        );
-    };
-
-    const formatEtherWithNotation = (value) => {
-        return formatPriceWithNotation(ethers.utils.formatEther(value));
-    };
+ // Function to format very small values using scientific notation
+const formatSmallValue = (value) => {
+    if (value < 0.0001 && value !== 0) {
+      return value.toExponential(2); // 2 decimal places in exponent
+    }
+    return value.toFixed(8); // Default to 8 decimal places for small values
+  };
+  
+  // Function to add thousands separators
+  const formatLargeNumber = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+  
+  // Function to format cryptocurrency prices
+  const formatPriceWithNotation = (price) => {
+    const parts = price.split('.');
+    if (parts.length === 1) return formatLargeNumber(price);
+  
+    const integerPart = formatLargeNumber(parts[0]);
+    let decimalPart = parts[1];
+  
+    if (parseFloat(`0.${decimalPart}`) < 0.0001 && parseFloat(`0.${decimalPart}`) !== 0) {
+      return formatSmallValue(parseFloat(price));
+    }
+  
+    // Trim trailing zeros from the decimal part
+    decimalPart = decimalPart.replace(/0+$/, '');
+  
+    return `${integerPart}.${decimalPart}`;
+  };
+  
+  const formatEtherWithNotation = (value) => {
+    const etherValue = parseFloat(ethers.utils.formatEther(value));
+    return formatPriceWithNotation(etherValue.toString());
+  };
 
     // Function to add spaces every three digits
 const formatNumber = (number) => {
@@ -467,7 +480,7 @@ const formatNumber = (number) => {
                         >
                             Close
                         </button>
-                        <h2 className="text-2xl font-bold mb-2">{selectedToken.metadata.name}</h2>
+                        <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{selectedToken.metadata.name}</h2>
                         <img 
                             src={`https://gateway.ipfs.io/ipfs/${selectedToken.metadata.imageUri.split("ipfs://")[1]}`} 
                             alt={selectedToken.metadata.name} 
@@ -475,7 +488,7 @@ const formatNumber = (number) => {
                         />
                         
                         <p className="text-center pb-4 pt-4">Your Token Balance: {tokenBalance}</p>
-                        <p className="pb-4">Market Cap: {tokenDetails[selectedToken.tokenId]?.marketCap} AVAX</p>
+                        <p className="pb-4 text-spot-yellow font-bold text-lg">Market Cap: {tokenDetails[selectedToken.tokenId]?.marketCap} AVAX</p>
                         {!isApproved && (
                             <div className="pt-4 pb-4"> 
                                 <button
