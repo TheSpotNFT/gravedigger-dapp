@@ -184,7 +184,30 @@ const Sats = ({  }) => {
     };
 
     return (
-        <div className="relative min-h-screen font-mono text-white">
+        <div className="relative min-h-screen font-mono text-white w-full md:w-3/5 sm:pt-24">
+                        <div className="flex justify-between mb-4 space-x-2">
+    <button
+        onClick={() => navigate('/sats')}
+        className={`flex-1 px-4 py-2 rounded font-bold text-white ${
+            true ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-700'
+        }`}
+    >
+        Create SATs
+    </button>
+    <button
+        onClick={() => navigate('/satsgallery')}
+        className="flex-1 px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white font-bold"
+    >
+        Mint SATs
+    </button>
+    <button
+        onClick={() => navigate('/market')}
+        className="flex-1 px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white font-bold"
+    
+    >
+        SATs Marketplace
+    </button>
+</div>
             <div className="py-8 md:py-0 relative">
                 <div className="mx-auto pointer-events-none block md:hidden md:pb-8 relative">
                     {/* SVG logo or image can be here */}

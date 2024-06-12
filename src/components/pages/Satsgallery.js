@@ -154,8 +154,32 @@ const SatsGallery = () => {
     };
 
     return (
-        <div className="relative min-h-screen font-mono text-white w-3/5">
-            <h1 className="text-3xl font-bold mb-4 pt-16">SATs Gallery</h1>
+        <div className="relative min-h-screen font-mono text-white w-full md:w-3/5 sm:pt-24">
+            <div className="flex justify-between mb-4 space-x-2">
+    <button
+        onClick={() => navigate('/sats')}
+        className="flex-1 px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white font-bold"
+    >
+        Create SATs
+    </button>
+    <button
+        onClick={() => navigate('/satsgallery')}
+        disabled={true}
+    className={`flex-1 px-4 py-2 rounded font-bold text-white ${
+        true ? 'bg-blue-700' : 'bg-blue-500 hover:bg-blue-700'
+    }`}
+    >
+        Mint SATs
+    </button>
+    <button
+        onClick={() => navigate('/market')}
+        className="flex-1 px-4 py-2 rounded bg-blue-500 hover:bg-blue-700 text-white font-bold"
+    
+    >
+        SATs Marketplace
+    </button>
+</div>
+            <h1 className="text-3xl font-bold mb-4 pt-16">SATs Minting</h1>
             {loading ? (
                 <p>Loading...</p>
             ) : (
@@ -166,18 +190,29 @@ const SatsGallery = () => {
 
                         return (
                             <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow">
-                                <h2 className="text-2xl font-bold mb-2">{token.metadata.name}</h2>
+                                <h2 className="text-2xl font-bold mb-2 text-spot-yellow">{token.metadata.name}</h2>
                                 <img 
                                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
                                     alt={token.metadata.name} 
                                     className="w-full h-auto mb-2" 
                                 />
                                 <div className="mb-2">
-                                    <p>Total Supply: {details.maxSupply.toString()}</p>
-                                    <p>Current Supply: {details.totalSupply.toString()}</p>
-                                    <p>Mint Price: {ethers.utils.formatEther(details.mintAdditionalCost.toString())} AVAX</p>
-                                    <p>Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p>
-                                    <p className="text-xs break-words">Creator: {details.creator}</p>
+                                <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Total Supply: {details.maxSupply.toString()}</p></div>
+                                <div className="pt-2 pb-2"><p>Current Supply: {details.totalSupply.toString()}</p></div>
+                                <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Mint Price: {ethers.utils.formatEther(details.mintAdditionalCost.toString())} AVAX</p></div>
+                                <div className="pt-2 pb-2"> <p>Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p></div>
+                                <div className="pt-2 pb-2 bg-gray-700 rounded-md">
+                                        <p className="text-xs break-words">
+                                            Creator: 
+                                            <a 
+                                                href={`https://snowscan.xyz/address/${details.creator}`} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="text-spot-yellow underline pl-4"
+                                            >
+                                                {details.creator.slice(0, 4)}...{details.creator.slice(-4)}
+                                            </a>
+                                        </p></div>
                                 </div>
                                 {account && account.toLowerCase() === details.creator.toLowerCase() && (
                                     <>
