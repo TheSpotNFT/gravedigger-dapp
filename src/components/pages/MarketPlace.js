@@ -31,6 +31,58 @@ const MarketPlace = () => {
         logoutOfWeb3Modal,
     } = useAuth();
 
+    const [userSellOrders, setUserSellOrders] = useState([]);
+    const [userBuyOrders, setUserBuyOrders] = useState([]);
+    const [showUserOrders, setShowUserOrders] = useState(false);
+
+    const tokenIdToName = tokens.reduce((acc, token) => {
+        acc[token.tokenId] = token.metadata.name;
+        return acc;
+    }, {});    
+    
+    const fetchUserOrders = async () => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                const signer = provider.getSigner();
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+    
+                // Fetch all sell orders
+                const allSellOrders = [];
+                for (let token of tokens) {
+                    const sellOrders = await marketContract.getSellOrders(token.tokenId);
+                    const userSellOrdersForToken = sellOrders
+                        .filter(order => order.user.toLowerCase() === account.toLowerCase())
+                        .map(order => ({ ...order, name: token.metadata.name }));
+                    allSellOrders.push(...userSellOrdersForToken);
+                }
+                setUserSellOrders(allSellOrders);
+    
+                // Fetch all buy orders
+                const allBuyOrders = [];
+                for (let token of tokens) {
+                    const buyOrders = await marketContract.getBuyOrders(token.tokenId);
+                    const userBuyOrdersForToken = buyOrders
+                        .filter(order => order.user.toLowerCase() === account.toLowerCase())
+                        .map(order => ({ ...order, name: token.metadata.name }));
+                    allBuyOrders.push(...userBuyOrdersForToken);
+                }
+                setUserBuyOrders(allBuyOrders);
+            }
+        } catch (error) {
+            console.error("Error fetching user orders:", error);
+        }
+    };
+    
+    
+    useEffect(() => {
+        if (tokens.length > 0 && account) {
+            fetchUserOrders();
+        }
+    }, [tokens, account, showUserOrders]);
+    
+
  // Function to format very small values using scientific notation
 const formatSmallValue = (value) => {
     if (value < 0.0001 && value !== 0) {
@@ -370,6 +422,12 @@ const formatNumber = (number) => {
                         <line x1="4" y1="18" x2="20" y2="18" stroke="currentColor" strokeWidth="2"></line>
                     </svg>
                 </button>
+                <button
+                    className={`px-4 py-2 rounded ml-2 ${showUserOrders ? 'bg-blue-500' : 'bg-gray-700'}`}
+                    onClick={() => setShowUserOrders(true)}
+                >
+                    My Orders
+                </button>
             </div>
             {loading ? (
                 <p>Loading...</p>
@@ -378,41 +436,36 @@ const formatNumber = (number) => {
                     {tokens.map((token) => {
                         const details = tokenDetails[token.tokenId];
                         if (!details) return null;
-
+    
                         return (
                             <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow cursor-pointer" onClick={() => selectToken(token)}>
-                               
                                 <img 
                                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
                                     alt={token.metadata.name} 
                                     className="w-full h-auto mb-2 rounded" 
                                 />
                                 <div className="mb-2">
-                                <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{token.metadata.name}</h2>
+                                    <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{token.metadata.name}</h2>
                                     <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Total Supply: {formatNumber(details.maxSupply.toString())}</p></div>
                                     <div className="pt-2 pb-2"><p className="">Current Supply: {formatNumber(details.totalSupply.toString())}</p></div>
                                     <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p></div>
                                     <div className="pt-2 pb-2"><p>Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p></div>
                                     <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p className="">Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p></div>
-                                    
-
-                                   
-                                    
                                     <div className="pt-2 pb-2"><p className="text-spot-yellow">Market Cap: {details.marketCap.toString()} AVAX</p></div>
                                     <div className="pt-2 pb-2 bg-gray-700 rounded-md">
-  <p className="text-xs break-words">
-    Creator: 
-    <a 
-      href={`https://snowscan.xyz/address/${details.creator}`} 
-      target="_blank" 
-      rel="noopener noreferrer" 
-      className="text-spot-yellow underline pl-4"
-    >
-      {details.creator.slice(0, 4)}...{details.creator.slice(-4)}
-    </a>
-  </p>
-</div>
-<div className="pt-2"><p className="">Exploded: {details.exploded.toString()}</p></div>
+                                        <p className="text-xs break-words">
+                                            Creator: 
+                                            <a 
+                                                href={`https://snowscan.xyz/address/${details.creator}`} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="text-spot-yellow underline pl-4"
+                                            >
+                                                {details.creator.slice(0, 4)}...{details.creator.slice(-4)}
+                                            </a>
+                                        </p>
+                                    </div>
+                                    <div className="pt-2"><p className="">Exploded: {details.exploded.toString()}</p></div>
                                 </div>
                             </div>
                         );
@@ -440,7 +493,7 @@ const formatNumber = (number) => {
                     {tokens.map((token) => {
                         const details = tokenDetails[token.tokenId];
                         if (!details) return null;
-
+    
                         return (
                             <div key={token.tokenId} className="bg-gray-800 p-4 shadow flex items-center cursor-pointer" onClick={() => selectToken(token)}>
                                 <img 
@@ -470,7 +523,7 @@ const formatNumber = (number) => {
                     })}
                 </div>
             )}
-
+    
             {selectedToken && (
                 <div className="fixed inset-0 flex items-start justify-center pt-16 bg-black bg-opacity-75 overflow-y-auto">
                     <div className="bg-gray-900 p-4 rounded shadow-lg max-w-6xl w-full relative">
@@ -579,15 +632,13 @@ const formatNumber = (number) => {
                                             <div>{order.amount.toString()}</div>
                                             <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
                                             <div className="text-right">
-                                                {order.user.toLowerCase() === account.toLowerCase() ? (
+                                                {order.user.toLowerCase() === account.toLowerCase() && (
                                                     <button
                                                         onClick={() => cancelSellOrder(order.tokenId, order.price, order.amount)}
                                                         className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
                                                     >
                                                         Cancel
                                                     </button>
-                                                ) : (
-                                                    <div/>
                                                 )}
                                             </div>
                                         </div>
@@ -630,8 +681,85 @@ const formatNumber = (number) => {
                     </div>
                 </div>
             )}
+    
+            {showUserOrders && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                    <div className="bg-gray-900 p-4 rounded shadow-lg max-w-6xl w-full relative">
+                        <button 
+                            onClick={() => setShowUserOrders(false)} 
+                            className="text-white font-bold absolute top-2 right-2"
+                        >
+                            Close
+                        </button>
+                        <h3 className="text-2xl font-bold mb-4 text-spot-yellow">My Orders</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="mb-4">
+                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">My Sell Orders</h3>
+                                <div className="grid grid-cols-5 gap-4">
+                                    <div className="text-gray-400">Ticker</div>
+                                    <div className="text-gray-400">Price</div>
+                                    <div className="text-gray-400">Amount</div>
+                                    <div className="text-gray-400">Total</div>
+                                    <div></div>
+                                </div>
+                                {userSellOrders.length > 0 ? (
+                                    userSellOrders.map((order, index) => (
+                                        <div key={index} className="grid grid-cols-5 gap-4 border-b-2 border-gray-700 p-2 text-sm items-center">
+                                            <div className="">{order.name}</div>
+                                            <div>{formatEtherWithNotation(order.price)}</div>
+                                            <div>{order.amount.toString()}</div>
+                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
+                                            <div className="text-right">
+                                                <button
+                                                    onClick={() => cancelSellOrder(order.tokenId, order.price, order.amount)}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No sell orders available.</p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">My Buy Orders</h3>
+                                <div className="grid grid-cols-5 gap-4">
+                                <div className="text-gray-400">Ticker</div>
+                                    <div className="text-gray-400">Price</div>
+                                    <div className="text-gray-400">Amount</div>
+                                    <div className="text-gray-400">Total</div>
+                                    <div></div>
+                                </div>
+                                {userBuyOrders.length > 0 ? (
+                                    userBuyOrders.map((order, index) => (
+                                        <div key={index} className="grid grid-cols-5 gap-4 border-b-2 border-gray-700 text-sm p-2 items-center">
+                                             <div>{order.name}</div>
+                                            <div>{formatEtherWithNotation(order.price)}</div>
+                                            <div>{order.amount.toString()}</div>
+                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
+                                            <div className="text-right">
+                                                <button
+                                                    onClick={() => cancelBuyOrder(order.tokenId, order.price, order.amount)}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No buy orders available.</p>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
+    
 };
 
 export default MarketPlace;
