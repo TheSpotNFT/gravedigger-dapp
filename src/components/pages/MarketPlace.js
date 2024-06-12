@@ -5,6 +5,7 @@ import { SATS_ABI, SATS_ADDRESS } from "../Contracts/SatsContract";
 import { MARKET_ABI, MARKET_ADDRESS } from "../Contracts/MarketContract";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Auth";
+import { GiWhaleTail } from "react-icons/gi";
 
 const MarketPlace = () => {
     const [tokens, setTokens] = useState([]);
@@ -531,15 +532,23 @@ const formatNumber = (number) => {
                                     <div className="flex-1">
                                         <h2 className="text-xl font-bold text-spot-yellow">{token.metadata.name}</h2>
                                         <p className="md:hidden">Current Supply: {formatNumber(details.totalSupply.toString())}</p>
-                                        <p className="md:hidden">Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
+                                        <p className="md:hidden flex items-center"><div className="pr-2">Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</div>{!details.antiWhale && (
+                                                <GiWhaleTail />
+                                            )}</p>
                                         <p className="md:hidden">Market Cap: {details.marketCap} AVAX</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
                                         <p>{formatNumber(details.totalSupply.toString())}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p>
-                                    </div>
+                                    <div className="flex items-center justify-center mx-auto">
+        <p className="flex items-center">
+                                        {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX {!details.antiWhale && (
+                <GiWhaleTail className="ml-2" />
+            )}
+        </p>
+    </div>
+</div>
                                     <div className="flex-1 hidden md:block">
                                         <p>{details.marketCap} AVAX</p>
                                     </div>
@@ -783,6 +792,11 @@ const formatNumber = (number) => {
                     </div>
                 </div>
             )}
+                 <footer className=" text-white text-center py-4 pt-24">
+    <p>
+        As a platform, we do not condone or support any tokens created or traded on this platform. All users are responsible for their own actions and decisions regarding token transactions. Use at your own risk.
+    </p>
+</footer>
         </div>
     );
     

@@ -278,6 +278,11 @@ const Sats = ({  }) => {
                     {txProcessing ? "Processing..." : "Create your SATs! (1 AVAX)"}
                 </button>
             </div>
+            <footer className=" text-white text-center py-4 pt-24">
+    <p>
+        As a platform, we do not condone or support any tokens created or traded on this platform. All users are responsible for their own actions and decisions regarding token transactions. Use at your own risk.
+    </p>
+</footer>
         </div>
     );
 };

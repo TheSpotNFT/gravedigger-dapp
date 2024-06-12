@@ -4,6 +4,7 @@ import { ethers, Contract } from "ethers";
 import { SATS_ABI, SATS_ADDRESS } from "../Contracts/SatsContract";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Auth";
+import { GiWhaleTail } from "react-icons/gi";
 
 const SatsGallery = () => {
     const [tokens, setTokens] = useState([]);
@@ -361,7 +362,7 @@ const SatsGallery = () => {
         if (!details) return null;
 
         return (
-            <div key={token.tokenId} className="bg-gray-800 p-4 shadow flex flex-col md:flex-row items-center cursor-pointer">
+            <div key={token.tokenId} className="bg-gray-800 p-4 shadow flex flex-col md:flex-row items-center">
                 <img 
                     src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
                     alt={token.metadata.name} 
@@ -372,7 +373,12 @@ const SatsGallery = () => {
                         <h2 className="text-xl font-bold text-spot-yellow">{token.metadata.name}</h2>
                         <p className="md:hidden">Max Supply: {formatNumber(details.maxSupply.toString())}</p>
                         <p className="md:hidden">Current Supply: {formatNumber(details.totalSupply.toString())}</p>
-                        <p className="md:hidden">Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p>
+                        <p className="md:hidden flex items-center">
+                                           <div className="pr-2">Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</div>
+                                            {!details.antiWhale && (
+                                                <GiWhaleTail />
+                                            )}
+                                        </p>
                     </div>
                     <div className="flex-1 hidden md:block">
                         <p>{formatNumber(details.maxSupply.toString())}</p>
@@ -381,8 +387,16 @@ const SatsGallery = () => {
                         <p>{formatNumber(details.totalSupply.toString())}</p>
                     </div>
                     <div className="flex-1 hidden md:block">
-                        <p>{formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p>
-                    </div>
+    <div className="flex items-center justify-center mx-auto">
+        <p className="flex items-center">
+            {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX
+            {!details.antiWhale && (
+                <GiWhaleTail className="ml-2" />
+            )}
+        </p>
+    </div>
+</div>
+
                     <div className="flex-1 w-40 mt-4 md:mt-0 md:flex md:items-center md:justify-end">
     <div className="grid grid-cols-2">
         <input
@@ -411,6 +425,11 @@ const SatsGallery = () => {
 
 
             )}
+            <footer className=" text-white text-center py-4 pt-24">
+    <p>
+        As a platform, we do not condone or support any tokens created or traded on this platform. All users are responsible for their own actions and decisions regarding token transactions. Use at your own risk.
+    </p>
+</footer>
         </div>
     );
 };
