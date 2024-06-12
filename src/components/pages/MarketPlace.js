@@ -587,12 +587,7 @@ const formatNumber = (number) => {
                                                         Cancel
                                                     </button>
                                                 ) : (
-                                                    <button
-                                                        onClick={() => buyToken(order)}
-                                                        className="bg-green-500 hover:bg-green-700 text-white font-bold px-2 py-1 rounded"
-                                                    >
-                                                        Buy
-                                                    </button>
+                                                    <div/>
                                                 )}
                                             </div>
                                         </div>
