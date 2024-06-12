@@ -275,7 +275,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error listing token:", error);
-            alert(error.message || "An error occurred while listing the token for sale.");
+            alert("Something is not as it should be.");
         }
     };
 
@@ -295,7 +295,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error placing buy order:", error);
-            alert(error.message || "An error occurred while placing the buy order.");
+            alert("Something is not as it should be.");
         }
     };
 
@@ -314,7 +314,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error cancelling sell order:", error);
-            alert(error.message || "An error occurred while cancelling the sell order.");
+            alert("An error occurred while cancelling the sell order.");
         }
     };
 
@@ -333,7 +333,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error cancelling buy order:", error);
-            alert(error.message || "An error occurred while cancelling the buy order.");
+            alert("An error occurred while cancelling the buy order.");
         }
     };
 
@@ -353,7 +353,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error buying token:", error);
-            alert(error.message || "An error occurred while buying the token.");
+            alert("An error occurred while buying the token.");
         }
     };
 
@@ -375,7 +375,7 @@ const formatNumber = (number) => {
             }
         } catch (error) {
             console.error("Error buying up to limit:", error);
-            alert(error.message || "An error occurred while buying tokens up to the limit.");
+            alert("You need to create a limit.");
         }
     };
 
