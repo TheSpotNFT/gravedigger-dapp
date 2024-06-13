@@ -165,9 +165,9 @@ const MarketPlace = () => {
             const { ethereum } = window;
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
-                const signer = provider.getSigner();
-                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+              
+                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, provider);
+                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, provider);
 
                 const fetchedTokenDetails = await Promise.all(
                     allFetchedTokens.map(async (token) => {
@@ -619,14 +619,14 @@ const MarketPlace = () => {
                                     placeholder="Price in AVAX"
                                     value={listPrice}
                                     onChange={(e) => setListPrice(e.target.value)}
-                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Token Amount"
                                     value={listAmount}
                                     onChange={(e) => setListAmount(e.target.value)}
-                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
                                     onClick={() => listTokenForSale(selectedToken.tokenId, listPrice, listAmount)}
@@ -642,14 +642,14 @@ const MarketPlace = () => {
                                     placeholder="Price in AVAX"
                                     value={buyPrice}
                                     onChange={(e) => setBuyPrice(e.target.value)}
-                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <input
                                     type="number"
                                     placeholder="Token Amount"
                                     value={buyAmount}
                                     onChange={(e) => setBuyAmount(e.target.value)}
-                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
                                     onClick={() => placeBuyOrder(selectedToken.tokenId, buyPrice, buyAmount)}
@@ -665,7 +665,7 @@ const MarketPlace = () => {
                                     placeholder="AVAX to Spend"
                                     value={spendAvax}
                                     onChange={(e) => setSpendAvax(e.target.value)}
-                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2"
+                                    className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
                                     onClick={() => buyUpToLimit(selectedToken.tokenId, spendAvax)}
