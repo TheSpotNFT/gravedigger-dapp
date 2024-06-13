@@ -217,6 +217,8 @@ const SatsGallery = () => {
                     SATs Marketplace
                 </button>
             </div>
+            
+            <h1 className="text-3xl font-bold mb-4 pt-16">SATs Minting</h1>
             <div className="flex justify-end mb-4">
                 <button
                     className={`px-4 py-2 rounded ${view === 'card' ? 'bg-blue-500' : 'bg-gray-700'}`}
@@ -240,7 +242,6 @@ const SatsGallery = () => {
                     </svg>
                 </button>
             </div>
-            <h1 className="text-3xl font-bold mb-4 pt-16">SATs Minting</h1>
             {loading ? (
                 <p>Loading...</p>
             ) : view === 'card' ? (

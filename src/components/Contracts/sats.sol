@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 import "@openzeppelin/contracts/interfaces/IERC2981.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
-contract SingleAssetTokens is ERC1155, Ownable, IERC2981, ReentrancyGuard {
+contract SingleAssetTokensV0 is ERC1155, Ownable, IERC2981, ReentrancyGuard {
     struct TokenInfo {
         address creator;
         string uri;
