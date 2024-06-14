@@ -89,7 +89,7 @@ const Sats = ({  }) => {
                         SATS_ABI,
                         signer
                     );
-                    let options = { value: ethers.utils.parseEther("1") };
+                    let options = { value: ethers.utils.parseEther("5") };
                     let tx = await contract.mint(metadataUrl, nftDetails.totalSupply, nftDetails.mintPrice, antiWhale, options);
                     console.log(tx.hash);
                     await tx.wait();
