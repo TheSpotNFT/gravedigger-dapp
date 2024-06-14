@@ -26,7 +26,7 @@ const SatsGallery = () => {
         setLoading(true);
         let allFetchedTokens = [];
         let currentPageToken = null;
-        const chainId = 43113;
+        const chainId = 43114;
 
         try {
             while (true) {
@@ -48,7 +48,8 @@ const SatsGallery = () => {
                 }
             }
             setTokens(allFetchedTokens);
-
+            // Sort the tokens by latest minted (highest token ID number)
+            allFetchedTokens.sort((a, b) => b.tokenId - a.tokenId);
             // Fetch token details for each token
             const { ethereum } = window;
             if (ethereum) {

@@ -132,11 +132,22 @@ const MarketPlace = () => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     };
 
+    const decodeInputData = (inputData, abi) => {
+        const iface = new ethers.utils.Interface(abi);
+        try {
+            const decoded = iface.parseTransaction({ data: inputData });
+            return decoded.args.tokenId.toString();
+        } catch (error) {
+            console.error("Failed to decode input data:", error);
+            return null;
+        }
+    };
+
     const fetchAllItems = async () => {
         setLoading(true);
         let allFetchedTokens = [];
         let currentPageToken = null;
-        const chainId = 43113;
+        const chainId = 43114;
 
         try {
             while (true) {
@@ -374,7 +385,7 @@ const MarketPlace = () => {
     };
 
     const fetchRecentTransfers = async (tokenId) => {
-        const chainId = 43113;
+        const chainId = 43114;
         const url = `https://glacier-api.avax.network/v1/chains/${chainId}/addresses/${SATS_ADDRESS}/transactions`;
         const options = { method: "GET", headers: { accept: "application/json" } };
 
@@ -382,8 +393,14 @@ const MarketPlace = () => {
             const response = await axios.get(url, options);
             const data = response.data;
             if (Array.isArray(data.transactions)) {
-                setTransfers(data.transactions);
-                console.log(transfers);
+                const filteredTransfers = data.transactions.filter((tx) => {
+                    if (tx.input) {
+                        const tokenIdInTx = decodeInputData(tx.input, SATS_ABI);
+                        return tokenIdInTx === tokenId.toString();
+                    }
+                    return false;
+                });
+                setTransfers(filteredTransfers);
             } else {
                 console.error("No transactions found");
             }
@@ -582,20 +599,20 @@ const MarketPlace = () => {
                             <div>
                                 <h3 className="text-xl font-bold mb-4">Recent Transfers</h3>
                                 <div className="grid grid-cols-6 gap-4 pb-4 border-b-2 border-gray-700">
-                <div className="text-gray-400 col-span-1">Seller</div>
-                <div className="text-gray-400 col-span-1">Buyer</div>
-                <div className="text-gray-400 col-span-2">Value</div>
-                <div className="text-gray-400 col-span-2">Time Ago</div>
-            </div>
-                              
-                                {transfers.map((tx, index) => (
-                <div key={index} className="grid grid-cols-6 gap-4 py-2 border-b-2 border-gray-700">
-                    <div className="col-span-1 text-red-700">{tx.nativeTransaction.from.address.slice(-4)}</div>
-                    <div className="col-span-1 text-green-700">{tx.nativeTransaction.to.address.slice(-4)}</div>
-                    <div className="col-span-2">{formatEtherWithNotation(tx.nativeTransaction.value.toString())} AVAX</div>
-                    <div className="col-span-2">{getTimeAgo(tx.nativeTransaction.blockTimestamp)}</div>
-                </div>
-            ))}
+                                    <div className="text-gray-400 col-span-1">Seller</div>
+                                    <div className="text-gray-400 col-span-1">Buyer</div>
+                                    <div className="text-gray-400 col-span-2">Value</div>
+                                    <div className="text-gray-400 col-span-2">Time Ago</div>
+                                </div>
+                              Soon
+                                {/*{transfers.map((tx, index) => (
+                                    <div key={index} className="grid grid-cols-6 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div className="col-span-1 text-red-700">{tx.nativeTransaction.from.address.slice(-4)}</div>
+                                        <div className="col-span-1 text-green-700">{tx.nativeTransaction.to.address.slice(-4)}</div>
+                                        <div className="col-span-2">{formatEtherWithNotation(tx.nativeTransaction.value.toString())} AVAX</div>
+                                        <div className="col-span-2">{getTimeAgo(tx.nativeTransaction.blockTimestamp)}</div>
+                                    </div>
+                                ))}*/}
                                 
                             </div>
                         </div>

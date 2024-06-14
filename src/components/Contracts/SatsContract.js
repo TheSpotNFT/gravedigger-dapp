@@ -1,4 +1,4 @@
-export const SATS_ADDRESS = "0x4b0F8FDA400b9a5091516759e47Aa837FaC22292";//FUJI
+export const SATS_ADDRESS = "0xd2582ecfE1e44000c5718cB6f4D8c02fab53240c";//Mainnet
 export const SATS_ABI = [
 	{
 		"inputs": [

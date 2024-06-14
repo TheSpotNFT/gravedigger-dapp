@@ -275,7 +275,7 @@ const Sats = ({  }) => {
                     <label className="block text-gray-100">Anti-Whale Protection</label>
                 </div>
                 <button onClick={handleSubmit} disabled={txProcessing} className="bg-spot-yellow text-black hover:bg-avax-red duration-300 rounded-md p-4 font-bold text-xl">
-                    {txProcessing ? "Processing..." : "Create your SATs! (1 AVAX)"}
+                    {txProcessing ? "Processing..." : "Create your SATs! (5 AVAX)"}
                 </button>
             </div>
             <footer className=" text-white text-center py-4 pt-24">
