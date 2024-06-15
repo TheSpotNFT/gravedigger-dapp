@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ethers, Contract } from "ethers";
-import { SATS_ABI, SATS_ADDRESS } from "../Contracts/SatsContract";
-import { MARKET_ABI, MARKET_ADDRESS } from "../Contracts/MarketContract";
+import { MARKETMULTI_ABI, MARKETMULTI_ADDRESS } from "../Contracts/MarketMultiContract";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../Auth";
-import { GiWhaleTail } from "react-icons/gi";
+import traits from '../../goatdTraits';
 
-const MarketPlace = () => {
+const MarketPlaceAll = () => {
     const [tokens, setTokens] = useState([]);
     const [loading, setLoading] = useState(true);
     const [tokenDetails, setTokenDetails] = useState({});
@@ -38,9 +37,20 @@ const MarketPlace = () => {
     const [showUserOrders, setShowUserOrders] = useState(false);
 
     const tokenIdToName = tokens.reduce((acc, token) => {
-        acc[token.tokenId] = token.metadata.name;
+        acc[token.id] = token.traitName;
         return acc;
     }, {});
+
+    const decodeInputData = (inputData, abi) => {
+        const iface = new ethers.utils.Interface(abi);
+        try {
+            const decoded = iface.parseTransaction({ data: inputData });
+            return decoded.args.tokenId.toString();
+        } catch (error) {
+            console.error("Failed to decode input data:", error);
+            return null;
+        }
+    };
 
     const fetchUserOrders = async () => {
         try {
@@ -48,26 +58,28 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+    
+                const tokenContractAddress = '0x9521807ADF320D1CDF87AFDf875Bf438d1D92d87';
+    
                 // Fetch all sell orders
                 const allSellOrders = [];
                 for (let token of tokens) {
-                    const sellOrders = await marketContract.getSellOrders(token.tokenId);
+                    const sellOrders = await marketContract.getSellOrders(tokenContractAddress, token.id);
                     const userSellOrdersForToken = sellOrders
                         .filter(order => order.user.toLowerCase() === account.toLowerCase())
-                        .map(order => ({ ...order, name: token.metadata.name }));
+                        .map(order => ({ ...order, name: token.traitName }));
                     allSellOrders.push(...userSellOrdersForToken);
                 }
                 setUserSellOrders(allSellOrders);
-
+    
                 // Fetch all buy orders
                 const allBuyOrders = [];
                 for (let token of tokens) {
-                    const buyOrders = await marketContract.getBuyOrders(token.tokenId);
+                    const buyOrders = await marketContract.getBuyOrders(tokenContractAddress, token.id);
                     const userBuyOrdersForToken = buyOrders
                         .filter(order => order.user.toLowerCase() === account.toLowerCase())
-                        .map(order => ({ ...order, name: token.metadata.name }));
+                        .map(order => ({ ...order, name: token.traitName }));
                     allBuyOrders.push(...userBuyOrdersForToken);
                 }
                 setUserBuyOrders(allBuyOrders);
@@ -76,6 +88,7 @@ const MarketPlace = () => {
             console.error("Error fetching user orders:", error);
         }
     };
+    
 
     const getTimeAgo = (timestamp) => {
         const seconds = Math.floor((new Date() - new Date(timestamp * 1000)) / 1000);
@@ -132,80 +145,16 @@ const MarketPlace = () => {
         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     };
 
-    const decodeInputData = (inputData, abi) => {
-        const iface = new ethers.utils.Interface(abi);
-        try {
-            const decoded = iface.parseTransaction({ data: inputData });
-            return decoded.args.tokenId.toString();
-        } catch (error) {
-            console.error("Failed to decode input data:", error);
-            return null;
-        }
-    };
-
     const fetchAllItems = async () => {
         setLoading(true);
-        let allFetchedTokens = [];
-        let currentPageToken = null;
-        const chainId = 43114;
-
         try {
-            while (true) {
-                const pageTokenParam = currentPageToken ? `&pageToken=${currentPageToken}` : "";
-                const url = `https://glacier-api.avax.network/v1/chains/${chainId}/nfts/collections/${SATS_ADDRESS}/tokens?pageSize=100${pageTokenParam}`;
-                const options = { method: "GET", headers: { accept: "application/json" } };
-
-                const response = await axios.get(url, options);
-                const data = response.data;
-                if (Array.isArray(data.tokens)) {
-                    allFetchedTokens = [...allFetchedTokens, ...data.tokens];
-                    if (data.nextPageToken) {
-                        currentPageToken = data.nextPageToken;
-                    } else {
-                        break;
-                    }
-                } else {
-                    throw new Error(data.message || "Error fetching data");
-                }
-            }
+            // Use local data
+            const allFetchedTokens = traits;
 
             // Sort the tokens by latest minted (highest token ID number)
-            allFetchedTokens.sort((a, b) => b.tokenId - a.tokenId);
+            allFetchedTokens.sort((a, b) => b.id - a.id);
 
-            // Fetch token details for each token
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-              
-                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, provider);
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, provider);
-
-                const fetchedTokenDetails = await Promise.all(
-                    allFetchedTokens.map(async (token) => {
-                        const details = await satsContract.tokenDetails(token.tokenId);
-                        const sellOrders = await marketContract.getSellOrders(token.tokenId);
-                        const clonedSellOrders = [...sellOrders]; // Clone the sellOrders array
-                        const lowestSellOrder = clonedSellOrders.sort((a, b) => a.price - b.price)[0];
-                        const marketCap = lowestSellOrder
-                            ? calculateMarketCap(details, lowestSellOrder)
-                            : 'N/A';
-                        return {
-                            tokenId: token.tokenId,
-                            ...details,
-                            lowestSellOrder,
-                            marketCap,
-                        };
-                    })
-                );
-
-                const tokenDetailsMap = {};
-                fetchedTokenDetails.forEach(details => {
-                    tokenDetailsMap[details.tokenId] = details;
-                });
-
-                setTokens(allFetchedTokens);
-                setTokenDetails(tokenDetailsMap);
-            }
+            setTokens(allFetchedTokens);
         } catch (err) {
             console.error("Fetch error:", err);
         } finally {
@@ -219,9 +168,9 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const sellOrders = await marketContract.getSellOrders(tokenId);
-                const buyOrders = await marketContract.getBuyOrders(tokenId);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const sellOrders = await marketContract.getSellOrders(MARKETMULTI_ADDRESS, tokenId);
+                const buyOrders = await marketContract.getBuyOrders(MARKETMULTI_ADDRESS, tokenId);
                 setSellOrders(sellOrders.slice(0, 10));
                 setBuyOrders(buyOrders.slice(0, 10).sort((a, b) => a.price - b.price));
             }
@@ -236,8 +185,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
-                const balance = await satsContract.balanceOf(account, tokenId);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const balance = await marketContract.balanceOf(account, tokenId);
                 setTokenBalance(balance.toString());
             }
         } catch (error) {
@@ -251,8 +200,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
-                const approved = await satsContract.isApprovedForAll(account, MARKET_ADDRESS);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const approved = await marketContract.isApprovedForAll(account, MARKETMULTI_ADDRESS);
                 setIsApproved(approved);
             }
         } catch (error) {
@@ -266,8 +215,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const satsContract = new Contract(SATS_ADDRESS, SATS_ABI, signer);
-                const tx = await satsContract.setApprovalForAll(MARKET_ADDRESS, true);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const tx = await marketContract.setApprovalForAll(MARKETMULTI_ADDRESS, true);
                 await tx.wait();
                 setIsApproved(true);
                 console.log("Marketplace approved:", tx.hash);
@@ -283,8 +232,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.listToken(tokenId, ethers.utils.parseEther(price), amount);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const tx = await marketContract.listToken(MARKETMULTI_ADDRESS, tokenId, ethers.utils.parseEther(price), amount);
                 await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
                 // Re-fetch orders after listing a token
@@ -302,9 +251,9 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
                 const totalCost = ethers.utils.parseEther(price).mul(amount);
-                const tx = await marketContract.placeBuyOrder(tokenId, ethers.utils.parseEther(price), amount, { value: totalCost.toString() });
+                const tx = await marketContract.placeBuyOrder(MARKETMULTI_ADDRESS, tokenId, ethers.utils.parseEther(price), amount, { value: totalCost.toString() });
                 await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
                 // Re-fetch orders after placing a buy order
@@ -322,8 +271,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.cancelSellOrder(tokenId, price, amount);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const tx = await marketContract.cancelSellOrder(MARKETMULTI_ADDRESS, tokenId, price, amount);
                 await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
                 // Re-fetch orders after cancelling a sell order
@@ -341,8 +290,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.cancelBuyOrder(tokenId, price, amount);
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const tx = await marketContract.cancelBuyOrder(MARKETMULTI_ADDRESS, tokenId, price, amount);
                 await tx.wait(); // Wait for the transaction to be confirmed
                 console.log(tx.hash);
                 // Re-fetch orders after cancelling a buy order
@@ -360,8 +309,8 @@ const MarketPlace = () => {
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum);
                 const signer = provider.getSigner();
-                const marketContract = new Contract(MARKET_ADDRESS, MARKET_ABI, signer);
-                const tx = await marketContract.buyUpToLimit(tokenId, ethers.utils.parseEther(avaxLimit), {
+                const marketContract = new Contract(MARKETMULTI_ADDRESS, MARKETMULTI_ABI, signer);
+                const tx = await marketContract.buyUpToLimit(MARKETMULTI_ADDRESS, tokenId, ethers.utils.parseEther(avaxLimit), {
                     value: ethers.utils.parseEther(avaxLimit),
                     gasLimit: 3000000 // Increase the gas limit
                 });
@@ -378,29 +327,31 @@ const MarketPlace = () => {
 
     const selectToken = async (token) => {
         setSelectedToken(token);
-        await fetchOrders(token.tokenId);
-        await fetchBalance(token.tokenId);
+        await fetchOrders(token.id);
+        await fetchBalance(token.id);
         checkApproval();
-        fetchRecentTransfers(token.tokenId);
+        fetchRecentTransfers(token.id);
     };
 
     const fetchRecentTransfers = async (tokenId) => {
-        const url = `https://glacier-api.avax.network/v1/chains/43114/tokens/${SATS_ADDRESS}/transfers`;
+        const chainId = 43114;
+        const url = `https://glacier-api.avax.network/v1/chains/${chainId}/addresses/${MARKETMULTI_ADDRESS}/transactions`;
         const options = { method: "GET", headers: { accept: "application/json" } };
-    
+
         try {
             const response = await axios.get(url, options);
             const data = response.data;
-            console.log('API Response Data:', data);  // Debugging line
-    
-            if (Array.isArray(data.transfers)) {
-                const filteredTransfers = data.transfers.filter((tx) => {
-                    return tx.erc1155Token && tx.erc1155Token.tokenId === tokenId.toString();
+            if (Array.isArray(data.transactions)) {
+                const filteredTransfers = data.transactions.filter((tx) => {
+                    if (tx.input) {
+                        const tokenIdInTx = decodeInputData(tx.input, MARKETMULTI_ABI);
+                        return tokenIdInTx === tokenId.toString();
+                    }
+                    return false;
                 });
-                console.log('Filtered Transfers:', filteredTransfers);  // Debugging line
                 setTransfers(filteredTransfers);
             } else {
-                console.error("No transfers array found in the response");
+                console.error("No transactions found");
             }
         } catch (err) {
             console.error("Fetch error:", err);
@@ -410,14 +361,6 @@ const MarketPlace = () => {
     useEffect(() => {
         fetchAllItems();
     }, []);
-    
-
-    const calculateMarketCap = (details, lowestSellOrder) => {
-        if (!details || !lowestSellOrder) return 'N/A';
-        const price = ethers.utils.formatEther(lowestSellOrder.price);
-        const totalSupply = details.totalSupply.toString();
-        return (price * totalSupply).toFixed(2);
-    };
 
     return (
         <div className="relative min-h-screen font-mono text-white w-full md:w-3/5 sm:pt-24">
@@ -479,38 +422,20 @@ const MarketPlace = () => {
             ) : view === 'card' ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-24">
                     {tokens.map((token) => {
-                        const details = tokenDetails[token.tokenId];
+                        const details = tokenDetails[token.id];
                         if (!details) return null;
 
                         return (
-                            <div key={token.tokenId} className="bg-gray-800 p-4 rounded shadow cursor-pointer" onClick={() => selectToken(token)}>
+                            <div key={token.id} className="bg-gray-800 p-4 rounded shadow cursor-pointer" onClick={() => selectToken(token)}>
                                 <img 
-                                    src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
-                                    alt={token.metadata.name} 
+                                    src={token.image} 
+                                    alt={token.traitName} 
                                     className="w-full h-auto mb-2 rounded" 
                                 />
                                 <div className="mb-2">
-                                    <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{token.metadata.name}</h2>
-                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Total Supply: {formatNumber(details.maxSupply.toString())}</p></div>
-                                    <div className="pt-2 pb-2"><p className="">Current Supply: {formatNumber(details.totalSupply.toString())}</p></div>
-                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Mint Price: {formatEtherWithNotation(details.mintAdditionalCost.toString())} AVAX</p></div>
-                                    <div className="pt-2 pb-2"><p>Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</p></div>
-                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p className="">Anti-Whale Protection: {details.antiWhale ? "Enabled" : "Disabled"}</p></div>
-                                    <div className="pt-2 pb-2"><p className="text-spot-yellow">Market Cap: {details.marketCap.toString()} AVAX</p></div>
-                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md">
-                                        <p className="text-xs break-words">
-                                            Creator: 
-                                            <a 
-                                                href={`https://snowscan.xyz/address/${details.creator}`} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer" 
-                                                className="text-spot-yellow underline pl-4"
-                                            >
-                                                {details.creator.slice(0, 4)}...{details.creator.slice(-4)}
-                                            </a>
-                                        </p>
-                                    </div>
-                                    <div className="pt-2"><p className="">Exploded: {details.exploded.toString()}</p></div>
+                                    <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{token.traitName}</h2>
+                                    <div className="pt-2 pb-2 bg-gray-700 rounded-md"><p>Type: {token.traitType}</p></div>
+                                    <div className="pt-2 pb-2"><p className="">Rarity: {token.rarity}</p></div>
                                 </div>
                             </div>
                         );
@@ -525,50 +450,35 @@ const MarketPlace = () => {
                                 <h2 className="text-xl font-bold text-spot-yellow">Name</h2>
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold">Current Supply</h2>
+                                <h2 className="text-xl font-bold">Type</h2>
                             </div>
                             <div className="flex-1">
-                                <h2 className="text-xl font-bold">Lowest Sell Order</h2>
-                            </div>
-                            <div className="flex-1">
-                                <h2 className="text-xl font-bold">Market Cap</h2>
+                                <h2 className="text-xl font-bold">Rarity</h2>
                             </div>
                         </div>
                     </div>
                     {tokens.map((token) => {
-                        const details = tokenDetails[token.tokenId];
+                        const details = tokenDetails[token.id];
                         if (!details) return null;
 
                         return (
-                            <div key={token.tokenId} className="bg-gray-800 p-4 shadow flex items-center cursor-pointer" onClick={() => selectToken(token)}>
+                            <div key={token.id} className="bg-gray-800 p-4 shadow flex items-center cursor-pointer" onClick={() => selectToken(token)}>
                                 <img 
-                                    src={`https://gateway.ipfs.io/ipfs/${token.metadata.imageUri.split("ipfs://")[1]}`} 
-                                    alt={token.metadata.name} 
+                                    src={token.image} 
+                                    alt={token.traitName} 
                                     className="w-16 h-16 object-cover rounded" 
                                 />
                                 <div className="ml-4 flex flex-col md:flex-row md:items-center w-full">
                                     <div className="flex-1">
-                                        <h2 className="text-xl font-bold text-spot-yellow">{token.metadata.name}</h2>
-                                        <p className="md:hidden">Current Supply: {formatNumber(details.totalSupply.toString())}</p>
-                                        <p className="md:hidden flex items-center"><div className="pr-2">Lowest Sell Order: {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX</div>{!details.antiWhale && (
-                                                <GiWhaleTail />
-                                            )}</p>
-                                        <p className="md:hidden">Market Cap: {details.marketCap} AVAX</p>
+                                        <h2 className="text-xl font-bold text-spot-yellow">{token.traitName}</h2>
+                                        <p className="md:hidden">Type: {token.traitType}</p>
+                                        <p className="md:hidden">Rarity: {token.rarity}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                        <p>{formatNumber(details.totalSupply.toString())}</p>
+                                        <p>{token.traitType}</p>
                                     </div>
                                     <div className="flex-1 hidden md:block">
-                                    <div className="flex items-center justify-center mx-auto">
-        <p className="flex items-center">
-                                        {details.lowestSellOrder ? formatEtherWithNotation(details.lowestSellOrder.price) : 'N/A'} AVAX {!details.antiWhale && (
-                <GiWhaleTail className="ml-2" />
-            )}
-        </p>
-    </div>
-</div>
-                                    <div className="flex-1 hidden md:block">
-                                        <p>{details.marketCap} AVAX</p>
+                                        <p>{token.rarity}</p>
                                     </div>
                                 </div>
                             </div>
@@ -588,10 +498,10 @@ const MarketPlace = () => {
                         </button>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{selectedToken.metadata.name}</h2>
+                                <h2 className="text-4xl font-bold mb-2 text-spot-yellow">{selectedToken.traitName}</h2>
                                 <img 
-                                    src={`https://gateway.ipfs.io/ipfs/${selectedToken.metadata.imageUri.split("ipfs://")[1]}`} 
-                                    alt={selectedToken.metadata.name} 
+                                    src={selectedToken.image} 
+                                    alt={selectedToken.traitName} 
                                     className="w-full h-auto mb-2 rounded" 
                                 />
                             </div>
@@ -603,19 +513,20 @@ const MarketPlace = () => {
                                     <div className="text-gray-400 col-span-2">Value</div>
                                     <div className="text-gray-400 col-span-2">Time Ago</div>
                                 </div>
-                                {transfers.map((tx, index) => (
-                <div key={index} className="grid grid-cols-6 gap-4 py-2 border-b-2 border-gray-700">
-                    <div className="col-span-1 text-red-700">{tx.from.address.slice(-4)}</div>
-                    <div className="col-span-1 text-green-700">{tx.to.address.slice(-4)}</div>
-                    <div className="col-span-2">{formatEtherWithNotation(tx.value)} AVAX</div>
-                    <div className="col-span-2">{getTimeAgo(tx.blockTimestamp)}</div>
-                </div>
-            ))}
+                                Soon
+                                {/*{transfers.map((tx, index) => (
+                                    <div key={index} className="grid grid-cols-6 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div className="col-span-1 text-red-700">{tx.nativeTransaction.from.address.slice(-4)}</div>
+                                        <div className="col-span-1 text-green-700">{tx.nativeTransaction.to.address.slice(-4)}</div>
+                                        <div className="col-span-2">{formatEtherWithNotation(tx.nativeTransaction.value.toString())} AVAX</div>
+                                        <div className="col-span-2">{getTimeAgo(tx.nativeTransaction.blockTimestamp)}</div>
+                                    </div>
+                                ))}*/}
                                 
                             </div>
                         </div>
                         <p className="text-center pb-4 pt-4">Your Token Balance: {tokenBalance}</p>
-                        <p className="pb-4 text-spot-yellow font-bold text-lg">Market Cap: {tokenDetails[selectedToken.tokenId]?.marketCap} AVAX</p>
+                        <p className="pb-4 text-spot-yellow font-bold text-lg">Market Cap: {tokenDetails[selectedToken.id]?.marketCap} AVAX</p>
                         {!isApproved && (
                             <div className="pt-4 pb-4"> 
                                 <button
@@ -644,7 +555,7 @@ const MarketPlace = () => {
                                     className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
-                                    onClick={() => listTokenForSale(selectedToken.tokenId, listPrice, listAmount)}
+                                    onClick={() => listTokenForSale(selectedToken.id, listPrice, listAmount)}
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                 >
                                     List for Sale
@@ -667,7 +578,7 @@ const MarketPlace = () => {
                                     className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
-                                    onClick={() => placeBuyOrder(selectedToken.tokenId, buyPrice, buyAmount)}
+                                    onClick={() => placeBuyOrder(selectedToken.id, buyPrice, buyAmount)}
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                 >
                                     Place Buy Order
@@ -683,7 +594,7 @@ const MarketPlace = () => {
                                     className="bg-gray-700 text-white font-bold py-2 px-4 rounded w-full mb-2 placeholder:text-xs md:placeholder:text-base"
                                 />
                                 <button
-                                    onClick={() => buyUpToLimit(selectedToken.tokenId, spendAvax)}
+                                    onClick={() => buyUpToLimit(selectedToken.id, spendAvax)}
                                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                 >
                                     Buy Up to Limit
@@ -696,148 +607,122 @@ const MarketPlace = () => {
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
-                                    <div className="text-gray-400">Total</div>
-                                    <div></div>
+                                    <div className="text-gray-400">User</div>
+                                    <div className="text-gray-400">Cancel</div>
                                 </div>
-                                {sellOrders.length > 0 ? (
-                                    sellOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 p-2 text-sm items-center">
-                                            <div>{formatEtherWithNotation(order.price)}</div>
-                                            <div>{order.amount.toString()}</div>
-                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
-                                            <div className="text-right">
-                                                {order.user.toLowerCase() === account.toLowerCase() && (
-                                                    <button
-                                                        onClick={() => cancelSellOrder(order.tokenId, order.price, order.amount)}
-                                                        className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                )}
-                                            </div>
+                                {sellOrders.map((order, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div>{order.amount.toString()}</div>
+                                        <div>{order.user.slice(-4)}</div>
+                                        <div>
+                                            {order.user.toLowerCase() === account.toLowerCase() && (
+                                                <button
+                                                    onClick={() => cancelSellOrder(selectedToken.id, order.price, order.amount)}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            )}
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No sell orders available.</p>
-                                )}
+                                    </div>
+                                ))}
                             </div>
                             <div className="mb-4">
                                 <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">Buy Orders</h3>
                                 <div className="grid grid-cols-4 gap-4">
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
-                                    <div className="text-gray-400">Total</div>
-                                    <div></div>
+                                    <div className="text-gray-400">User</div>
+                                    <div className="text-gray-400">Cancel</div>
                                 </div>
-                                {buyOrders.length > 0 ? (
-                                    buyOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-4 gap-4 border-b-2 border-gray-700 text-sm p-2 items-center">
-                                            <div>{formatEtherWithNotation(order.price)}</div>
-                                            <div>{order.amount.toString()}</div>
-                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
-                                            <div className="text-right">
-                                                {order.user.toLowerCase() === account.toLowerCase() && (
-                                                    <button
-                                                        onClick={() => cancelBuyOrder(order.tokenId, order.price, order.amount)}
-                                                        className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                )}
-                                            </div>
+                                {buyOrders.map((order, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div>{order.amount.toString()}</div>
+                                        <div>{order.user.slice(-4)}</div>
+                                        <div>
+                                            {order.user.toLowerCase() === account.toLowerCase() && (
+                                                <button
+                                                    onClick={() => cancelBuyOrder(selectedToken.id, order.price, order.amount)}
+                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                                >
+                                                    Cancel
+                                                </button>
+                                            )}
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No buy orders available.</p>
-                                )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-
             {showUserOrders && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                <div className="fixed inset-0 flex items-start justify-center pt-16 bg-black bg-opacity-75 overflow-y-auto">
                     <div className="bg-gray-900 p-4 rounded shadow-lg max-w-6xl w-full relative">
-                        <button 
-                            onClick={() => setShowUserOrders(false)} 
+                        <button
+                            onClick={() => setShowUserOrders(false)}
                             className="text-white font-bold absolute top-2 right-2"
                         >
                             Close
                         </button>
-                        <h3 className="text-2xl font-bold mb-4 text-spot-yellow">My Orders</h3>
+                        <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">Your Orders</h3>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="mb-4">
-                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">My Sell Orders</h3>
-                                <div className="grid grid-cols-5 gap-4">
-                                    <div className="text-gray-400">Ticker</div>
+                                <h4 className="text-lg font-bold mb-2">Your Sell Orders</h4>
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div className="text-gray-400">Token</div>
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
-                                    <div className="text-gray-400">Total</div>
-                                    <div></div>
+                                    <div className="text-gray-400">Cancel</div>
                                 </div>
-                                {userSellOrders.length > 0 ? (
-                                    userSellOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-5 gap-4 border-b-2 border-gray-700 p-2 text-sm items-center">
-                                            <div className="">{order.name}</div>
-                                            <div>{formatEtherWithNotation(order.price)}</div>
-                                            <div>{order.amount.toString()}</div>
-                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
-                                            <div className="text-right">
-                                                <button
-                                                    onClick={() => cancelSellOrder(order.tokenId, order.price, order.amount)}
-                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
-                                                >
-                                                    Cancel
-                                                </button>
-                                            </div>
+                                {userSellOrders.map((order, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div>{order.name}</div>
+                                        <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div>{order.amount.toString()}</div>
+                                        <div>
+                                            <button
+                                                onClick={() => cancelSellOrder(selectedToken.id, order.price, order.amount)}
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                            >
+                                                Cancel
+                                            </button>
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No sell orders available.</p>
-                                )}
+                                    </div>
+                                ))}
                             </div>
                             <div className="mb-4">
-                                <h3 className="text-lg font-bold mb-2 border-b-2 border-gray-700">My Buy Orders</h3>
-                                <div className="grid grid-cols-5 gap-4">
-                                <div className="text-gray-400">Ticker</div>
+                                <h4 className="text-lg font-bold mb-2">Your Buy Orders</h4>
+                                <div className="grid grid-cols-4 gap-4">
+                                    <div className="text-gray-400">Token</div>
                                     <div className="text-gray-400">Price</div>
                                     <div className="text-gray-400">Amount</div>
-                                    <div className="text-gray-400">Total</div>
-                                    <div></div>
+                                    <div className="text-gray-400">Cancel</div>
                                 </div>
-                                {userBuyOrders.length > 0 ? (
-                                    userBuyOrders.map((order, index) => (
-                                        <div key={index} className="grid grid-cols-5 gap-4 border-b-2 border-gray-700 text-sm p-2 items-center">
-                                             <div>{order.name}</div>
-                                            <div>{formatEtherWithNotation(order.price)}</div>
-                                            <div>{order.amount.toString()}</div>
-                                            <div>{(ethers.utils.formatEther(order.price) * order.amount).toFixed(2)} AVAX</div>
-                                            <div className="text-right">
-                                                <button
-                                                    onClick={() => cancelBuyOrder(order.tokenId, order.price, order.amount)}
-                                                    className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
-                                                >
-                                                    Cancel
-                                                </button>
-                                            </div>
+                                {userBuyOrders.map((order, index) => (
+                                    <div key={index} className="grid grid-cols-4 gap-4 py-2 border-b-2 border-gray-700">
+                                        <div>{order.name}</div>
+                                        <div>{ethers.utils.formatEther(order.price)}</div>
+                                        <div>{order.amount.toString()}</div>
+                                        <div>
+                                            <button
+                                                onClick={() => cancelBuyOrder(selectedToken.id, order.price, order.amount)}
+                                                className="bg-red-500 hover:bg-red-700 text-white font-bold px-2 py-1 rounded"
+                                            >
+                                                Cancel
+                                            </button>
                                         </div>
-                                    ))
-                                ) : (
-                                    <p>No buy orders available.</p>
-                                )}
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     </div>
                 </div>
             )}
-            <footer className=" text-white text-center py-4 pt-24">
-                <p>
-                    As a platform, we do not condone or support any tokens created or traded on this platform. All users are responsible for their own actions and decisions regarding token transactions. Use at your own risk.
-                </p>
-            </footer>
         </div>
     );
 };
 
-export default MarketPlace;
+export default MarketPlaceAll;

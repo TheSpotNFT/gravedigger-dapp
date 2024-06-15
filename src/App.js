@@ -36,6 +36,7 @@ import { AuthProvider } from "./Auth";
 import TokenInfo from "./components/pages/TokenInfo";
 import SatsGallery from "./components/pages/Satsgallery";
 import MarketPlace from "./components/pages/MarketPlace";
+import MarketAll from "./components/pages/MultiMarket";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -225,6 +226,15 @@ function App() {
                 exact
                 element={
                   <MarketPlace
+                   
+                  />
+                }
+              />
+                  <Route
+                path="/multimarket"
+                exact
+                element={
+                  <MarketAll
                    
                   />
                 }
