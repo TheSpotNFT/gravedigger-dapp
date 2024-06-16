@@ -37,6 +37,7 @@ import TokenInfo from "./components/pages/TokenInfo";
 import SatsGallery from "./components/pages/Satsgallery";
 import MarketPlace from "./components/pages/MarketPlace";
 import MarketAll from "./components/pages/MultiMarket";
+import WalletAssetPage from "./components/pages/Assets";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -235,6 +236,15 @@ function App() {
                 exact
                 element={
                   <MarketAll
+                   
+                  />
+                }
+              />
+               <Route
+                path="/assets"
+                exact
+                element={
+                  <WalletAssetPage
                    
                   />
                 }
