@@ -330,7 +330,7 @@ const SatsGallery = () => {
                                                 onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
                                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold w-full px-4 py-2 rounded"
                                             >
-                                                Mint Tokens
+                                                Mint {mintAmount[token.tokenId] ? `for ${formatEtherWithNotation(details.mintAdditionalCost.mul(mintAmount[token.tokenId]).toString())} AVAX` : 'Tokens'}
                                             </button>
                                         </div>
                                     </div>
@@ -413,7 +413,7 @@ const SatsGallery = () => {
             onClick={() => mintAdditional(token.tokenId, mintAmount[token.tokenId])}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded m:w-auto col-span-1 text-xs"
         >
-            Mint
+            Mint {mintAmount[token.tokenId] ? `for ${formatEtherWithNotation(details.mintAdditionalCost.mul(mintAmount[token.tokenId]).toString())} AVAX` : ''}
         </button>
     </div>
 </div>
