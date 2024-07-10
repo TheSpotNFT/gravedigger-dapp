@@ -222,7 +222,7 @@ const Channel3 = () => {
           const result = await contract.sharesBalance(/*"0x04b54f4e5e7abf5113857ce3bd8ebf2823c3d3e5"*/"0xD54bB51BBB6D843Ebae9061d098274CCa28dd78e" /*THE ARENA*/,account);
   
           // 'result' is either true or false, you can use it as needed
-        console.log(`sharesBalance result for address ${account}: ${result}`);
+          console.log(`sharesBalance result for address ${account}: ${result}`);
           console.log(`Your Wallet Address: ${account}`);
   
           //const hasSharesBalance = result;

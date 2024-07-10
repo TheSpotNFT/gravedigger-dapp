@@ -563,10 +563,10 @@ const slideRight = () => {
           Approve To Wrap Spots
         </button>
         </div>
-        <div className="pt-4">
+        <div className="pt-4 pb-4">
                                     <input
                                         type="text"
-                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-96 h-12"
+                                        className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 min-w-full placeholder:text-xs pl-2 h-12"
                                         placeholder="IDs to Wrap (separate IDs with a comma)"
                                         value={textinputText}
                                         onChange={textinputUserText.bind(this)}
@@ -661,7 +661,7 @@ const slideRight = () => {
 {/* Unnamed Branding */}
 
  <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Unnamed Branding</div>
- <div><img src={unnamednft} alt="Unnamed" className=""></img></div>
+ <div><img src={unnamednft} alt="Unnamed" className="w-full"></img></div>
 
  <div className="font-mono text-l px-4 py-2 text-white">Slap your favourite project's branding on your unnamedNFT. Let's gooooo!!!!</div>
  <div className="py-2">
@@ -706,6 +706,7 @@ const slideRight = () => {
           Launch Scribble Customs
         </button>
         </div>
+        {/* 
         <img src={eff} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-4/5 block"></img>
         <div className="py-2">
         <button
@@ -734,7 +735,7 @@ const slideRight = () => {
         >
           Wrap Them Up!
         </button>
-        </div>
+        </div>*/}
       </div>
 
 
@@ -823,7 +824,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
     <div id="spotbot" className="h-full lg:pt-20 xl:pt-24 overflow-hidden">
     <div className="text-white pr-10">
       <h1 className="text-5xl pt-2 font-mono">The Spot Bot</h1>
-      <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are coming! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots will happen over the span of an undetermined time, as parts are available. The first round has been released in Jan 2023, and subsequent releases are to follow. Updates will be given as they are made available. Once 3k Spot Bots are produced holders will have the opprotunity to harnes the Sacrificial Power Obtaining Technology  (SPOT) that the bots have created and produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold th emore of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
+      <div className="text-xl font-mono pt-8 px-24 lg:pb-8 xl:pb-8 lg:text-base xl:text-lg 2xl:text-xl">The bots are here! As supply chains are recovering the manufacturing process has begun. The initial mint of 3k bots has been completed. With the first round complete the Sacrificial Power Obtaining Technology (SPOT) that the bots have created will produce the remaining 2k bots by sacrificing NFTs from other collections, rugged, ded or alive NFTs to have a chance at producing more bots. The more bots you hold the more of a chance you will have at a successful sacrificial production. 1/1 Spot Bots will have a 100% production rate on NFT sacrifice. Once 5k bots are produced the true utility of the bots will be revealed. </div>
      
             <div className="px-96 pb-8"><button
               className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
@@ -1070,16 +1071,16 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 
     <div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
   {/* Image container on the left */}
-  <div className="flex-1 flex justify-center items-center">
+   {/*<div className="flex-1 flex justify-center items-center">
     <img src={eff} alt="EffEm" className="p-5 m-0 w-1/2"></img>
   </div>
 
-  {/* Button and text fields container on the right */}
+  Button and text fields container on the right 
 
   <div className="flex-1 flex flex-col justify-center items-center space-y-4">
   <div className="text-white pr-2 font-mono">
       <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $FUCKEM</h1></div>
-    {/* Button 1 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={effSetApprovalForAll}
@@ -1087,7 +1088,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Approve To Wrap Eff_Inscriptions
     </button>
 
-    {/* Text Field */}
+    
     <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
@@ -1096,7 +1097,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       onChange={textinputUserText1.bind(this)}
     />
 
-    {/* Button 2 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={effWrap721}
@@ -1107,17 +1108,17 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 </div>
 
 <div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
-  {/* Image container on the left */}
+
   <div className="flex-1 flex justify-center items-center">
     <img src={bones} alt="Bonez" className="p-5 m-0 w-1/2"></img>
   </div>
 
-  {/* Button and text fields container on the right */}
+ 
 
   <div className="flex-1 flex flex-col justify-center items-center space-y-4">
   <div className="text-white pr-2 font-mono">
       <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $BBBNOCHILL</h1></div>
-    {/* Button 1 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={setApprovalForAllBadBoneBiz}
@@ -1131,7 +1132,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Approve To Spend $NOCHILL
     </button>
 
-    {/* Text Field */}
+   
     <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
@@ -1140,7 +1141,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       onChange={textinputUserText2.bind(this)}
     />
 
-    {/* Button 2 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={depositTokens}
@@ -1148,7 +1149,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Wrap Them Bonez Up!
     </button>
 
-     {/* Text Field */}
+    
      <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
@@ -1157,7 +1158,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       onChange={textinputUserText3.bind(this)}
     />
 
-    {/* Button 3 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={withdrawTokens}
@@ -1170,17 +1171,17 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
 </div>
 
 <div className="h-screen flex flex-col justify-center items-center lg:flex-row snap-start snap-always">
-  {/* Image container on the left */}
+ 
   <div className="flex-1 flex justify-center items-center">
     <img src={pepe} alt="Pepe Portraits" className="p-5 m-0 w-1/2"></img>
   </div>
 
-  {/* Button and text fields container on the right */}
+ 
 
   <div className="flex-1 flex flex-col justify-center items-center space-y-4">
   <div className="text-white pr-2 font-mono">
       <h1 className="text-5xl md:pt-4 2xl:pt-6 pb-8"> The Ticker is $PEPECOQ</h1></div>
-    {/* Button 1 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={setApprovalForAllPepe}
@@ -1194,7 +1195,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Approve To Spend $COQ
     </button>
 
-    {/* Text Field */}
+  
     <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
@@ -1203,7 +1204,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       onChange={textinputUserText4.bind(this)}
     />
 
-    {/* Button 2 */}
+  
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={depositPepeTokens}
@@ -1211,7 +1212,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       Wrap Them Pepes with $Coq!
     </button>
 
-     {/* Text Field */}
+    
      <input
       type="text"
       className="border-2 border-slate-600 bg-slate-400 text-left font-mono placeholder-slate-600 pl-2 w-1/2 h-12"
@@ -1220,7 +1221,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       onChange={textinputUserText5.bind(this)}
     />
 
-    {/* Button 3 */}
+    
     <button
       className="w-1/2 rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
       onClick={withdrawPepeTokens}
@@ -1228,7 +1229,7 @@ hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono 
       UnWrap and get your $Coq Back..
     </button>
   </div>
-
+*/}
 
 </div>
 
