@@ -203,7 +203,7 @@ const Channel3 = () => {
           );
   
           // 'result' is a BigNumber
-          console.log(`sharesBalance result for address ${account}: ${result}`);
+          console.log(`sharesBalance result for address 0xD54bB51BBB6D843Ebae9061d098274CCa28dd78e: ${result}`);
           console.log(`Your Wallet Address: ${account}`);
   
           setHasSharesBalance(result.toNumber());

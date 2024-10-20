@@ -21,7 +21,6 @@ const Channel3 = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [currentUser, setCurrentUser] = useState('The Spot');
   const [userVideos, setUserVideos] = useState([]);
-  const playerRefs = useRef([]);
   const [isToggled, setToggled] = useState(true);
   const [currentBuyPrice, setCurrentBuyPrice] = useState([]);
   const [currentBuyPriceEther, setCurrentBuyPriceEther] = useState(0);
@@ -36,25 +35,43 @@ const Channel3 = () => {
 
   const spotWallet = "0x32bD2811Fb91BC46756232A0B8c6b2902D7d8763";
 
+  // Function to extract Vimeo video ID from URL or return it directly if it's an ID
+  function getVimeoVideoId(url) {
+    // Check if url is a number (video ID)
+    if (/^\d+$/.test(url)) {
+      return url;
+    }
+    // Try to extract video ID from full URL
+    const regex = /vimeo\.com\/(\d+)/;
+    const match = url.match(regex);
+    if (match && match[1]) {
+      return match[1];
+    }
+    return null;
+  }
+
   useEffect(() => {
     const fetchUsers = async () => {
+      console.log('Fetching users...');
       const { data, error } = await supabase.from('users').select('*');
       if (error) {
         console.error('Error fetching users:', error);
       } else {
+        console.log('Fetched users:', data);
         setUsers(data);
       }
     };
 
     fetchUsers();
 
-    // Optionally, set up real-time subscriptions
+    // Set up real-time subscription to users table
     const subscription = supabase
       .channel('public:users')
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'users' },
         (payload) => {
+          console.log('Users table changed:', payload);
           fetchUsers(); // Re-fetch users on any change
         }
       )
@@ -73,6 +90,8 @@ const Channel3 = () => {
   useEffect(() => {
     const fetchUserVideos = async () => {
       if (!selectedUser) return;
+
+      console.log(`Fetching videos for user: ${selectedUser}`);
 
       // Find the user by username to get the user_id
       const { data: userData, error: userError } = await supabase
@@ -97,20 +116,9 @@ const Channel3 = () => {
       if (videosError) {
         console.error('Error fetching videos:', videosError);
       } else {
+        console.log('Fetched videos:', videosData);
         const videoUrls = videosData.map((video) => video.url);
         setUserVideos(videoUrls);
-
-        // Initialize Vimeo players
-        playerRefs.current.forEach((player) => player.destroy());
-        playerRefs.current = [];
-
-        playerRefs.current = videoUrls.map((videoUrl, index) => {
-          const options = {
-            url: videoUrl,
-            width: 1080,
-          };
-          return new Player(`vimeo-player-${index}`, options);
-        });
       }
     };
 
@@ -121,7 +129,9 @@ const Channel3 = () => {
     const subscribeToVideos = async () => {
       if (!selectedUser) return;
 
-      // Use the userId from the fetchUserVideos function
+      console.log(`Subscribing to videos for user: ${selectedUser}`);
+
+      // Find the user by username to get the user_id
       const { data: userData, error: userError } = await supabase
         .from('users')
         .select('id')
@@ -129,7 +139,7 @@ const Channel3 = () => {
         .single();
 
       if (userError || !userData) {
-        console.error('Error fetching user:', userError);
+        console.error('Error fetching user for subscription:', userError);
         return;
       }
 
@@ -146,6 +156,7 @@ const Channel3 = () => {
             filter: `user_id=eq.${userId}`,
           },
           (payload) => {
+            console.log('Videos table changed:', payload);
             fetchUserVideos();
           }
         )
@@ -176,11 +187,10 @@ const Channel3 = () => {
           const result = await contract.sharesBalance(user.address, account);
           const hasSharesBalance = result.gte(1);
           if (hasSharesBalance) {
+            console.log(`User has access to ${user.username}`);
             setSelectedUser(user.username);
           } else {
-            // Handle the case where the user does not have access
-            // You might want to set a state variable to show an error message
-            console.log('You do not have access to ' + user.username);
+            console.log(`You do not have access to ${user.username}`);
           }
         }
       }
@@ -201,8 +211,11 @@ const Channel3 = () => {
           const contract = new Contract(SA_ADDRESS, SA_ABI, signer);
 
           const result = await contract.getBuyPriceAfterFee(userAddress, "1");
+          console.log('Buy price after fee:', result.toString());
           setCurrentBuyPrice(result.toString());
-          const currentBuyPriceEther = Number(ethers.utils.formatUnits(result, 'ether')).toFixed(2);
+          const currentBuyPriceEther = Number(
+            ethers.utils.formatUnits(result, 'ether')
+          ).toFixed(2);
           setCurrentBuyPriceEther(currentBuyPriceEther);
         }
       }
@@ -239,9 +252,12 @@ const Channel3 = () => {
 
   useEffect(() => {
     const initializeContract = async () => {
-      const provider = new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc');
+      const provider = new ethers.providers.JsonRpcProvider(
+        'https://api.avax.network/ext/bc/C/rpc'
+      );
       const yourContract = new ethers.Contract(SA_ADDRESS, SA_ABI, provider);
       setContract(yourContract);
+      console.log('Contract initialized:', yourContract);
     };
 
     initializeContract();
@@ -253,19 +269,31 @@ const Channel3 = () => {
         <div className='w-full md:w-full items-center md:pt-0'>
           <div className='flex flex-col items-center min-h-screen'>
             {currentUser ? (
-              <div className='font-bold text-3xl text-white pb-4 pt-6'>{currentUser}'s Channel3</div>
+              <div className='font-bold text-3xl text-white pb-4 pt-6'>
+                {currentUser}'s Channel3
+              </div>
             ) : (
-              <div className='font-bold text-3xl text-white pb-4 pt-6'>Channel3</div>
+              <div className='font-bold text-3xl text-white pb-4 pt-6'>
+                Channel3
+              </div>
             )}
 
             {userVideos.length > 0 ? (
               <div className='grid-cols-1 mx-auto'>
-                {userVideos.map((videoUrl, index) => (
-                  <div key={index} className='mx-auto w-full'>
-                    <p className='pb-4'></p>
-                    <div id={`vimeo-player-${index}`}></div>
-                  </div>
-                ))}
+                {userVideos.map((videoUrl, index) => {
+                  const videoId = getVimeoVideoId(videoUrl);
+                  if (videoId) {
+                    return (
+                      <div key={index} className='mx-auto w-full'>
+                        <p className='pb-4'></p>
+                        <VimeoPlayer videoId={videoId} />
+                      </div>
+                    );
+                  } else {
+                    console.error('Invalid video URL:', videoUrl);
+                    return null;
+                  }
+                })}
               </div>
             ) : (
               <p className='text-white'>Select a creator to view their content</p>
@@ -276,8 +304,12 @@ const Channel3 = () => {
         <div className='w-full md:w-1/5 pr-2 pl-2 pt-8'>
           <div className='pb-8'>
             <button
-              className={`w-full rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${isToggled ? 'bg-spot-yellow text-black border-white' : ''} hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center`}
-              onClick={() => window.location.href = "https://arena.social/?ref=TheSpotUG"}
+              className={`w-full rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 ${
+                isToggled ? 'bg-spot-yellow text-black border-white' : ''
+              } hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center`}
+              onClick={() =>
+                (window.location.href = "https://arena.social/?ref=TheSpotUG")
+              }
             >
               Enter The Arena
             </button>
@@ -285,7 +317,7 @@ const Channel3 = () => {
 
           <button
             className="w-full rounded-lg px-4 py-2 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono text-lg flex justify-center"
-            onClick={() => window.location.href = "/creator"}
+            onClick={() => (window.location.href = "/creator")}
           >
             Creator Portal
           </button>
@@ -303,7 +335,11 @@ const Channel3 = () => {
               {users.map((user, index) => (
                 <li className='py-2' key={index}>
                   <button
-                    className={`w-full rounded-lg px-4 py-2 ${buyModes[index] ? 'border-4 border-green-500 text-green-500 hover:border-white hover:bg-green-500 hover:text-black' : 'border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black hover:border-white'} duration-300 font-mono text-lg flex justify-center`}
+                    className={`w-full rounded-lg px-4 py-2 ${
+                      buyModes[index]
+                        ? 'border-4 border-green-500 text-green-500 hover:border-white hover:bg-green-500 hover:text-black'
+                        : 'border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black hover:border-white'
+                    } duration-300 font-mono text-lg flex justify-center`}
                     onClick={() => {
                       // Reset buyModes
                       setBuyModes(Array(users.length).fill(false));
@@ -327,7 +363,9 @@ const Channel3 = () => {
                       }
                     }}
                   >
-                    {buyModes[index] ? `Buy ${user.username} (${currentBuyPriceEther} AVAX)` : user.username}
+                    {buyModes[index]
+                      ? `Buy ${user.username} (${currentBuyPriceEther} AVAX)`
+                      : user.username}
                   </button>
                 </li>
               ))}
@@ -338,5 +376,24 @@ const Channel3 = () => {
     </div>
   );
 };
+
+// New VimeoPlayer component
+function VimeoPlayer({ videoId }) {
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const options = {
+      id: videoId,
+      width: 1080,
+    };
+    const player = new Player(containerRef.current, options);
+
+    return () => {
+      player.destroy();
+    };
+  }, [videoId]);
+
+  return <div ref={containerRef}></div>;
+}
 
 export default Channel3;
