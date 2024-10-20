@@ -19,7 +19,7 @@ const Channel3 = () => {
 
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [currentUser, setCurrentUser] = useState('The Spot');
+  const [currentUser, setCurrentUser] = useState(null);
   const [userVideos, setUserVideos] = useState([]);
   const [isToggled, setToggled] = useState(true);
   const [currentBuyPrice, setCurrentBuyPrice] = useState([]);
@@ -37,16 +37,37 @@ const Channel3 = () => {
 
   // Function to extract Vimeo video ID from URL or return it directly if it's an ID
   function getVimeoVideoId(url) {
+    if (!url) return null;
+
+    // Trim whitespace
+    url = url.trim();
+
     // Check if url is a number (video ID)
     if (/^\d+$/.test(url)) {
       return url;
     }
+
     // Try to extract video ID from full URL
     const regex = /vimeo\.com\/(\d+)/;
     const match = url.match(regex);
     if (match && match[1]) {
       return match[1];
     }
+
+    // Handle URLs with parameters
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.hostname.includes('vimeo.com')) {
+        const pathnameParts = urlObj.pathname.split('/');
+        const id = pathnameParts.find((part) => /^\d+$/.test(part));
+        if (id) {
+          return id;
+        }
+      }
+    } catch (e) {
+      console.error('Invalid URL format:', url);
+    }
+
     return null;
   }
 
@@ -189,6 +210,7 @@ const Channel3 = () => {
           if (hasSharesBalance) {
             console.log(`User has access to ${user.username}`);
             setSelectedUser(user.username);
+            setCurrentUser(user.username); // Update currentUser here
           } else {
             console.log(`You do not have access to ${user.username}`);
           }
@@ -270,11 +292,11 @@ const Channel3 = () => {
           <div className='flex flex-col items-center min-h-screen'>
             {currentUser ? (
               <div className='font-bold text-3xl text-white pb-4 pt-6'>
-                {currentUser}'s Channel3
+                {currentUser} on Channel3
               </div>
             ) : (
               <div className='font-bold text-3xl text-white pb-4 pt-6'>
-                Channel3
+                Welcome to Channel3
               </div>
             )}
 
@@ -282,11 +304,12 @@ const Channel3 = () => {
               <div className='grid-cols-1 mx-auto'>
                 {userVideos.map((videoUrl, index) => {
                   const videoId = getVimeoVideoId(videoUrl);
+                  console.log('Processing videoUrl:', videoUrl, 'Extracted videoId:', videoId);
                   if (videoId) {
                     return (
-                      <div key={index} className='mx-auto w-full'>
+                      <div key={videoId} className='mx-auto w-full'>
                         <p className='pb-4'></p>
-                        <VimeoPlayer videoId={videoId} />
+                        <VimeoPlayer key={videoId} videoId={videoId} />
                       </div>
                     );
                   } else {
@@ -377,15 +400,28 @@ const Channel3 = () => {
   );
 };
 
-// New VimeoPlayer component
+// Updated VimeoPlayer component
 function VimeoPlayer({ videoId }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
+    console.log('Initializing VimeoPlayer with videoId:', videoId);
+
+    // Clear any existing content and attributes
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+      // Remove all attributes from the container
+      Array.from(containerRef.current.attributes).forEach((attr) =>
+        containerRef.current.removeAttribute(attr.name)
+      );
+      console.log('Container attributes after cleanup:', containerRef.current.attributes);
+    }
+
     const options = {
       id: videoId,
       width: 1080,
     };
+
     const player = new Player(containerRef.current, options);
 
     return () => {
