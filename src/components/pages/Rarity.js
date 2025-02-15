@@ -322,7 +322,7 @@ export const Rarity = ({
     } bg-white bg-opacity-10 ${spotBotTokens.token_ids.includes(nft.edition) ? 'border-4 border-spot-yellow cursor-pointer' : ''}`}
     
       key={nft.edition} 
-      onClick={() => window.open(`https://avax.hyperspace.xyz/collection/avax/71bc03c0-0229-47d7-927a-9dbb7bc746d6?tokenAddress=0x20ef794f891c050d27bec63f50b202cce97d7224_${nft.edition}`, "_blank")}
+      onClick={() => window.open(`https://salvor.io/collections/0x20ef794f891c050d27bec63f50b202cce97d7224/${nft.edition}`, "_blank")}
       ref={index === displayedNFTs.length - 1 ? lastNFTElementRef : null}
     >
       <div className="aspect-w-16 aspect-h-9 overflow-hidden">
