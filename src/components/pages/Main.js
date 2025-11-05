@@ -59,6 +59,68 @@ import pepe from "../../assets/6194.png";
 
 ReactGA.initialize('G-YJ9C2P37P6');
 
+// ---- Cleaner, smaller 7-segment green display ----
+const SEG_MAP = {
+  0: ["a", "b", "c", "d", "e", "f"],
+  1: ["b", "c"],
+  2: ["a", "b", "g", "e", "d"],
+  3: ["a", "b", "c", "d", "g"],
+  4: ["f", "g", "b", "c"],
+  5: ["a", "f", "g", "c", "d"],
+  6: ["a", "f", "e", "d", "c", "g"],
+  7: ["a", "b", "c"],
+  8: ["a", "b", "c", "d", "e", "f", "g"],
+  9: ["a", "b", "c", "d", "f", "g"],
+};
+
+function Digit({ on }) {
+  // compact canvas: 28x48; segment thickness = 4
+  const onColor = "#32CD32";              // lime green
+  const offColor = "rgba(80,80,80,0.25)";
+
+
+  const segOn = (id) => (on.includes(id) ? onColor : offColor);
+
+  return (
+    <svg
+      width="28"
+      height="48"
+      viewBox="0 0 28 48"
+      className="drop-shadow-[0_0_3px_rgba(50,205,50,0.45)]"
+    >
+      {/* a (top) */}
+      <rect x="6"  y="2"  width="16" height="4" rx="2" fill={segOn("a")} />
+      {/* b (upper-right) */}
+      <rect x="22" y="6"  width="4"  height="16" rx="2" fill={segOn("b")} />
+      {/* c (lower-right) */}
+      <rect x="22" y="26" width="4"  height="16" rx="2" fill={segOn("c")} />
+      {/* d (bottom) */}
+      <rect x="6"  y="42" width="16" height="4" rx="2" fill={segOn("d")} />
+      {/* e (lower-left) */}
+      <rect x="2"  y="26" width="4"  height="16" rx="2" fill={segOn("e")} />
+      {/* f (upper-left) */}
+      <rect x="2"  y="6"  width="4"  height="16" rx="2" fill={segOn("f")} />
+      {/* g (middle) */}
+      <rect x="6"  y="22" width="16" height="4" rx="2" fill={segOn("g")} />
+    </svg>
+  );
+}
+
+function SevenSeg({ value, digits = 4, gap = 4 }) {
+  const str = Math.max(0, Number(value || 0)).toString().padStart(digits, "0");
+  return (
+    <div
+      className="flex items-center justify-center"
+      style={{ columnGap: `${gap}px` }}
+    >
+      {str.split("").map((ch, i) => (
+        <Digit key={i} on={SEG_MAP[ch] ?? []} />
+      ))}
+    </div>
+  );
+}
+
+
 
 const Main = ({
  
@@ -75,6 +137,53 @@ const Main = ({
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
   }, []);
+
+  // Supply state
+const [maxSupply, setMaxSupply] = useState(null);
+const [totalMinted, setTotalMinted] = useState(null);
+
+const remaining = useMemo(() => {
+  if (maxSupply == null || totalMinted == null) return null;
+  try {
+    const ms = ethers.BigNumber.from(maxSupply);
+    const tm = ethers.BigNumber.from(totalMinted);
+    const rem = ms.sub(tm);
+    return rem.lt(0) ? 0 : rem.toNumber();
+  } catch {
+    return null;
+  }
+}, [maxSupply, totalMinted]);
+
+const remainingDigits = useMemo(() => {
+  if (!maxSupply) return 4;
+  try {
+    return ethers.BigNumber.from(maxSupply).toString().length;
+  } catch {
+    return 4;
+  }
+}, [maxSupply]);
+
+async function readSupply() {
+  try {
+    const { ethereum } = window;
+    if (!ethereum) return;
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const contract = new Contract(DECAY_ADDRESS, DECAY_ABI, provider);
+    const [ms, tm] = await Promise.all([contract.MAX_SUPPLY(), contract.totalMinted()]);
+    setMaxSupply(ms);
+    setTotalMinted(tm);
+  } catch (e) {
+    console.error("readSupply error:", e);
+  }
+}
+
+// initial load + periodic refresh
+useEffect(() => {
+  readSupply();
+  const t = setInterval(readSupply, 20000); // refresh every 20s
+  return () => clearInterval(t);
+}, []);
+
 
   const [spotsMinted, setSpotsMinted] = useState([]);
   const [isLoading, setIsLoading] = useState(false)
@@ -171,6 +280,7 @@ const mintDecayNFT = async () => {
       const tx = await contract.mintPublic(parsedQty, { value: totalValueWei });
       console.log("Tx:", tx.hash);
       await tx.wait();
+      await readSupply(); 
       alert("Mint successful!");
     } catch (err) {
       console.error(err);
@@ -584,9 +694,18 @@ const slideRight = () => {
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
 
    {/*Spot Bot */}
-   
+     {/* REMAINING SUPPLY DISPLAY (MOBILE) */}
+<div className="pt-3">
+  <div className="w-full rounded-lg px-4 py-2 border-4 border-spot-yellow bg-black/70 flex flex-col items-center justify-center">
+    <SevenSeg value={remaining ?? 0} digits={remainingDigits} />
+    <div className="text-spot-yellow font-mono mt-2 text-sm">
+      {remaining == null ? "Loading…" : "Remaining"}
+    </div>
+  </div>
+</div>
    {/* MINT INPUT + BUTTON */}
 <div className="flex w-full gap-2 pt-4">
+  
   <input
     type="text"
     inputMode="numeric"
@@ -599,6 +718,8 @@ const slideRight = () => {
                placeholder:text-spot-yellow/60 outline-none
                focus:ring-2 focus:ring-spot-yellow/60 focus:border-white transition"
   />
+
+
   <button
     onClick={mintDecayNFT}
     disabled={!isValidQty || minting}
@@ -844,8 +965,16 @@ const slideRight = () => {
         background ? "bg-opacity-0 duration-1000" : "bg-opacity-100"
       }`}
     >
-      <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60">
+      <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60 z-10">
+        
         <div className="ml-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col gap-3">
+{/* REMAINING SUPPLY DISPLAY (DESKTOP) */}
+<div className="w-full rounded-lg px-4 py-2 border-4 border-spot-yellow bg-black/70 flex flex-col items-center justify-center">
+  <SevenSeg value={remaining ?? 0} digits={remainingDigits} />
+  <div className="text-spot-yellow font-mono mt-2 text-sm">
+    {remaining == null ? "Loading…" : "Remaining"}
+  </div>
+</div>
 
           {/* Row 1: Input (1/3) + Button (2/3) */}
           <div className="flex w-full gap-2">
@@ -861,6 +990,7 @@ const slideRight = () => {
                          placeholder:text-spot-yellow/60 outline-none
                          focus:ring-2 focus:ring-spot-yellow/60 focus:border-white transition"
             />
+            
             <button
               onClick={mintDecayNFT}
               disabled={!isValidQty || minting}
@@ -1051,7 +1181,7 @@ const slideRight = () => {
               Get Scribbled
             </button></div>
             </div>
-     <div className="lg:pt-2 2xl:pt-2"> <FlippableCard /></div>
+     <div className="relative z-0 lg:pt-2 2xl:pt-2"> <FlippableCard /></div>
    
  
     
