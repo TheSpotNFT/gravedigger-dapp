@@ -741,7 +741,7 @@ const slideRight = () => {
 {/* MARKETPLACE LINK */}
 <div className="pt-3">
   <a
-    href="https://joepegs.com/collections/avalanche/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
+    href="https://salvor.io/collections/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
     target="_blank"
     rel="noopener noreferrer"
   >
@@ -1011,7 +1011,7 @@ const slideRight = () => {
 
           {/* Row 2 */}
               <a
-            href="https://joepegs.com/collections/avalanche/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
+            href="https://salvor.io/collections/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
             target="_blank"
             rel="noopener noreferrer"
             className="w-full h-10 rounded-lg px-4 flex items-center justify-center
