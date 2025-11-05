@@ -730,11 +730,12 @@ const slideRight = () => {
           : "bg-gray-300/30 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black hover:border-white"
       }`}
   >
-    {minting
-      ? "Minting…"
-      : isValidQty
-      ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""}`
-      : "Enter Amount"}
+  {minting
+  ? "Minting…"
+  : isValidQty
+  ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""} (${(parsedQty * 0.1).toFixed(2)} AVAX)`
+  : "Enter Amount"}
+
   </button>
 </div>
 
@@ -985,7 +986,7 @@ const slideRight = () => {
               value={qty}
               onChange={handleQtyChange}
               placeholder="Qty"
-              className="w-1/3 h-10 rounded-lg px-3 font-mono sm:text-xs md:text-base 2xl:text-xl
+              className="w-1/3 h-16 rounded-lg px-3 font-mono sm:text-xs md:text-base 2xl:text-xl
                          bg-gray-300/30 border-4 border-spot-yellow text-spot-yellow
                          placeholder:text-spot-yellow/60 outline-none
                          focus:ring-2 focus:ring-spot-yellow/60 focus:border-white transition"
@@ -994,18 +995,19 @@ const slideRight = () => {
             <button
               onClick={mintDecayNFT}
               disabled={!isValidQty || minting}
-              className={`w-2/3 h-10 rounded-lg px-4 border-4 font-mono sm:text-xs md:text-base 2xl:text-xl duration-300
+              className={`w-2/3 h-16 rounded-lg px-4 border-4 font-mono sm:text-xs md:text-base 2xl:text-xl duration-300
                 ${
                   !isValidQty || minting
                     ? "bg-gray-400/40 border-gray-300 text-gray-300 cursor-not-allowed"
                     : "bg-gray-300/30 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black hover:border-white"
                 }`}
             >
-              {minting
-                ? "Minting…"
-                : isValidQty
-                ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""}`
-                : "Enter Amount"}
+            {minting
+  ? "Minting…"
+  : isValidQty
+  ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""} (${(parsedQty * 0.1).toFixed(2)} AVAX)`
+  : "Enter Amount"}
+
             </button>
           </div>
 
