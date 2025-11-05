@@ -166,10 +166,15 @@ const remainingDigits = useMemo(() => {
 async function readSupply() {
   try {
     const { ethereum } = window;
-    if (!ethereum) return;
+    if (!ethereum || !account) return; // Only read if wallet connected
+
     const provider = new ethers.providers.Web3Provider(ethereum);
     const contract = new Contract(DECAY_ADDRESS, DECAY_ABI, provider);
-    const [ms, tm] = await Promise.all([contract.MAX_SUPPLY(), contract.totalMinted()]);
+    const [ms, tm] = await Promise.all([
+      contract.MAX_SUPPLY(),
+      contract.totalMinted()
+    ]);
+
     setMaxSupply(ms);
     setTotalMinted(tm);
   } catch (e) {
@@ -177,12 +182,16 @@ async function readSupply() {
   }
 }
 
+
 // initial load + periodic refresh
 useEffect(() => {
+  if (!account) return; // don’t poll until connected
+
   readSupply();
-  const t = setInterval(readSupply, 20000); // refresh every 20s
-  return () => clearInterval(t);
-}, []);
+  const timer = setInterval(readSupply, 20000); // refresh every 20s
+  return () => clearInterval(timer);
+}, [account]);
+
 
 
   const [spotsMinted, setSpotsMinted] = useState([]);
@@ -698,9 +707,14 @@ const slideRight = () => {
 <div className="pt-3">
   <div className="w-full rounded-lg px-4 py-2 border-4 border-spot-yellow bg-black/70 flex flex-col items-center justify-center">
     <SevenSeg value={remaining ?? 0} digits={remainingDigits} />
-    <div className="text-spot-yellow font-mono mt-2 text-sm">
-      {remaining == null ? "Loading…" : "Remaining"}
-    </div>
+   <div className="text-center text-spot-yellow font-mono text-sm pt-2">
+  {account
+    ? (maxSupply && totalMinted
+        ? `Remaining: ${maxSupply - totalMinted}`
+        : "Loading…")
+    : "Connect wallet to view remaining"}
+</div>
+
   </div>
 </div>
    {/* MINT INPUT + BUTTON */}
@@ -972,9 +986,14 @@ const slideRight = () => {
 {/* REMAINING SUPPLY DISPLAY (DESKTOP) */}
 <div className="w-full rounded-lg px-4 py-2 border-4 border-spot-yellow bg-black/70 flex flex-col items-center justify-center">
   <SevenSeg value={remaining ?? 0} digits={remainingDigits} />
-  <div className="text-spot-yellow font-mono mt-2 text-sm">
-    {remaining == null ? "Loading…" : "Remaining"}
-  </div>
+<div className="text-center text-spot-yellow font-mono text-sm pt-2">
+  {account
+    ? (maxSupply && totalMinted
+        ? `Remaining: ${maxSupply - totalMinted}`
+        : "Loading…")
+    : "Connect wallet to view remaining"}
+</div>
+
 </div>
 
           {/* Row 1: Input (1/3) + Button (2/3) */}
