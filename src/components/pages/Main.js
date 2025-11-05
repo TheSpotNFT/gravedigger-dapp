@@ -710,7 +710,7 @@ const slideRight = () => {
    <div className="text-center text-spot-yellow font-mono text-sm pt-2">
   {account
     ? (maxSupply && totalMinted
-        ? `Remaining: ${maxSupply - totalMinted}`
+        ? `Remaining`
         : "Loading…")
     : "Connect wallet to view remaining"}
 </div>
@@ -989,7 +989,7 @@ const slideRight = () => {
 <div className="text-center text-spot-yellow font-mono text-sm pt-2">
   {account
     ? (maxSupply && totalMinted
-        ? `Remaining: ${maxSupply - totalMinted}`
+        ? `Remaining`
         : "Loading…")
     : "Connect wallet to view remaining"}
 </div>
