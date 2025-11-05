@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { ethers, Contract } from "ethers";
 import { SPOTBOT_ADDRESS, SPOTBOT_ABI } from '../Contracts/SpotBotContract';
 import { SPOT404_ADDRESS, SPOT404_ABI } from "../Contracts/Spot404";
+import { DECAY_ABI, DECAY_ADDRESS } from "../Contracts/DecayNFT";
 import SPOTNFTABI from '../Contracts/SpotNFTAbi.json';
 import { EFF404_ABI, EFF404_ADDRESS } from "../Contracts/Eff404Contract";
 import { EFF_ABI, EFF_ADDRESS } from "../Contracts/EffContract";
@@ -136,8 +137,48 @@ const textinputUser = (event) => {
 };
 const [txProcessing, setTxProcessing] = useState();
 
+const [qty, setQty] = useState(1);
+const [minting, setMinting] = useState(false);
 
+const handleQtyChange = (e) => {
+    const value = e.target.value.replace(/[^\d]/g, ""); // only digits
+    setQty(value);
+};
 
+const parsedQty = Number(qty);
+const isValidQty = parsedQty >= 1;
+
+  const totalValueWei = useMemo(() => {
+    if (!isValidQty) return ethers.constants.Zero;
+    const pricePer = ethers.utils.parseEther("0.1");
+    return pricePer.mul(parsedQty);
+  }, [parsedQty, isValidQty]);
+
+const mintDecayNFT = async () => {
+    try {
+      setMinting(true);
+      const { ethereum } = window;
+      if (!ethereum) {
+        alert("Please connect MetaMask.");
+        return;
+      }
+
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+      const contract = new Contract(DECAY_ADDRESS, DECAY_ABI, signer);
+
+      const tx = await contract.mintPublic(parsedQty, { value: totalValueWei });
+      console.log("Tx:", tx.hash);
+      await tx.wait();
+      alert("Mint successful!");
+    } catch (err) {
+      console.error(err);
+      alert(err?.data?.message || err?.message || "Mint failed.");
+    } finally {
+      setMinting(false);
+    }
+  };
 
 async function setApprovalForAll() {
   setTxProcessing(true);
@@ -543,13 +584,67 @@ const slideRight = () => {
  <div><img src={spotmobile} alt="Goatd" className=""></img></div>
 
    {/*Spot Bot */}
-   <div className="pt-4"><a href="/ecosystem"><button
-              className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+   
+   {/* MINT INPUT + BUTTON */}
+<div className="flex w-full gap-2 pt-4">
+  <input
+    type="text"
+    inputMode="numeric"
+    pattern="\d*"
+    value={qty}
+    onChange={handleQtyChange}
+    placeholder="Qty"
+    className="w-1/3 h-16 rounded-lg px-3 font-mono sm:text-xs md:text-base 2xl:text-xl
+               bg-gray-300/30 border-4 border-spot-yellow text-spot-yellow
+               placeholder:text-spot-yellow/60 outline-none
+               focus:ring-2 focus:ring-spot-yellow/60 focus:border-white transition"
+  />
+  <button
+    onClick={mintDecayNFT}
+    disabled={!isValidQty || minting}
+    className={`w-2/3 h-16 rounded-lg px-4 border-4 font-mono sm:text-xs md:text-base 2xl:text-xl duration-300
+      ${
+        !isValidQty || minting
+          ? "bg-gray-400/40 border-gray-300 text-gray-300 cursor-not-allowed"
+          : "bg-gray-300/30 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black hover:border-white"
+      }`}
+  >
+    {minting
+      ? "Minting…"
+      : isValidQty
+      ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""}`
+      : "Enter Amount"}
+  </button>
+</div>
+
+{/* MARKETPLACE LINK */}
+<div className="pt-3">
+  <a
+    href="https://joepegs.com/collections/avalanche/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <button
+      className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
-              
-            >
-              Eco-system Overview
-            </button></a></div>
+    >
+      View DecayNFT Marketplace
+    </button>
+  </a>
+</div>
+
+{/* EXISTING ECO-SYSTEM BUTTON */}
+<div className="pt-4">
+  <a href="/ecosystem">
+    <button
+      className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 border-4 border-spot-yellow text-spot-yellow 
+      hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-3xl flex justify-center"
+    >
+      Eco-system Overview
+    </button>
+  </a>
+</div>
+
             <div id="spotwrapmobile" className="font-mono text-3xl px-4 py-4 pt-16 text-white">Wrap Your Spot</div>
  <div className="mx-auto w-full"><img src={ChadYellow} alt="The Spot" className="w-full"></img></div>
 
@@ -744,21 +839,75 @@ const slideRight = () => {
     <div className="snap-container flex-auto mx-auto px-12 hidden lg:block scroll-smooth">
     
       
-    <div className={`h-screen bg-spotbg bg-cover bg-no-repeat bg-center bg-fixed bg-slate-900 scroll-smooth snap-start ${background ? "bg-opacity-0 duration-1000" : "bg-opacity-100"}`}>
-    <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60 flex justify-end">
-  <button
-    className="w-1/4 rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 py-2 bg-gray-300 bg-opacity-30 border-4 border-spot-yellow text-spot-yellow
-hover:bg-spot-yellow hover:text-black duration-300 hover:border-white font-mono sm:text-xs md:text-l 2xl:text-xl"
-    onClick={onClickUrl("/rarity")}
-  >
-    Spot Bot Rarity
-  </button>
-</div>
+ <div
+      className={`h-screen bg-spotbg bg-cover bg-no-repeat bg-center bg-fixed bg-slate-900 scroll-smooth snap-start flex flex-col grid-cols-1 ${
+        background ? "bg-opacity-0 duration-1000" : "bg-opacity-100"
+      }`}
+    >
+      <div className="fixed bottom-0 w-full px-4 py-2 pb-16 pr-36 bg-opacity-60">
+        <div className="ml-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex flex-col gap-3">
 
+          {/* Row 1: Input (1/3) + Button (2/3) */}
+          <div className="flex w-full gap-2">
+            <input
+              type="text"
+              inputMode="numeric"
+              pattern="\d*"
+              value={qty}
+              onChange={handleQtyChange}
+              placeholder="Qty"
+              className="w-1/3 h-10 rounded-lg px-3 font-mono sm:text-xs md:text-base 2xl:text-xl
+                         bg-gray-300/30 border-4 border-spot-yellow text-spot-yellow
+                         placeholder:text-spot-yellow/60 outline-none
+                         focus:ring-2 focus:ring-spot-yellow/60 focus:border-white transition"
+            />
+            <button
+              onClick={mintDecayNFT}
+              disabled={!isValidQty || minting}
+              className={`w-2/3 h-10 rounded-lg px-4 border-4 font-mono sm:text-xs md:text-base 2xl:text-xl duration-300
+                ${
+                  !isValidQty || minting
+                    ? "bg-gray-400/40 border-gray-300 text-gray-300 cursor-not-allowed"
+                    : "bg-gray-300/30 border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-black hover:border-white"
+                }`}
+            >
+              {minting
+                ? "Minting…"
+                : isValidQty
+                ? `Mint ${parsedQty} DecayNFT${parsedQty > 1 ? "s" : ""}`
+                : "Enter Amount"}
+            </button>
+          </div>
 
+          {/* Row 2 */}
+              <a
+            href="https://joepegs.com/collections/avalanche/0x8f49ea15ba5180a606091e24665c8d771fd9d02b"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full h-10 rounded-lg px-4 flex items-center justify-center
+                       bg-gray-300/30 border-4 border-spot-yellow text-spot-yellow
+                       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white
+                       font-mono sm:text-xs md:text-base 2xl:text-xl"
+          >
+            View DecayNFT Marketplace
+          </a>
 
+          {/* Row 3 */}
+          <button
+            className="w-full h-10 rounded-lg px-4 bg-gray-300/30 border-4 border-spot-yellow text-spot-yellow
+                       hover:bg-spot-yellow hover:text-black duration-300 hover:border-white
+                       font-mono sm:text-xs md:text-base 2xl:text-xl"
+            onClick={onClickUrl("/rarity")}
+          >
+            Spot Bot Rarity
+          </button>
+        </div>
+      </div>
     </div>
+
+
     <div className="snap-item scroll-smooth h-screen">
+    
       {/*Spot Explainer */}
     <div className="grid grid-cols-2 h-screen pt-24 lg:pr-10 2xl:pr-24">
     <div className="pl-24 xl:pl-24 2xl:pl-36 md:pt-12 2xl:pt-24"><img src={goatdmain} alt="Goatd" className="p-5 m-0 lg:w-4/5 2xl:w-4/5 block"></img>
