@@ -7,13 +7,18 @@ import {
     VIBES_ABI,
     GUD_VIBE_ID,
     BAD_VIBE_ID,
-    VIBES_LEADER_ADDRESSES,
+    // VIBES_LEADER_ADDRESSES, // ⬅️ no longer needed, indexer provides the list
 } from "../Contracts/VibesContract";
 import {
     VIBES_ALIAS_REGISTRY_ADDRESS,
     VIBES_ALIAS_REGISTRY_ABI,
 } from "../Contracts/VibesAliasRegistry";
 import gudVibes from "../../assets/gud.png";
+
+const API_BASE = (
+    process.env.REACT_APP_VIBES_API_URL
+).replace(/\/+$/, ""); // strip trailing slashes
+
 
 const shorten = (addr) =>
     addr ? `${addr.slice(0, 4)}...${addr.slice(-4)}` : "";
@@ -57,49 +62,55 @@ const VibesLeaderboard = () => {
         }
     }, [web3Provider]);
 
-    // --- Build leaderboard from VIBES balances ---
+    // --- Load leaderboard from Heroku indexer API ---
 
     useEffect(() => {
-        const load = async () => {
-            if (!provider || !VIBES_ADDRESS || VIBES_LEADER_ADDRESSES.length === 0)
-                return;
-
+        const loadFromApi = async () => {
             try {
                 setLoading(true);
-                const vibes = new Contract(VIBES_ADDRESS, VIBES_ABI, provider);
 
-                const rows = await Promise.all(
-                    VIBES_LEADER_ADDRESSES.map(async (addr) => {
-                        try {
-                            const [gudRaw, badRaw] = await Promise.all([
-                                vibes.balanceOf(addr, GUD_VIBE_ID),
-                                vibes.balanceOf(addr, BAD_VIBE_ID),
-                            ]);
-                            const good = Number(gudRaw);
-                            const bad = Number(badRaw);
-                            const net = good - bad;
-                            return { address: addr, good, bad, net };
-                        } catch (err) {
-                            console.error("Error reading balances for", addr, err);
-                            return { address: addr, good: 0, bad: 0, net: 0 };
-                        }
-                    })
-                );
+                const res = await fetch(`${API_BASE}/leaderboard`);
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status} ${res.statusText}`);
+                }
 
+                const data = await res.json();
+
+                // Support a few possible response shapes:
+                // [{ address, gudVibes, badVibes, netVibes }, ...]
+                // or [{ wallet, good, bad, net }, ...]
+                const rows = (data || []).map((row) => {
+                    const address = row.address || row.wallet;
+                    const good =
+                        row.gudVibes ?? row.good ?? row.goodVibes ?? 0;
+                    const bad =
+                        row.badVibes ?? row.bad ?? row.badVibes ?? 0;
+                    const net =
+                        row.netVibes ?? row.net ?? (Number(good) - Number(bad));
+
+                    return {
+                        address,
+                        good: Number(good) || 0,
+                        bad: Number(bad) || 0,
+                        net: Number(net) || 0,
+                    };
+                });
+
+                // Sort client-side just in case
                 const sorted = rows
                     .slice()
                     .sort((a, b) => b.net - a.net || b.good - a.good);
 
                 setLeaderboard(sorted);
             } catch (err) {
-                console.error("Error loading leaderboard:", err);
+                console.error("Error loading leaderboard from API:", err);
             } finally {
                 setLoading(false);
             }
         };
 
-        load();
-    }, [provider]);
+        loadFromApi();
+    }, []);
 
     // --- Load aliases from on-chain alias registry ---
 
@@ -134,6 +145,7 @@ const VibesLeaderboard = () => {
 
                 const map = {};
                 for (const { address, alias } of entries) {
+                    if (!address) continue;
                     map[address.toLowerCase()] = alias;
                 }
                 setAliases(map);
@@ -206,7 +218,11 @@ const VibesLeaderboard = () => {
 
     // --- Send vibes with amount ---
 
-    const handleSendVibes = async (target, vibeType = "good", amountNum = 1) => {
+    const handleSendVibes = async (
+        target,
+        vibeType = "good",
+        amountNum = 1
+    ) => {
         try {
             if (!window.ethereum) {
                 alert("Please install / unlock a Web3 wallet (MetaMask, Core, etc).");
@@ -229,7 +245,7 @@ const VibesLeaderboard = () => {
             const activeProvider =
                 web3Provider || new ethers.providers.Web3Provider(window.ethereum);
             const activeSigner = activeProvider.getSigner();
-            const fromAddress = await activeSigner.getAddress();
+            await activeSigner.getAddress(); // ensure wallet is connected
 
             const network = await activeProvider.getNetwork();
             if (network.chainId !== 43114) {
@@ -325,11 +341,12 @@ const VibesLeaderboard = () => {
                             gudVibes Leaderboard
                         </h1>
                         <div className="flex items-center justify-center">
-                            <img src={gudVibes} className="md:w-1/4 md:h-1/4 w-1/2 h-1/2 pt-4" alt="gud vibes" />
+                            <img
+                                src={gudVibes}
+                                className="md:w-1/4 md:h-1/4 w-1/2 h-1/2 pt-4"
+                                alt="gud vibes"
+                            />
                         </div>
-
-
-
                     </div>
                 </header>
 
@@ -385,7 +402,7 @@ const VibesLeaderboard = () => {
                         <div className="p-4 text-sm text-slate-400">Loading…</div>
                     ) : leaderboard.length === 0 ? (
                         <div className="p-4 text-sm text-slate-400">
-                            No leaderboard addresses configured yet.
+                            No leaderboard data yet.
                         </div>
                     ) : (
                         <div className="divide-y divide-slate-800">
@@ -483,7 +500,7 @@ const VibesLeaderboard = () => {
                                                 {idx + 1}
                                             </span>
 
-                                            {/* alias column (no inline edit, just button) */}
+                                            {/* alias column */}
                                             <div className="col-span-4 flex flex-col gap-1 max-w-full">
                                                 <span
                                                     className={`font-mono truncate ${alias === "no alias configured"
@@ -645,7 +662,9 @@ const VibesLeaderboard = () => {
                     <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-4 shadow-xl">
                         <div className="flex items-start justify-between mb-3">
                             <div className="pr-4">
-                                <h3 className="text-sm font-semibold">Send vibes (0.2 avax each)</h3>
+                                <h3 className="text-sm font-semibold">
+                                    Send vibes (0.2 avax each)
+                                </h3>
                                 <p className="text-[11px] text-slate-400 mt-1">
                                     Choose vibe type and amount to send.
                                 </p>
