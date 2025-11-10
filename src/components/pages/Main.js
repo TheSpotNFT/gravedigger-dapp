@@ -1188,15 +1188,15 @@ const slideRight = () => {
       </div>
       <div className="flex justify-center pt-8"><VibesMint/></div>
 <div className="flex justify-center pt-4 pb-8">
-  <a href="/vibes-leaderboard">
-    <button
-      className="align-middle rounded-lg px-8 py-2 border-4 border-spot-yellow text-spot-yellow
-                 bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black
-                 duration-300 hover:border-white font-mono sm:text-xs md:text-base 2xl:text-xl"
-    >
-      gudVibes Leaderboard
-    </button>
-  </a>
+<a
+  href="/vibes-leaderboard"
+  className="inline-block align-middle rounded-lg px-8 py-2 border-4 border-spot-yellow text-spot-yellow
+             bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black
+             duration-300 hover:border-white font-mono sm:text-xs md:text-base 2xl:text-xl"
+>
+  gudVibes Leaderboard
+</a>
+
 </div>
     
 

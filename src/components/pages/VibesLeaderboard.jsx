@@ -82,7 +82,7 @@ const VibesLeaderboard = () => {
                 const rows = (data || []).map((row) => {
                     const address = row.address || row.wallet;
                     const good =
-                        row.gudVibes ?? row.good ?? row.goodVibes ?? 0;
+                        row.gud ?? row.gudVibes ?? row.good ?? row.goodVibes ?? 0;
                     const bad =
                         row.badVibes ?? row.bad ?? row.badVibes ?? 0;
                     const net =
