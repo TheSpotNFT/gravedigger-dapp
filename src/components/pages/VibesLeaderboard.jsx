@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { ExternalLink } from "lucide-react";
 import { ethers, Contract } from "ethers";
 import { useAuth } from "../../Auth";
 import {
@@ -12,9 +13,10 @@ import {
     VIBES_ALIAS_REGISTRY_ADDRESS,
     VIBES_ALIAS_REGISTRY_ABI,
 } from "../Contracts/VibesAliasRegistry";
+import gudVibes from "../../assets/gud.png";
 
 const shorten = (addr) =>
-    addr ? `${addr.slice(0, 6)}...${addr.slice(-4)}` : "";
+    addr ? `${addr.slice(0, 4)}...${addr.slice(-4)}` : "";
 
 const VibesLeaderboard = () => {
     const { account, web3Provider, loadWeb3Modal } = useAuth();
@@ -32,9 +34,14 @@ const VibesLeaderboard = () => {
     const [sending, setSending] = useState(false);
     const [sendStatus, setSendStatus] = useState(null); // "success" | "error" | null
 
-    const isConnected = !!account;
+    // send vibes modal state
+    const [sendModalOpen, setSendModalOpen] = useState(false);
+    const [modalTarget, setModalTarget] = useState(null);
+    const [modalTargetAlias, setModalTargetAlias] = useState("");
+    const [modalVibeType, setModalVibeType] = useState("good");
+    const [modalAmount, setModalAmount] = useState("1");
 
-    // --- Provider / signer setup using your existing web3Provider pattern ---
+    // --- Provider / signer setup ---
 
     useEffect(() => {
         if (web3Provider) {
@@ -162,7 +169,7 @@ const VibesLeaderboard = () => {
         setEditAliasValue("");
     };
 
-    // Save alias on-chain using VibesAliasRegistry.setAlias
+    // Save alias on-chain
     const saveAlias = async () => {
         if (!editAddress) return;
 
@@ -197,19 +204,22 @@ const VibesLeaderboard = () => {
         }
     };
 
-    // --- Send gudVibes / badVibes using VIBES mint(to, id, amount) ---
+    // --- Send vibes with amount ---
 
-    const handleSendVibes = async (target, vibeType = "good") => {
+    const handleSendVibes = async (target, vibeType = "good", amountNum = 1) => {
         try {
             if (!window.ethereum) {
                 alert("Please install / unlock a Web3 wallet (MetaMask, Core, etc).");
                 return;
             }
 
-            // Ensure wallet is connected
+            if (!amountNum || amountNum <= 0) {
+                alert("Please enter a valid amount of vibes to send.");
+                return;
+            }
+
             if (!signer || !account) {
                 await loadWeb3Modal();
-                // re-grab signer from provider after connect
                 const nextProvider =
                     web3Provider || new ethers.providers.Web3Provider(window.ethereum);
                 setProvider(nextProvider);
@@ -221,7 +231,6 @@ const VibesLeaderboard = () => {
             const activeSigner = activeProvider.getSigner();
             const fromAddress = await activeSigner.getAddress();
 
-            // Optional: ensure Avalanche C-Chain
             const network = await activeProvider.getNetwork();
             if (network.chainId !== 43114) {
                 alert("Please switch your wallet to Avalanche C-Chain (chainId 43114).");
@@ -233,43 +242,18 @@ const VibesLeaderboard = () => {
             setSendingTo(target);
 
             const vibes = new Contract(VIBES_ADDRESS, VIBES_ABI, activeSigner);
+            const amount = ethers.BigNumber.from(amountNum);
 
-            // Amount: 1 vibe
-            const amount = ethers.BigNumber.from(1);
-
-            // Read mint fee from chain, with log + fallback
             let mintFee;
             try {
                 mintFee = await vibes._mintFee();
-                console.log(
-                    "Mint fee from contract (wei):",
-                    mintFee.toString(),
-                    "=>",
-                    ethers.utils.formatEther(mintFee),
-                    "AVAX"
-                );
             } catch (e) {
                 console.error("_mintFee() call failed, falling back to 0.2 AVAX:", e);
                 mintFee = ethers.utils.parseEther("0.2");
             }
 
             const totalValue = mintFee.mul(amount);
-
             const tokenId = vibeType === "bad" ? BAD_VIBE_ID : GUD_VIBE_ID;
-
-            console.log(
-                `Sending ${vibeType} vibes`,
-                "\n  from:",
-                fromAddress,
-                "\n  to:",
-                target,
-                "\n  tokenId:",
-                tokenId,
-                "\n  amount:",
-                amount.toString(),
-                "\n  value (wei):",
-                totalValue.toString()
-            );
 
             const tx = await vibes.mint(target, tokenId, amount, {
                 value: totalValue,
@@ -280,6 +264,7 @@ const VibesLeaderboard = () => {
             console.log("mint tx confirmed");
 
             setSendStatus("success");
+            setSendModalOpen(false);
         } catch (err) {
             console.error("Error sending vibes:", err);
             const msg =
@@ -299,7 +284,28 @@ const VibesLeaderboard = () => {
         }
     };
 
-    // Row for the connected user, if present
+    // send modal helpers
+    const openSendModal = (row) => {
+        const alias = getAliasFor(row.address);
+        setModalTarget(row.address);
+        setModalTargetAlias(alias);
+        setModalVibeType("good");
+        setModalAmount("1");
+        setSendModalOpen(true);
+    };
+
+    const closeSendModal = () => {
+        if (sending) return;
+        setSendModalOpen(false);
+        setModalTarget(null);
+    };
+
+    const confirmSendFromModal = async () => {
+        const amountNum = Number(modalAmount);
+        await handleSendVibes(modalTarget, modalVibeType, amountNum);
+    };
+
+    // my row
     const myRow = useMemo(
         () =>
             leaderboard.find(
@@ -310,48 +316,52 @@ const VibesLeaderboard = () => {
     );
 
     return (
-        <div className="min-h-screen bg-slate-950 text-slate-100">
-            <div className="max-w-5xl mx-auto px-4 py-8">
+        <div className="min-h-screen bg-slate-950 text-slate-100 overflow-x-hidden pt-24 md:pt-4">
+            <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8">
                 {/* Header */}
-                <header className="m:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <header className="flex flex-col gap-3 mb-6 sm:mb-8">
                     <div>
-                        <h1 className="text-3xl font-semibold tracking-tight">
+                        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
                             gudVibes Leaderboard
                         </h1>
-                        <p className="text-sm text-slate-400 mt-2">
-                            Net gudVibes = gudVibes − badVibes. Top wallets, their{" "}
-                            <span className="text-spot-yellow font-semibold">alias</span>, and
-                            quick actions to send gudVibes or badVibes.
+                        <p className="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl">
+                            Net gudVibes = gudVibes − badVibes.
                         </p>
                     </div>
                 </header>
 
                 {/* My summary */}
                 {myRow && (
-                    <section className="mb-6 border border-slate-800 rounded-xl bg-slate-900/70 p-4">
-                        <h2 className="text-xs uppercase tracking-wide text-slate-400 mb-2">
+                    <section className="mb-6 border border-slate-800 rounded-2xl bg-slate-900/70 p-4 flex flex-col gap-3">
+                        <h2 className="text-[10px] uppercase tracking-wide text-slate-400">
                             My gudVibes
                         </h2>
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm">
-                            <div>
-                                <div className="font-mono text-spot-yellow">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex flex-col gap-1 max-w-full">
+                                <div className="font-mono text-spot-yellow text-sm break-all">
                                     {getAliasFor(myRow.address)}
                                 </div>
-                                <div className="text-slate-400 text-xs">
+                                <div className="text-slate-400 text-[11px] break-all">
                                     {shorten(myRow.address)}
                                 </div>
                             </div>
-                            <div className="flex gap-6">
+                            <div className="flex items-center gap-4 text-xs sm:text-sm">
                                 <div>
-                                    <div className="text-slate-400 text-xs">gudVibes</div>
+                                    <div className="text-slate-400 text-[10px] uppercase">
+                                        gudVibes
+                                    </div>
                                     <div className="font-mono">{myRow.good}</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-400 text-xs">badVibes</div>
+                                    <div className="text-slate-400 text-[10px] uppercase">
+                                        badVibes
+                                    </div>
                                     <div className="font-mono">{myRow.bad}</div>
                                 </div>
                                 <div>
-                                    <div className="text-slate-400 text-xs">netVibes</div>
+                                    <div className="text-slate-400 text-[10px] uppercase">
+                                        netVibes
+                                    </div>
                                     <div className="font-mono text-lime-300">{myRow.net}</div>
                                 </div>
                             </div>
@@ -360,14 +370,12 @@ const VibesLeaderboard = () => {
                 )}
 
                 {/* Leaderboard */}
-                <section className="border border-slate-800 rounded-xl bg-slate-900/70 overflow-hidden">
+                <section className="border border-slate-800 rounded-2xl bg-slate-900/70 overflow-hidden">
                     <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-                        <h2 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+                        <h2 className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
                             Top gudVibes wallets
                         </h2>
-                        <span className="text-[11px] text-slate-500">
-                            Balances from Vibes; aliases from AliasRegistry
-                        </span>
+                        <span className="hidden sm:inline text-[11px] text-slate-500" />
                     </div>
 
                     {loading ? (
@@ -378,14 +386,14 @@ const VibesLeaderboard = () => {
                         </div>
                     ) : (
                         <div className="divide-y divide-slate-800">
-                            {/* header row */}
-                            <div className="grid grid-cols-12 px-4 py-2 text-[11px] text-slate-500 uppercase tracking-wide">
+                            {/* desktop header row */}
+                            <div className="hidden sm:grid grid-cols-12 px-4 py-2 text-[11px] text-slate-500 uppercase tracking-wide">
                                 <span className="col-span-1">#</span>
                                 <span className="col-span-4">Alias</span>
                                 <div className="col-span-7 flex items-center justify-between">
                                     <span>Wallet</span>
-                                    <span>NET</span>
-                                    <span>Send</span>
+                                    <span>Net</span>
+                                    <span className="pr-2">Send</span>
                                 </div>
                             </div>
 
@@ -394,108 +402,148 @@ const VibesLeaderboard = () => {
                                     account &&
                                     row.address.toLowerCase() === account.toLowerCase();
                                 const alias = getAliasFor(row.address);
-                                const editing =
-                                    editAddress &&
-                                    editAddress.toLowerCase() === row.address.toLowerCase();
-
                                 const isSendingThis = sending && sendingTo === row.address;
 
                                 return (
                                     <div
                                         key={row.address}
-                                        className={`grid grid-cols-12 px-4 py-2 text-xs sm:text-sm items-center ${isMe ? "bg-spot-yellow/5" : ""
+                                        className={`px-4 py-3 text-xs sm:text-sm ${isMe ? "bg-spot-yellow/5" : ""
                                             }`}
                                     >
-                                        {/* rank */}
-                                        <span className="col-span-1 text-slate-500">
-                                            {idx + 1}
-                                        </span>
+                                        {/* Mobile layout */}
+                                        <div className="flex flex-col gap-2 sm:hidden">
+                                            <div className="flex items-center justify-between">
+                                                <div className="text-[11px] text-slate-500">
+                                                    #{idx + 1}
+                                                </div>
+                                                <div className="font-mono text-lime-300 text-center w-full">
+                                                    net {row.net}
+                                                </div>
+                                            </div>
 
-                                        {/* alias */}
-                                        <div className="col-span-4 flex flex-col gap-1">
-                                            {!editing ? (
-                                                <>
-                                                    <span
-                                                        className={`font-mono ${alias === "no alias configured"
+                                            {/* alias + wallet + edit button (no inline edit) */}
+                                            <div className="flex flex-col gap-1 max-w-full">
+                                                <span
+                                                    className={`font-mono break-all ${alias === "no alias configured"
                                                             ? "text-slate-500"
                                                             : "text-spot-yellow"
-                                                            }`}
+                                                        }`}
+                                                >
+                                                    {alias}
+                                                </span>
+                                                <span className="font-mono text-slate-300 break-all">
+                                                    <a
+                                                        href={`https://snowtrace.io/address/${row.address}?chainid=43114`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-1 font-mono text-slate-200 justify-self-start hover:text-spot-yellow transition-colors"
                                                     >
-                                                        {alias}
-                                                    </span>
-                                                    {canEditAlias(row.address) && (
-                                                        <button
-                                                            onClick={() => startEditAlias(row.address)}
-                                                            className="text-[10px] text-slate-400 underline underline-offset-2 w-fit"
-                                                        >
-                                                            Edit alias
-                                                        </button>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <div className="flex items-center gap-2">
-                                                    <input
-                                                        type="text"
-                                                        value={editAliasValue}
-                                                        onChange={(e) =>
-                                                            setEditAliasValue(e.target.value)
-                                                        }
-                                                        placeholder="Enter alias"
-                                                        className="bg-slate-800 border border-slate-600 text-xs px-2 py-1 rounded font-mono w-full"
-                                                    />
+                                                        {shorten(row.address)}
+                                                        <ExternalLink
+                                                            size={12}
+                                                            className="opacity-60 hover:opacity-100"
+                                                        />
+                                                    </a>
+                                                </span>
+                                                {canEditAlias(row.address) && (
                                                     <button
-                                                        onClick={saveAlias}
-                                                        className="text-[10px] px-2 py-1 rounded bg-spot-yellow text-black font-mono"
+                                                        onClick={() => startEditAlias(row.address)}
+                                                        className="text-[10px] text-slate-400 underline underline-offset-2 w-fit"
                                                     >
-                                                        Save
+                                                        Edit alias
                                                     </button>
-                                                    <button
-                                                        onClick={cancelEditAlias}
-                                                        className="text-[10px] text-slate-400 font-mono"
-                                                    >
-                                                        Cancel
-                                                    </button>
+                                                )}
+                                            </div>
+
+                                            <div className="flex items-center justify-between mt-1 gap-2">
+                                                <div className="flex flex-wrap gap-2 text-[11px] text-slate-400">
+                                                    <span>gud: {row.good}</span>
+                                                    <span>bad: {row.bad}</span>
                                                 </div>
-                                            )}
+                                                <button
+                                                    onClick={() => openSendModal(row)}
+                                                    disabled={isSendingThis}
+                                                    className={`px-2 py-1 text-[10px] rounded-full border font-mono transition-all duration-150 shrink-0 ${isSendingThis
+                                                            ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                            : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                        }`}
+                                                >
+                                                    {isSendingThis ? "Sending…" : "Send vibes"}
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        {/* right side: wallet + net + buttons spaced out */}
-                                        <div className="col-span-7 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                                            {/* wallet */}
-                                            <span className="font-mono text-slate-200 justify-self-start">
-                                                {shorten(row.address)}
+                                        {/* Desktop / tablet layout */}
+                                        <div className="hidden sm:grid grid-cols-12 items-center">
+                                            {/* rank */}
+                                            <span className="col-span-1 text-slate-500">
+                                                {idx + 1}
                                             </span>
 
-                                            {/* net */}
-                                            <span className="font-mono text-lime-300 text-center justify-self-center min-w-[3rem]">
-                                                {row.net}
-                                            </span>
-
-                                            {/* send buttons */}
-                                            <div className="flex justify-end gap-2 justify-self-end">
-                                                <button
-                                                    onClick={() =>
-                                                        handleSendVibes(row.address, "good")
-                                                    }
-                                                    disabled={isSendingThis}
-                                                    className={`px-3 py-1 text-[11px] rounded-full border border-spot-yellow font-mono transition-all duration-150 ${isSendingThis
-                                                        ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                        : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                            {/* alias column (no inline edit, just button) */}
+                                            <div className="col-span-4 flex flex-col gap-1 max-w-full">
+                                                <span
+                                                    className={`font-mono truncate ${alias === "no alias configured"
+                                                            ? "text-slate-500"
+                                                            : "text-spot-yellow"
                                                         }`}
+                                                    title={alias}
                                                 >
-                                                    {isSendingThis ? "Sending…" : "Send gudVibes"}
-                                                </button>
+                                                    {alias}
+                                                </span>
+                                                {canEditAlias(row.address) && (
+                                                    <button
+                                                        onClick={() => startEditAlias(row.address)}
+                                                        className="text-[10px] text-slate-400 underline underline-offset-2 w-fit"
+                                                    >
+                                                        Edit alias
+                                                    </button>
+                                                )}
+                                            </div>
 
-                                                <button
-                                                    onClick={() => handleSendVibes(row.address, "bad")}
-                                                    disabled={isSendingThis}
-                                                    className={`px-3 py-1 text-[11px] rounded-full border border-spot-yellow font-mono transition-all duration-150 ${isSendingThis
-                                                        ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                        : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
-                                                        }`}
-                                                >
-                                                    {isSendingThis ? "Sending…" : "Send badVibes"}
-                                                </button>
+                                            {/* right side: wallet + net + button */}
+                                            <div className="col-span-7 grid grid-cols-3 items-center gap-4">
+                                                {/* wallet */}
+                                                <span className="font-mono text-slate-200 justify-self-start truncate">
+                                                    <a
+                                                        href={`https://snowtrace.io/address/${row.address}?chainid=43114`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1 font-mono text-slate-400 text-[11px] hover:text-spot-yellow transition-colors"
+                                                    >
+                                                        {shorten(row.address)}
+                                                        <ExternalLink
+                                                            size={10}
+                                                            className="opacity-60 hover:opacity-100"
+                                                        />
+                                                    </a>
+                                                </span>
+
+                                                {/* net */}
+                                                <span className="font-mono text-lime-300 text-center w-full pl-2">
+                                                    {row.net}
+                                                </span>
+
+                                                {/* send button */}
+                                                <div className="flex justify-end">
+                                                    <button
+                                                        onClick={() => openSendModal(row)}
+                                                        disabled={isSendingThis}
+                                                        className={`px-3 py-1 text-[11px] rounded-full border font-mono transition-all duration-150 text-center ${isSendingThis
+                                                                ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                                : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                            }`}
+                                                    >
+                                                        {isSendingThis ? (
+                                                            "Sending…"
+                                                        ) : (
+                                                            <>
+                                                                <span className="block leading-tight">Send</span>
+                                                                <span className="block leading-tight">vibes</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -505,24 +553,185 @@ const VibesLeaderboard = () => {
                     )}
                 </section>
 
-                <div className="mt-6 text-[11px] text-slate-500 text-center">
-                    Aliases are stored on-chain in the VibesAliasRegistry at{" "}
-                    <span className="font-mono">
-                        0x0B9204d2F95F8F2BD7426327eaDF56DE4E7a656D
-                    </span>
-                    .
+                <div className="mt-6 text-[11px] text-slate-500 text-center space-y-1">
+                    <div className="break-all">
+                        Aliases are stored on-chain in the VibesAliasRegistry at{" "}
+                        <span className="font-mono">
+                            0x0B9204d2F95F8F2BD7426327eaDF56DE4E7a656D
+                        </span>
+                        .
+                    </div>
                     {sendStatus === "success" && (
-                        <div className="mt-2 text-lime-300">
-                            Vibes sent successfully ✨
-                        </div>
+                        <div className="text-lime-300">Vibes sent successfully ✨</div>
                     )}
                     {sendStatus === "error" && (
-                        <div className="mt-2 text-red-400">
+                        <div className="text-red-400">
                             Error sending vibes – check your wallet / console.
                         </div>
                     )}
                 </div>
             </div>
+
+            {/* Alias Edit Modal */}
+            {editAddress && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
+                    <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-4 shadow-xl">
+                        <div className="flex items-center justify-between mb-3">
+                            <h3 className="text-sm font-semibold text-slate-100">
+                                Edit alias
+                            </h3>
+                            <button
+                                onClick={cancelEditAlias}
+                                className="text-xs text-slate-400 hover:text-slate-200"
+                            >
+                                Close
+                            </button>
+                        </div>
+
+                        <div className="mb-3">
+                            <div className="text-[11px] text-slate-500 mb-1">Wallet</div>
+                            <div className="font-mono text-xs text-slate-200 break-all">
+                                {shorten(editAddress)}
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-[11px] text-slate-400 mb-1">
+                                Alias
+                            </label>
+                            <input
+                                type="text"
+                                value={editAliasValue}
+                                onChange={(e) => setEditAliasValue(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        saveAlias();
+                                    }
+                                    if (e.key === "Escape") {
+                                        e.preventDefault();
+                                        cancelEditAlias();
+                                    }
+                                }}
+                                placeholder="Enter alias"
+                                className="w-full bg-slate-800 border border-slate-600 text-xs px-2 py-2 rounded font-mono focus:outline-none focus:ring-1 focus:ring-spot-yellow"
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-end gap-2">
+                            <button
+                                onClick={cancelEditAlias}
+                                className="text-xs px-3 py-1 rounded border border-slate-600 text-slate-300 hover:text-slate-100 hover:border-slate-400"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={saveAlias}
+                                className="text-xs px-3 py-1 rounded bg-spot-yellow text-black font-semibold hover:brightness-110"
+                            >
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Send Vibes Modal */}
+            {sendModalOpen && modalTarget && (
+                <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/70 px-4">
+                    <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-4 shadow-xl">
+                        <div className="flex items-start justify-between mb-3">
+                            <div className="pr-4">
+                                <h3 className="text-sm font-semibold">Send vibes</h3>
+                                <p className="text-[11px] text-slate-400 mt-1">
+                                    Choose vibe type and amount to send.
+                                </p>
+                            </div>
+                            <button
+                                onClick={closeSendModal}
+                                disabled={sending}
+                                className="text-slate-400 hover:text-slate-200 text-lg leading-none"
+                            >
+                                ×
+                            </button>
+                        </div>
+
+                        <div className="space-y-3 mb-4">
+                            <div className="text-[11px] text-slate-400">
+                                To:
+                                <div className="font-mono text-spot-yellow text-xs break-all">
+                                    {modalTargetAlias}
+                                </div>
+                                <div className="font-mono text-slate-300 text-[11px] break-all">
+                                    {shorten(modalTarget)}
+                                </div>
+                            </div>
+
+                            {/* Vibe type toggle */}
+                            <div>
+                                <div className="text-[11px] text-slate-400 mb-1">
+                                    Vibe type
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => setModalVibeType("good")}
+                                        className={`flex-1 px-3 py-1.5 rounded-full text-[11px] font-mono border ${modalVibeType === "good"
+                                                ? "border-spot-yellow bg-spot-yellow text-slate-900"
+                                                : "border-slate-600 text-slate-200"
+                                            }`}
+                                    >
+                                        gudVibes
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setModalVibeType("bad")}
+                                        className={`flex-1 px-3 py-1.5 rounded-full text-[11px] font-mono border ${modalVibeType === "bad"
+                                                ? "border-spot-yellow bg-spot-yellow text-slate-900"
+                                                : "border-slate-600 text-slate-200"
+                                            }`}
+                                    >
+                                        badVibes
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Amount input */}
+                            <div>
+                                <div className="flex items-center justify-between mb-1">
+                                    <span className="text-[11px] text-slate-400">Amount</span>
+                                    <span className="text-[10px] text-slate-500">
+                                        whole numbers only
+                                    </span>
+                                </div>
+                                <input
+                                    type="number"
+                                    min="1"
+                                    step="1"
+                                    value={modalAmount}
+                                    onChange={(e) => setModalAmount(e.target.value)}
+                                    className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-100"
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={confirmSendFromModal}
+                            disabled={sending}
+                            className={`w-full px-3 py-2 rounded-full text-[12px] font-mono border transition-all duration-150 ${sending
+                                    ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                    : "border-spot-yellow bg-spot-yellow text-slate-900 hover:brightness-105"
+                                }`}
+                        >
+                            {sending ? "Sending vibes…" : "Send vibes"}
+                        </button>
+
+                        <div className="mt-2 text-[10px] text-slate-500 text-center">
+                            Your wallet will ask you to confirm the transaction.
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
