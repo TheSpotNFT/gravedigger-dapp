@@ -324,9 +324,12 @@ const VibesLeaderboard = () => {
                         <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
                             gudVibes Leaderboard
                         </h1>
-                        <p className="text-xs sm:text-sm text-slate-400 mt-2 max-w-xl">
-                            Net gudVibes = gudVibes − badVibes.
-                        </p>
+                        <div className="flex items-center justify-center">
+                            <img src={gudVibes} className="md:w-1/4 md:h-1/4 w-1/2 h-1/2 pt-4" alt="gud vibes" />
+                        </div>
+
+
+
                     </div>
                 </header>
 
@@ -425,8 +428,8 @@ const VibesLeaderboard = () => {
                                             <div className="flex flex-col gap-1 max-w-full">
                                                 <span
                                                     className={`font-mono break-all ${alias === "no alias configured"
-                                                            ? "text-slate-500"
-                                                            : "text-spot-yellow"
+                                                        ? "text-slate-500"
+                                                        : "text-spot-yellow"
                                                         }`}
                                                 >
                                                     {alias}
@@ -464,8 +467,8 @@ const VibesLeaderboard = () => {
                                                     onClick={() => openSendModal(row)}
                                                     disabled={isSendingThis}
                                                     className={`px-2 py-1 text-[10px] rounded-full border font-mono transition-all duration-150 shrink-0 ${isSendingThis
-                                                            ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                            : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                        ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                        : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
                                                         }`}
                                                 >
                                                     {isSendingThis ? "Sending…" : "Send vibes"}
@@ -484,8 +487,8 @@ const VibesLeaderboard = () => {
                                             <div className="col-span-4 flex flex-col gap-1 max-w-full">
                                                 <span
                                                     className={`font-mono truncate ${alias === "no alias configured"
-                                                            ? "text-slate-500"
-                                                            : "text-spot-yellow"
+                                                        ? "text-slate-500"
+                                                        : "text-spot-yellow"
                                                         }`}
                                                     title={alias}
                                                 >
@@ -530,8 +533,8 @@ const VibesLeaderboard = () => {
                                                         onClick={() => openSendModal(row)}
                                                         disabled={isSendingThis}
                                                         className={`px-3 py-1 text-[11px] rounded-full border font-mono transition-all duration-150 text-center ${isSendingThis
-                                                                ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                                : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                            ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                            : "border-spot-yellow text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
                                                             }`}
                                                     >
                                                         {isSendingThis ? (
@@ -677,8 +680,8 @@ const VibesLeaderboard = () => {
                                         type="button"
                                         onClick={() => setModalVibeType("good")}
                                         className={`flex-1 px-3 py-1.5 rounded-full text-[11px] font-mono border ${modalVibeType === "good"
-                                                ? "border-spot-yellow bg-spot-yellow text-slate-900"
-                                                : "border-slate-600 text-slate-200"
+                                            ? "border-spot-yellow bg-spot-yellow text-slate-900"
+                                            : "border-slate-600 text-slate-200"
                                             }`}
                                     >
                                         gudVibes
@@ -687,8 +690,8 @@ const VibesLeaderboard = () => {
                                         type="button"
                                         onClick={() => setModalVibeType("bad")}
                                         className={`flex-1 px-3 py-1.5 rounded-full text-[11px] font-mono border ${modalVibeType === "bad"
-                                                ? "border-spot-yellow bg-spot-yellow text-slate-900"
-                                                : "border-slate-600 text-slate-200"
+                                            ? "border-spot-yellow bg-spot-yellow text-slate-900"
+                                            : "border-slate-600 text-slate-200"
                                             }`}
                                     >
                                         badVibes
@@ -719,8 +722,8 @@ const VibesLeaderboard = () => {
                             onClick={confirmSendFromModal}
                             disabled={sending}
                             className={`w-full px-3 py-2 rounded-full text-[12px] font-mono border transition-all duration-150 ${sending
-                                    ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                    : "border-spot-yellow bg-spot-yellow text-slate-900 hover:brightness-105"
+                                ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                : "border-spot-yellow bg-spot-yellow text-slate-900 hover:brightness-105"
                                 }`}
                         >
                             {sending ? "Sending vibes…" : "Send vibes"}
