@@ -38,6 +38,7 @@ import SatsGallery from "./components/pages/Satsgallery";
 import MarketPlace from "./components/pages/MarketPlace";
 import MarketAll from "./components/pages/MultiMarket";
 import WalletAssetPage from "./components/pages/Assets";
+import VibesLeaderboard from "./components/pages/VibesLeaderboard";
 
 
 ReactGA.initialize('G-YJ9C2P37P6');
@@ -118,6 +119,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/vibes-leaderboard" exact element={<VibesLeaderboard />} />
                  <Route
                 path="/creator"
                 exact

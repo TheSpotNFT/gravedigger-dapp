@@ -1,4 +1,18 @@
 export const VIBES_ADDRESS = "0x26DaEb5eDa7bBb8b12d05764502d832feEDA45Ea"; //Mainnet
+export const VIBES_LEADER_ADDRESSES = [
+  "0x84b126c2e11689fd8a51c20e7d5bed6616f60558",
+  "0x39ffa0838b7b89e35dbf1ff2017001769b76dd37",
+  "0xb12e23ce85efe7d1ee0c320e38829332d9e11bb8",
+  "0x074afbac79ab82bd11b69037b8241dc5d292bce6",
+  "0x1d98cdc299253aa43d4806ad6d46205ded44bc4e",
+  "0xe09932ff1c9f8ffff1e4a6fd0ec513c90026b638",
+  "0x3aefde059de4ff9d02fab18b8075e5c95244d5fa",
+  "0x5841e2b7b56566376208fd70b7d6b35bad678ebb",
+  "0xd58891152e0f481db854722a564d0aa9a7f22ba4",
+  "0xc61a6f30ba0f5a3396966ccd3711782445ff5a85",
+];
+export const GUD_VIBE_ID = 1;
+export const BAD_VIBE_ID = 2;
 export const VIBES_ABI = 
 	[
 		{

@@ -837,6 +837,19 @@ const slideRight = () => {
  <div><img src={gud} alt="gudVibes NFT" className=""></img></div>
  <div className="py-2">
         <VibesMintMobile/>
+        
+<div className="py-2">
+  <a href="/vibes-leaderboard">
+    <button
+      className="align-middle w-full rounded-lg sm:px-4 md:px-4 lg:px-2 xl:px-4 px-4 py-2 
+                 border-4 border-spot-yellow text-spot-yellow bg-slate-900 bg-opacity-60
+                 hover:bg-spot-yellow hover:text-black duration-300 hover:border-white
+                 font-mono sm:text-xs md:text-l 2xl:text-xl flex justify-center"
+    >
+      gudVibes Leaderboard
+    </button>
+  </a>
+</div>
         </div>
         {/*GOATD */}
  <div className="font-mono text-3xl px-4 py-4 pt-16 text-white">Goatd</div>
@@ -1174,7 +1187,17 @@ const slideRight = () => {
       <div></div>
       </div>
       <div className="flex justify-center pt-8"><VibesMint/></div>
-
+<div className="flex justify-center pt-4 pb-8">
+  <a href="/vibes-leaderboard">
+    <button
+      className="align-middle rounded-lg px-8 py-2 border-4 border-spot-yellow text-spot-yellow
+                 bg-slate-900 bg-opacity-60 hover:bg-spot-yellow hover:text-black
+                 duration-300 hover:border-white font-mono sm:text-xs md:text-base 2xl:text-xl"
+    >
+      gudVibes Leaderboard
+    </button>
+  </a>
+</div>
     
 
     </div>
