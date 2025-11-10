@@ -201,12 +201,30 @@ const VibesLeaderboard = () => {
 
     const handleSendVibes = async (target, vibeType = "good") => {
         try {
-            if (!signer) {
-                if (!window.ethereum) {
-                    alert("Connect a wallet to send vibes.");
-                    return;
-                }
+            if (!window.ethereum) {
+                alert("Please install / unlock a Web3 wallet (MetaMask, Core, etc).");
+                return;
+            }
+
+            // Ensure wallet is connected
+            if (!signer || !account) {
                 await loadWeb3Modal();
+                // re-grab signer from provider after connect
+                const nextProvider =
+                    web3Provider || new ethers.providers.Web3Provider(window.ethereum);
+                setProvider(nextProvider);
+                setSigner(nextProvider.getSigner());
+            }
+
+            const activeProvider =
+                web3Provider || new ethers.providers.Web3Provider(window.ethereum);
+            const activeSigner = activeProvider.getSigner();
+            const fromAddress = await activeSigner.getAddress();
+
+            // Optional: ensure Avalanche C-Chain
+            const network = await activeProvider.getNetwork();
+            if (network.chainId !== 43114) {
+                alert("Please switch your wallet to Avalanche C-Chain (chainId 43114).");
                 return;
             }
 
@@ -214,24 +232,63 @@ const VibesLeaderboard = () => {
             setSendStatus(null);
             setSendingTo(target);
 
-            const vibes = new Contract(VIBES_ADDRESS, VIBES_ABI, signer);
+            const vibes = new Contract(VIBES_ADDRESS, VIBES_ABI, activeSigner);
 
+            // Amount: 1 vibe
             const amount = ethers.BigNumber.from(1);
-            const mintFee = await vibes._mintFee(); // returns wei
+
+            // Read mint fee from chain, with log + fallback
+            let mintFee;
+            try {
+                mintFee = await vibes._mintFee();
+                console.log(
+                    "Mint fee from contract (wei):",
+                    mintFee.toString(),
+                    "=>",
+                    ethers.utils.formatEther(mintFee),
+                    "AVAX"
+                );
+            } catch (e) {
+                console.error("_mintFee() call failed, falling back to 0.2 AVAX:", e);
+                mintFee = ethers.utils.parseEther("0.2");
+            }
+
             const totalValue = mintFee.mul(amount);
 
             const tokenId = vibeType === "bad" ? BAD_VIBE_ID : GUD_VIBE_ID;
+
+            console.log(
+                `Sending ${vibeType} vibes`,
+                "\n  from:",
+                fromAddress,
+                "\n  to:",
+                target,
+                "\n  tokenId:",
+                tokenId,
+                "\n  amount:",
+                amount.toString(),
+                "\n  value (wei):",
+                totalValue.toString()
+            );
 
             const tx = await vibes.mint(target, tokenId, amount, {
                 value: totalValue,
             });
 
+            console.log("mint tx sent:", tx.hash);
             await tx.wait();
+            console.log("mint tx confirmed");
 
             setSendStatus("success");
-            // Could reload leaderboard here if you want instant refresh
         } catch (err) {
             console.error("Error sending vibes:", err);
+            const msg =
+                err?.data?.message ||
+                err?.error?.message ||
+                err?.reason ||
+                err?.message ||
+                "Transaction failed";
+            alert(`Error sending vibes: ${msg}`);
             setSendStatus("error");
         } finally {
             setSending(false);
@@ -256,13 +313,15 @@ const VibesLeaderboard = () => {
         <div className="min-h-screen bg-slate-950 text-slate-100">
             <div className="max-w-5xl mx-auto px-4 py-8">
                 {/* Header */}
-                <header className="sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                     <div>
                         <h1 className="text-3xl font-semibold tracking-tight">
                             gudVibes Leaderboard
                         </h1>
                         <p className="text-sm text-slate-400 mt-2">
-                            Net gudVibes = gudVibes − badVibes
+                            Net gudVibes = gudVibes − badVibes. Top wallets, their{" "}
+                            <span className="text-spot-yellow font-semibold">alias</span>, and
+                            quick actions to send gudVibes or badVibes.
                         </p>
                     </div>
                 </header>
@@ -325,7 +384,7 @@ const VibesLeaderboard = () => {
                                 <span className="col-span-4">Alias</span>
                                 <div className="col-span-7 flex items-center justify-between">
                                     <span>Wallet</span>
-                                    <span>net</span>
+                                    <span>NET</span>
                                     <span>Send</span>
                                 </div>
                             </div>
@@ -358,8 +417,8 @@ const VibesLeaderboard = () => {
                                                 <>
                                                     <span
                                                         className={`font-mono ${alias === "no alias configured"
-                                                            ? "text-slate-500"
-                                                            : "text-spot-yellow"
+                                                                ? "text-slate-500"
+                                                                : "text-spot-yellow"
                                                             }`}
                                                     >
                                                         {alias}
@@ -402,24 +461,26 @@ const VibesLeaderboard = () => {
 
                                         {/* right side: wallet + net + buttons spaced out */}
                                         <div className="col-span-7 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
-                                            {/* wallet (left) */}
+                                            {/* wallet */}
                                             <span className="font-mono text-slate-200 justify-self-start">
                                                 {shorten(row.address)}
                                             </span>
 
-                                            {/* net (centered) */}
+                                            {/* net */}
                                             <span className="font-mono text-lime-300 text-center justify-self-center min-w-[3rem]">
                                                 {row.net}
                                             </span>
 
-                                            {/* send buttons (right) */}
+                                            {/* send buttons */}
                                             <div className="flex justify-end gap-2 justify-self-end">
                                                 <button
-                                                    onClick={() => handleSendVibes(row.address, "good")}
+                                                    onClick={() =>
+                                                        handleSendVibes(row.address, "good")
+                                                    }
                                                     disabled={isSendingThis}
                                                     className={`px-3 py-1 text-[11px] rounded-full border border-spot-yellow font-mono transition-all duration-150 ${isSendingThis
-                                                        ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                        : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                            ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                            : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
                                                         }`}
                                                 >
                                                     {isSendingThis ? "Sending…" : "Send gudVibes"}
@@ -429,15 +490,14 @@ const VibesLeaderboard = () => {
                                                     onClick={() => handleSendVibes(row.address, "bad")}
                                                     disabled={isSendingThis}
                                                     className={`px-3 py-1 text-[11px] rounded-full border border-spot-yellow font-mono transition-all duration-150 ${isSendingThis
-                                                        ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
-                                                        : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
+                                                            ? "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-600"
+                                                            : "text-spot-yellow hover:bg-spot-yellow hover:text-slate-900"
                                                         }`}
                                                 >
                                                     {isSendingThis ? "Sending…" : "Send badVibes"}
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                 );
                             })}
