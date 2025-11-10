@@ -645,7 +645,7 @@ const VibesLeaderboard = () => {
                     <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-4 shadow-xl">
                         <div className="flex items-start justify-between mb-3">
                             <div className="pr-4">
-                                <h3 className="text-sm font-semibold">Send vibes</h3>
+                                <h3 className="text-sm font-semibold">Send vibes (0.2 avax each)</h3>
                                 <p className="text-[11px] text-slate-400 mt-1">
                                     Choose vibe type and amount to send.
                                 </p>
